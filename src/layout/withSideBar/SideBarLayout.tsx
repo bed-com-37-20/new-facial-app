@@ -1,8 +1,9 @@
-import React, { type FC } from 'react'
+import React from 'react'
+import { Outlet } from 'react-router-dom'
 
-const SideBarLayout: FC = ({ children }) => {
+function SideBarLayout(): React.ReactElement {
     return (
-        <>{children}</>
+        <>{Outlet}</>
     )
 }
 export { SideBarLayout }

@@ -1,8 +1,9 @@
-import React, { type FC } from 'react'
+import React from 'react'
+import { Outlet } from 'react-router-dom'
 
-const SimpleLayout: FC = ({ children }) => {
+function SimpleLayout() {
     return (
-        <>{children}</>
+        <>{Outlet}</>
     )
 }
 export { SimpleLayout }
