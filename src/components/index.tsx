@@ -1,3 +1,4 @@
 import DashboardCard from "./card/CardComponent";
+import { SideBar } from "./layout/index"
 
-export {DashboardCard}
+export { SideBar, DashboardCard}
