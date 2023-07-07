@@ -10,7 +10,7 @@ function DashboardCards(): React.ReactElement {
         title="Enrollment"
         value={27}
         program="jdhdjhdhs"
-        addLink="#"
+        formLink="#"
         listLink="#"
       />
     </>
