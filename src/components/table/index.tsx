@@ -1,3 +1,3 @@
-import Table from "./Table"
+import Table from "./render/Table"
 
-export { Table}
+export {Table}
