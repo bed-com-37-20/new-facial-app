@@ -2,9 +2,16 @@ import React from 'react'
 import { HeadTable, RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { OptionSet } from '../../../types/generated';
+
+type rowsHeaderProps = {
+    id: string,
+    header: string,
+    optionSets?: Array<OptionSet>,
+}
 
 type renderHeaderProps = {
-    rowsHeader: Array<any>,
+    rowsHeader: Array<rowsHeaderProps>,
     orderBy: string,
     order: string,
     //TODO resolve this bug.👇
