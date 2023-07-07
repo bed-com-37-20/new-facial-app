@@ -1,3 +1,4 @@
+import Button from "./button/Button"
 import DashboardCards from "./Card/Cards";
 
-export {DashboardCards}
+export {Button, DashboardCards}
