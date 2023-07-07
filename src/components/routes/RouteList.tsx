@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
-import { DashboardCards, Button} from "../../pages";
+import { DashboardCards, Button, Home} from "../../pages";
 
 function RouteList() {
     return [
@@ -13,7 +13,7 @@ function RouteList() {
         {
             path: "/home",
             layout: SideBarLayout,
-            component: () => <span>Home</span>
+            component: Home
         },
         {
             path: "/table",

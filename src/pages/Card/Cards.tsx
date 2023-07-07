@@ -1,5 +1,5 @@
 import React from "react";
-import enrollment from "../../assets/images/file.png";
+import enrollment from "../../assets/images/home/enrollment.png";
 import { DashboardCard } from "../../components";
 
 function DashboardCards(): React.ReactElement {
