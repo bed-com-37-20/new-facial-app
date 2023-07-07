@@ -1,8 +1,8 @@
-import React, { type FC } from 'react';
+import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { RouteList } from '.';
 
-const Router: FC = () => {
+function Router() {
     return (
         <HashRouter>
             <Routes>

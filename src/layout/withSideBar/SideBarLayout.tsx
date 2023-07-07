@@ -1,9 +1,16 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import style from "../Layout.module.css"
+import { SideBar } from '../../components'
+interface SideBarLayoutProps {
+    children: React.ReactNode
+}
 
-function SideBarLayout(): React.ReactElement {
+function SideBarLayout({ children }: SideBarLayoutProps): React.ReactElement {
     return (
-        <>{Outlet}</>
+        <div className={style.LayoutContainer}>
+            <SideBar />
+            <main className={style.MainContentContainer}>{children}</main>
+        </div>
     )
 }
 export { SideBarLayout }

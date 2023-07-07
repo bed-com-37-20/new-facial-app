@@ -1,0 +1,11 @@
+.LayoutContainer {
+    width: 100vw;
+    height: inherit;
+    display: flex;
+    flex-grow: 1;
+}
+
+.MainContentContainer {
+    width: 100%;
+    padding: 20px;
+}

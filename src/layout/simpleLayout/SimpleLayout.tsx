@@ -1,9 +1,15 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import style from "../Layout.module.css"
 
-function SimpleLayout() {
+interface SimpleLayoutProps {
+    children: React.ReactNode
+}
+
+function SimpleLayout({ children }: SimpleLayoutProps) {
     return (
-        <>{Outlet}</>
+        <div className={style.LayoutContainer}>
+            <main className={style.MainContentContainer}>{children}</main>
+        </div>
     )
 }
 export { SimpleLayout }
