@@ -1,0 +1,8 @@
+@import "../../../assets/style/colors.css";
+
+.MainHeaderContainer {
+    height: 51px;
+    width: 100%;
+    background-color: var(--secondary-colort);
+    border-bottom: 1px solid #D0CCCC;
+}

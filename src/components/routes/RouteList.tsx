@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
-import { SideBarLayout, SimpleLayout } from "../../layout"
+import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
 
 function RouteList() {
     return [
@@ -13,6 +13,11 @@ function RouteList() {
             path: "/home",
             layout: SideBarLayout,
             component: () => <span>Home</span>
+        },
+        {
+            path: "/table",
+            layout: HeadBarLayout,
+            component: () => <span>Table</span>
         }
     ]
 }
