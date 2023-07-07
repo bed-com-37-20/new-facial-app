@@ -1,12 +1,8 @@
 import React from 'react'
 import style from "./SideBar.module.css"
 import { SideBarItemTitle } from './SideBarItemTitle'
-import { SideBarSubItem, type SideBarSubItemProps } from './SideBarSubItem'
-
-interface SideBarItemProps {
-    title: string
-    subItems: SideBarSubItemProps[]
-}
+import { SideBarSubItem } from './SideBarSubItem'
+import { type SideBarItemProps } from './type/SideBarTypes'
 
 function SideBarItem({ title, subItems }: SideBarItemProps): React.ReactElement {
     return (

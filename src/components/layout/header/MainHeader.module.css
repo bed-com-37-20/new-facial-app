@@ -5,4 +5,69 @@
     width: 100%;
     background-color: var(--secondary-colort);
     border-bottom: 1px solid #D0CCCC;
+    display: flex;
+    align-items: center;
+}
+
+.HeaderItemContainer {
+    border-right: 1px #E1E5EB solid;
+}
+
+.HeaderItemLabel {
+    color: var(--grey-grey-600, #6E7A8A);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-right: 12px;
+}
+
+.HeaderItemValue {
+    color: var(--grey-grey-900, #212934);
+    font-family: Roboto;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
+    margin-right: 12px;
+}
+
+.HeaderIntenContent {
+    margin: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.AcademicYear {
+    color: var(--grey-grey-600, #6E7A8A);
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    margin-left: auto;
+    padding: 12px;
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.AcademicYear img {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.AcademicYear h5 {
+    margin-bottom: 0 !important;
+}
+
+.AcademicYear span {
+    color: #FF2002;
+    font-family: Roboto;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 20px;
 }

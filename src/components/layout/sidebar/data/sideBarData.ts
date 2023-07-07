@@ -4,13 +4,13 @@ import glyph from "../../../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../../../assets/images/sidebar/user-group.svg"
+import { type SideBarItemProps } from "../type/SideBarTypes"
 
-
-function sideBarData () {
+function sideBarData (): SideBarItemProps[] {
     return [
         {
             title: "Students",
-            subItem: [
+            subItems: [
                 {
                     icon: listAdd,
                     label: "Enrollment",
@@ -40,7 +40,7 @@ function sideBarData () {
         },
         {
             title: "Staff",
-            subItem: [
+            subItems: [
                 {
                     icon: userGroup,
                     label: "Teacher registry",
@@ -65,7 +65,7 @@ function sideBarData () {
         },
         {
             title: "Academic Year",
-            subItem: [
+            subItems: [
                 {
                     icon: listAdd,
                     label: "School Calendar",
