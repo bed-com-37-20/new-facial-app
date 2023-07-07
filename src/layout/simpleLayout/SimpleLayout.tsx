@@ -1,11 +1,8 @@
 import React from 'react'
 import style from "../Layout.module.css"
+import { type LayoutProps } from '../types/LayoutTypes'
 
-interface SimpleLayoutProps {
-    children: React.ReactNode
-}
-
-function SimpleLayout({ children }: SimpleLayoutProps) {
+function SimpleLayout({ children }: LayoutProps) {
     return (
         <div className={style.LayoutContainer}>
             <main className={style.MainContentContainer}>{children}</main>

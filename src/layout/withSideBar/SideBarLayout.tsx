@@ -1,13 +1,12 @@
 import React from 'react'
 import style from "../Layout.module.css"
-interface SideBarLayoutProps {
-    children: React.ReactNode
-}
+import { SideBar } from '../../components'
+import { type LayoutProps } from '../types/LayoutTypes'
 
-function SideBarLayout({ children }: SideBarLayoutProps): React.ReactElement {
+function SideBarLayout({ children }: LayoutProps): React.ReactElement {
     return (
         <div className={style.LayoutContainer}>
-            <>Sidebar</>
+            <SideBar />
             <main className={style.MainContentContainer}>{children}</main>
         </div>
     )

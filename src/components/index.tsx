@@ -1,3 +1,8 @@
-import { SideBar } from "./layout/index"
+
 import { Table } from "./table"
-export { SideBar, Table }
+import { SideBar, MainHeader } from "./layout/index"
+import ButtonComponent from "./buttons/Button";
+import DashboardCard from "./card/CardComponent";
+
+export { SideBar, MainHeader, DashboardCard, ButtonComponent, Table}
+
