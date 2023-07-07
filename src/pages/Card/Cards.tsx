@@ -1,12 +1,12 @@
 import React from "react";
-// import enrollment from "../../assets/images/file.png";
+import enrollment from "../../assets/images/file.png";
 import { DashboardCard } from "../../components";
 
 function DashboardCards(): React.ReactElement {
   return (
     <>
       <DashboardCard
-        icon={"enrollment"}
+        icon={enrollment}
         title="Enrollment"
         value={27}
         program="jdhdjhdhs"

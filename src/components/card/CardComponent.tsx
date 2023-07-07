@@ -3,7 +3,7 @@ import { Box, Card } from "@dhis2/ui";
 import React from "react";
 import style from "./card.module.css";
 import { Divider, IconButton, Tooltip } from "@mui/material";
-import { Add, Menu } from "@mui/icons-material";
+import { Add, InfoOutlined, Menu } from "@mui/icons-material";
 
 interface CardProps {
   icon: string
@@ -18,34 +18,32 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
   const { icon, title, value, program, addLink, listLink } = props;
 
   return (
-    <Box height="265px" width="206px">
+    <Box height="245px" width="206px">
       <Card className={style.cardContainer}>
         <div className={style.cardHeader}>
           <img src={icon} />
         </div>
-        <Divider />
         <div className={style.cardTitle}>{title}</div>
         <Divider />
         <div className={style.cardStatistics}>
-          <div className={style.cardStatisticsHoje}>
-            <span className={style.cardStatisticsHojeValue}>{value}</span>
-            <span>Total</span>
-          </div>
+          <strong className={style.cardTotalLabel}>Total</strong>
           <div className={style.cardStatisticsTotal}>
             <span className={style.cardStatisticsTotalValue}>{value}</span>
-            <span>Total</span>
+            <IconButton size="small" className={style.cardInfoIcon}>
+              <InfoOutlined fontSize="small"/>
+            </IconButton>
           </div>
         </div>
         <Divider />
         <div className={style.cardActions}>
           <Tooltip title={`Adicionar ${title}`}>
-            <IconButton size="small" aria-label="delete">
+            <IconButton size="small">
               <Add />
             </IconButton>
           </Tooltip>
           &nbsp;
           <Tooltip title={`Listar ${title}`}>
-            <IconButton size="small" aria-label="delete">
+            <IconButton size="small">
               <Menu />
             </IconButton>
           </Tooltip>
