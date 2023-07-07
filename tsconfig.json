@@ -15,6 +15,8 @@
     /* Skip type checking all .d.ts files. */
     "jsx": "react",
     "downlevelIteration": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     "resolveJsonModule": true
   }
