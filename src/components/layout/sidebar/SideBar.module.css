@@ -1,0 +1,54 @@
+@import "../../../assets/style/colors.css";
+@import "../../../assets/style/font.css";
+
+.SideBarContainer {
+    height: 100%;
+    overflow-y: auto;
+    width: 370px;
+    background-color: var(--secondary-colort);
+    padding: 20px 15px;
+}
+
+.SideBarItemContainer {
+    width: 100%;
+    height: auto;
+    margin-bottom: 24px;
+}
+
+.SideBarItemTitle {
+    color: var(--font-third-color);
+    font-family: var(--primary-font-family);
+    font-size: var(--sidebar-font-size);
+    font-weight: 500;
+    line-height: var(--sidebar-font-line-height);
+}
+
+.SideBarSubItemContainer {
+    list-style: none;
+    color: var(--font-secondary-color);
+    font-weight: 400;
+    line-height: var(--sidebar-font-line-height);
+    font-style: normal;
+    font-size: var(--sidebar-font-size);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    cursor: default;
+}
+
+.SideBarSubItemContainer:hover {
+    background-color: rgba(0, 0, 0, 0.138);
+}
+
+.SideBarSubItemContainer img {
+    margin-right: 16px;
+    width: 22px;
+}
+
+.BadgeContainer {
+    margin-left: auto;
+}
+
+.SideBarItemListContainer {
+    padding-left: 0 !important;
+}
