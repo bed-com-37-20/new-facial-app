@@ -1,2 +1,3 @@
 import { SideBar } from "./layout/index"
-export { SideBar }
+import { Table } from "./table"
+export { SideBar, Table }
