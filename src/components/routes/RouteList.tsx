@@ -17,7 +17,7 @@ function RouteList() {
         },
         {
             path: "/card",
-            layout: SimpleLayout,
+            layout: SideBarLayout,
             component: DashboardCards
         }
     ]
