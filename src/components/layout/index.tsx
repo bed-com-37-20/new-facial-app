@@ -1,2 +1,3 @@
 import { SideBar } from "./sidebar/SideBar"
-export { SideBar }
+import { MainHeader } from "./header/MainHeader"
+export { SideBar, MainHeader }
