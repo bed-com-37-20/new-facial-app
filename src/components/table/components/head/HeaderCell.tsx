@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import React from 'react'
-import defaultClasses from './table.module.css';
+import defaultClasses from '../table.module.css';
 
 type tableProps = {
     head: any,
