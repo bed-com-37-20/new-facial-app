@@ -1,7 +1,7 @@
 import React from 'react'
 import i18n from '@dhis2/d2-i18n';
 import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme } from '@material-ui/core/styles';
 import { RowCell, RowTable } from '../components';
 import { getDisplayName } from '../../../utils/table/rows/getDisplayNameByOption';
 import { OptionSet } from '../../../types/generated';
@@ -18,7 +18,6 @@ type RenderHeaderProps = {
 }
 
 const usetStyles = makeStyles({
-    table: {},
     row: { width: "100%" },
     dataRow: {
         cursor: 'pointer',
@@ -26,18 +25,18 @@ const usetStyles = makeStyles({
             backgroundColor: '#F1FBFF',
         },
     },
-    cell: {
+    cell: (theme: Theme) => ({
         padding: `${theme.spacing.unit / 2}px ${theme.spacing.unit * 7}px ${theme.spacing.unit /
             2}px ${theme.spacing.unit * 3}px`,
         '&:last-child': {
             paddingRight: theme.spacing.unit * 3,
         },
         borderBottomColor: "rgba(224, 224, 224, 1)",
-    },
-    bodyCell: {
+    }),
+    bodyCell: (theme: Theme) => ({
         fontSize: theme.typography.pxToRem(13),
         color: theme.palette.text.primary,
-    }
+    })
 });
 
 function RenderRows({ headerData, rowsData }: RenderHeaderProps): React.ReactElement {
