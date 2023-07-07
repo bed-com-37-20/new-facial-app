@@ -14,7 +14,8 @@
     "skipLibCheck": true,
     /* Skip type checking all .d.ts files. */
     "jsx": "react",
-    "downlevelIteration": true
+    "downlevelIteration": true,
     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    "resolveJsonModule": true
   }
 }
