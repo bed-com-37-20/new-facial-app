@@ -1,2 +1,3 @@
-import { SideBar } from "./layout/index"
-export { SideBar }
+import ButtonComponent from "./buttons/Button";
+
+export {ButtonComponent}

@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout } from "../../layout"
+import { Button } from "../../pages";
 
 function RouteList() {
     return [
@@ -13,6 +14,11 @@ function RouteList() {
             path: "/home",
             layout: SideBarLayout,
             component: () => <span>Home</span>
+        },
+        {
+            path: "/buttons",
+            layout: SideBarLayout,
+            component: Button
         }
     ]
 }
