@@ -1,8 +1,11 @@
+@import "../assets/style/colors.css";
+
 .LayoutContainer {
     width: 100vw;
     height: inherit;
     display: flex;
     flex-grow: 1;
+    background-color: var(--primary-color);
 }
 
 .MainContentContainer {
