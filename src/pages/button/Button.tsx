@@ -1,6 +1,6 @@
 import React from "react";
 // eslint-disable-next-line import/extensions
-import { InfoOutlined } from "@mui/icons-material";
+import { InfoOutlined } from "@material-ui/icons";
 import { ButtonComponent } from "../../components";
 
 const typesButtons = [

@@ -2,55 +2,56 @@ import { IconButton } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import React from 'react'
 import Select from 'react-select';
-import defaultClasses from './table.module.css';
+import defaultClasses from '../table.module.css';
 import { disableNextPage } from '../../../../utils/table/pagination/pagination';
 import { rowsPerPages } from '../../../../utils/constants/pagination/pagination';
 
-
-type PaginationProps = {
-    page: number,
-    rowsPerPage: number,
-    onPageChange: (page: number) => void,
-    onRowsPerPageChange: (rowsPerPage: number) => void,
-    totalPages: number,
-    loading: boolean,
-    totalPerPage: number,
+interface PaginationProps {
+    page: number
+    rowsPerPage: number
+    onPageChange: (page: number) => void
+    onRowsPerPageChange: (rowsPerPage: number) => void
+    totalPages: number
+    loading: boolean
+    totalPerPage: number
 }
 
-type TextPaginationProps = {
-    children?: React.ReactNode,
+interface TextPaginationProps {
+    text?: string
 }
 
-type IconButtonPaginationProps = {
-    onPageChange: (page: number) => void,
-    ariaLabel: string,
-    disabled: boolean,
+interface IconButtonPaginationProps {
+    onPageChange: (page: number) => void
+    ariaLabel: string
+    disabled: boolean
     Icon: React.ReactNode
 }
 
-function TextPagination(children: TextPaginationProps): React.ReactElement {
+function TextPagination(text: TextPaginationProps): React.ReactElement {
     return (
         <span className={defaultClasses.textPagination}>
-            {children}
+            <>{text}</>
         </span>
     )
 }
 
 function IconButtonPagination(props: IconButtonPaginationProps): React.ReactElement {
     return (
-        <IconButton
-            style={{ paddingRight: 15 }}
-            onClick={props.onPageChange}
-            disabled={props.disabled}
-            aria-label={props.ariaLabel}
-        >
-            {props.Icon}
-        </IconButton>
+        <>
+            <IconButton
+                style={{ paddingRight: 15 }}
+                // corrigir este erro 👇
+                // onClick={props.onPageChange}
+                disabled={props.disabled}
+                aria-label={props.ariaLabel}
+            >
+                {props.Icon}
+            </IconButton>
+        </>
     )
 }
 
 function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, loading, totalPerPage }: PaginationProps): React.ReactElement {
-
     return (
         <div
             className={defaultClasses.pagination}
@@ -59,7 +60,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
             <div />
 
             <div className={defaultClasses.rootPagination}>
-                <TextPagination children={"Linhas por página"} />
+                <TextPagination text={"Linhas por página"} />
 
                 <Select
                     className={defaultClasses.textPagination}
@@ -72,7 +73,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
                     onChange={onRowsPerPageChange}
                     menuContainerStyle={{ top: 'auto', bottom: '100%' }}
                 />
-                <TextPagination children={`Página ${page}`} />
+                <TextPagination text={`Página ${page}`} />
 
                 <div style={{ marginRight: 10 }} />
 
@@ -80,14 +81,14 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
                     Icon={<KeyboardArrowLeft />}
                     ariaLabel='Previous Page'
                     disabled={page <= 1 || loading}
-                    onPageChange={() => onPageChange(page - 1)}
+                    onPageChange={() => { onPageChange(page - 1); }}
                 />
 
                 <IconButtonPagination
                     Icon={<KeyboardArrowRight />}
                     ariaLabel='Next Page'
                     disabled={disableNextPage({ rowsPerPage, totalPerPage }) || loading}
-                    onPageChange={() => onPageChange(page + 1)}
+                    onPageChange={() => { onPageChange(page + 1); }}
                 />
 
             </div>
