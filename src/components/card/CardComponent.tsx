@@ -2,8 +2,8 @@
 import { Box, Card } from "@dhis2/ui";
 import React from "react";
 import style from "./card.module.css";
-import { Divider, IconButton, Tooltip } from "@mui/material";
-import { Add, InfoOutlined, Menu } from "@mui/icons-material";
+import { Divider, IconButton, Tooltip } from "@material-ui/core";
+import { Add, InfoOutlined, Menu } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 
 interface CardProps {

@@ -10,4 +10,4 @@ export {
     RowCell, RowTable, HeadTable,
     HeadCell, Pagination, SortLabel,
     TableComponent
-} 
+}

@@ -6,10 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const usetStyles = makeStyles({
     tableContainer: {
-        overflowX: 'auto',
-    },
+        overflowX: 'auto'
+    }
 });
-
 
 function Table() {
     const classes = usetStyles()
@@ -30,12 +29,11 @@ function Table() {
                         headerData={[{
                             id: 'id',
                             header: 'ID',
-                            optionSets: [],
+                            optionSets: []
                         }]}
                         rowsData={[]}
                     />
                 </>
-                }
             </TableComponent>
         </div>
     )
