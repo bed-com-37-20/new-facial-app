@@ -28,12 +28,12 @@ function Table() {
                             rowsHeader={[
                                 {
                                     id: 'id',
-                                    header: 'ID',
+                                    header: 'Id',
                                     optionSets: []
                                 },
                                 {
                                     id: 'id2',
-                                    header: 'ID2',
+                                    header: 'Id2',
                                     optionSets: []
                                 }
                             ]}
