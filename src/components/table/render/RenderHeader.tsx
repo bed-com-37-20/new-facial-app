@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeadTable, RowTable, SortLabel } from '../components'
+import { RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
 import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
 import { type OptionSet } from '../../../types/generated';
@@ -89,11 +89,11 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
     ))
 
     return (
-        <HeadTable
+        <RowTable
             className={classes.row}
         >
             {headerCells}
-        </HeadTable>
+        </RowTable>
     )
 }
 

@@ -16,10 +16,6 @@ interface PaginationProps {
     totalPerPage: number
 }
 
-interface TextPaginationProps {
-    text?: string
-}
-
 interface IconButtonPaginationProps {
     onPageChange: (page: number) => void
     ariaLabel: string
@@ -27,10 +23,10 @@ interface IconButtonPaginationProps {
     Icon: React.ReactNode
 }
 
-function TextPagination(text: TextPaginationProps): React.ReactElement {
+function textPagination(text: string): React.ReactElement {
     return (
         <span className={defaultClasses.textPagination}>
-            <>{text}</>
+            {text}
         </span>
     )
 }
@@ -60,7 +56,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
             <div />
 
             <div className={defaultClasses.rootPagination}>
-                <TextPagination text={"Linhas por página"} />
+                {textPagination("Rows per page")}
 
                 <Select
                     className={defaultClasses.textPagination}
@@ -73,7 +69,7 @@ function Pagination({ page, rowsPerPage, onPageChange, onRowsPerPageChange, load
                     onChange={onRowsPerPageChange}
                     menuContainerStyle={{ top: 'auto', bottom: '100%' }}
                 />
-                <TextPagination text={`Página ${page}`} />
+                {textPagination(`Page ${page}`)}
 
                 <div style={{ marginRight: 10 }} />
 
