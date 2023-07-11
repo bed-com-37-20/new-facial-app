@@ -1,5 +1,5 @@
 import React from 'react'
-import { TableComponent } from '../components'
+import { Pagination, TableComponent } from '../components'
 import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
 import { makeStyles } from '@material-ui/core/styles';
@@ -58,6 +58,15 @@ function Table() {
                         />
                     </>
                 </TableComponent>
+                <Pagination
+                    loading={false}
+                    page={1}
+                    rowsPerPage={10}
+                    onRowsPerPageChange={() => { }}
+                    onPageChange={() => { }}
+                    totalPerPage={10}
+                    totalPages={10}
+                />
             </div>
         </Paper>
     )
