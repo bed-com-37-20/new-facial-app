@@ -8,7 +8,7 @@ import transfer from "../../assets/images/home/transfer.png";
 import result from "../../assets/images/home/result.png";
 import { DashboardCard } from "../../components";
 
-function cardsData () {
+function cardsData() {
     return [
         {
             title: "Students",
@@ -119,30 +119,30 @@ function cardsData () {
 }
 
 function Home(): React.ReactElement {
-  return (
-    <div className={style.bodyContainer}>
-        {cardsData().map((section, y) => (
-          <div key={y} className={style.section}>
-            <label className={style.title}>{section.title}</label>
-            <div className={style.containerCards}>
-              {section.subItem.map((data, i) => (
-                <div key={i}>
-                  <DashboardCard
-                    program={data.program}
-                    icon={data.icon}
-                    title={data.title}
-                    listLink={"/table"}
-                    formLink={"#"}
-                    leftLabel={data.leftLabel}
-                    value={data.value}
-                  />
-                  &nbsp;&nbsp;
+    return (
+        <div className={style.bodyContainer}>
+            {cardsData().map((section, y) => (
+                <div key={y} className={style.section}>
+                    <label className={style.title}>{section.title}</label>
+                    <div className={style.containerCards}>
+                        {section.subItem.map((data, i) => (
+                            <div key={i}>
+                                <DashboardCard
+                                    program={data.program}
+                                    icon={data.icon}
+                                    title={data.title}
+                                    listLink={"/table"}
+                                    formLink={"#"}
+                                    leftLabel={data.leftLabel}
+                                    value={data.value}
+                                />
+                                &nbsp;&nbsp;
+                            </div>
+                        ))}
+                    </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-  );
+            ))}
+        </div>
+    );
 }
 export default Home;
