@@ -1,9 +1,9 @@
-import gauge from "../../../../assets/images/sidebar/gauge.svg"
-import fileDocument from "../../../../assets/images/sidebar/file-document.svg"
-import glyph from "../../../../assets/images/sidebar/Glyph.svg"
-import listAdd from "../../../../assets/images/sidebar/listAdd.svg"
-import logOut from "../../../../assets/images/sidebar/log-out.svg"
-import userGroup from "../../../../assets/images/sidebar/user-group.svg"
+import gauge from "../../../assets/images/sidebar/gauge.svg"
+import fileDocument from "../../../assets/images/sidebar/file-document.svg"
+import glyph from "../../../assets/images/sidebar/Glyph.svg"
+import listAdd from "../../../assets/images/sidebar/listAdd.svg"
+import logOut from "../../../assets/images/sidebar/log-out.svg"
+import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
 function sideBarData (): SideBarItemProps[] {
