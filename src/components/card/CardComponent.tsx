@@ -9,14 +9,15 @@ import { Link } from "react-router-dom";
 interface CardProps {
   icon: string
   title: string
-  value: number
+  leftLabel: string
+  value: string
   program: string
   formLink: string
   listLink: string
 }
 
 export default function DashboardCard(props: CardProps): React.ReactElement {
-  const { icon, title, value, program, formLink, listLink } = props;
+  const { icon, title, value, program, formLink, listLink, leftLabel } = props;
 
   return (
     <Box height="245px" width="200px">
@@ -27,7 +28,7 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         <div className={style.cardTitle}>{title}</div>
         <Divider />
         <div className={style.cardStatistics}>
-          <strong className={style.cardTotalLabel}>Total</strong>
+          <strong className={style.cardTotalLabel}>{leftLabel}</strong>
           <div className={style.cardStatisticsTotal}>
             <span className={style.cardStatisticsTotalValue}>{value}</span>
             <Tooltip title={`Info`}>
@@ -46,11 +47,9 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
           </Tooltip>
           &nbsp;
           <Tooltip title={`List ${title}`}>
-            <Link to={listLink}>
               <IconButton size="small">
                 <Menu />
               </IconButton>
-            </Link>
           </Tooltip>
         </div>
       </Card>
