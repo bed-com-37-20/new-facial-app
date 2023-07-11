@@ -8,9 +8,10 @@ function DashboardCards(): React.ReactElement {
       <DashboardCard
         icon={enrollment}
         title="Enrollment"
-        value={27}
+        value="27"
+        leftLabel="Total"
         program="jdhdjhdhs"
-        addLink="#"
+        formLink="#"
         listLink="#"
       />
     </>

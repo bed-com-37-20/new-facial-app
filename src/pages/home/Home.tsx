@@ -17,7 +17,8 @@ function cardsData () {
                     icon: enrollment,
                     title: "Enrollment",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-enrollment",
                     listLink: "list-enrollment"
                 },
@@ -25,7 +26,8 @@ function cardsData () {
                     icon: attendance,
                     title: "Attendance",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-attendance",
                     listLink: "list-attendance"
                 },
@@ -33,7 +35,8 @@ function cardsData () {
                     icon: performance,
                     title: "Performance",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-performance",
                     listLink: "list-performance"
                 },
@@ -41,7 +44,8 @@ function cardsData () {
                     icon: result,
                     title: "Final result",
                     program: "programId",
-                    value: 27,
+                    value: "80%",
+                    leftLabel: "Pending",
                     formLink: "form-result",
                     listLink: "list-result"
                 },
@@ -49,7 +53,8 @@ function cardsData () {
                     icon: transfer,
                     title: "Transfer",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-transfer",
                     listLink: "list-transfer"
                 }
@@ -62,7 +67,8 @@ function cardsData () {
                     icon: enrollment,
                     title: "Teacher registry",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-teacher",
                     listLink: "list-teacher"
                 },
@@ -70,7 +76,8 @@ function cardsData () {
                     icon: enrollment,
                     title: "Non-teacher registry",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-non-teacher",
                     listLink: "list-non-teacher"
                 },
@@ -78,7 +85,8 @@ function cardsData () {
                     icon: attendance,
                     title: "Attendance",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-staff-attendance",
                     listLink: "list-staff-attendance"
                 },
@@ -86,7 +94,8 @@ function cardsData () {
                     icon: transfer,
                     title: "Transfer",
                     program: "programId",
-                    value: 27,
+                    value: "27",
+                    leftLabel: "Total",
                     formLink: "form-staff-transfer",
                     listLink: "list-staff-transfer"
                 }
@@ -99,7 +108,8 @@ function cardsData () {
                     icon: calendar,
                     title: "School Calendar",
                     program: "programId",
-                    value: 27,
+                    value: "220",
+                    leftLabel: "School days",
                     formLink: "form-school-calendar",
                     listLink: "list-school-calendar"
                 }
@@ -112,7 +122,7 @@ function Home(): React.ReactElement {
   return (
     <div className={style.bodyContainer}>
         {cardsData().map((section, y) => (
-          <div key={y}>
+          <div key={y} className={style.section}>
             <label className={style.title}>{section.title}</label>
             <div className={style.containerCards}>
               {section.subItem.map((data, i) => (
@@ -123,6 +133,7 @@ function Home(): React.ReactElement {
                     title={data.title}
                     listLink={"/table"}
                     formLink={"#"}
+                    leftLabel={data.leftLabel}
                     value={data.value}
                   />
                   &nbsp;&nbsp;
