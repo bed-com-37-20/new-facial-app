@@ -1,6 +1,6 @@
 import React from 'react'
 import style from "../Layout.module.css"
-import { type LayoutProps } from '../types/LayoutTypes'
+import { type LayoutProps } from '../../types/layout/LayoutTypes'
 
 function SimpleLayout({ children }: LayoutProps) {
     return (

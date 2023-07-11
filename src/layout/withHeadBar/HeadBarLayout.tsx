@@ -1,5 +1,5 @@
 import React from 'react'
-import { type LayoutProps } from '../types/LayoutTypes'
+import { type LayoutProps } from '../../types/layout/LayoutTypes'
 import style from "../Layout.module.css"
 import { MainHeader } from '../../components'
 

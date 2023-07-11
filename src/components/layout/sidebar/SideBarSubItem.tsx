@@ -1,7 +1,7 @@
 import React from 'react';
 import style from "./SideBar.module.css"
 import { Badge } from '../../badge/Badge';
-import { type SideBarSubItemProps } from './type/SideBarTypes';
+import { type SideBarSubItemProps } from '../../../types/sideBar/SideBarTypes';
 
 function SideBarSubItem({ icon, label, showBadge }: SideBarSubItemProps) {
     return (

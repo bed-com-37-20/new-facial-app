@@ -1,5 +1,5 @@
 import chevronDown from "../../../../assets/images/headbar/chevron-down.svg"
-import { type HeadBarTypes } from "../types/HeadBarTypes"
+import { type HeadBarTypes } from "../../../../types/header/HeadBarTypes"
 
 function headBarData(): HeadBarTypes[] {
     return [

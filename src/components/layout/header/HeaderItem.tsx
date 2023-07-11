@@ -1,6 +1,6 @@
 import React from 'react'
 import style from "./MainHeader.module.css"
-import { type HeadBarTypes } from './types/HeadBarTypes'
+import { type HeadBarTypes } from '../../../types/header/HeadBarTypes'
 
 function HeaderItem({ label, value, icon }: HeadBarTypes): React.ReactElement {
     return (
