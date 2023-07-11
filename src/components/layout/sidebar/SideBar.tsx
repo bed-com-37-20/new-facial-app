@@ -8,7 +8,7 @@ function SideBar(): React.ReactElement {
         <aside className={style.SideBarContainer}>
             {
                 sideBarData().map((element, index) => (
-                    <SideBarItem key={index} title={element.title} subItems={element.subItem} />
+                    <SideBarItem key={index} title={element.title} subItems={element.subItems} />
                 ))
             }
         </aside>

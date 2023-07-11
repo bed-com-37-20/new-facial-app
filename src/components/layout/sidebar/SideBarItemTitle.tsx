@@ -1,9 +1,6 @@
 import React from 'react'
 import style from "./SideBar.module.css"
-
-interface SideBarItemTitleProps {
-  title: string
-}
+import { type SideBarItemTitleProps } from './type/SideBarTypes'
 
 function SideBarItemTitle({ title }: SideBarItemTitleProps): React.ReactElement {
   return (
