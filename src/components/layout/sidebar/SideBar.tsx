@@ -1,7 +1,7 @@
 import React from 'react'
 import style from "./SideBar.module.css"
 import { SideBarItem } from './SideBarItem'
-import { sideBarData } from "./data/sideBarData"
+import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 
 function SideBar(): React.ReactElement {
     return (

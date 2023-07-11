@@ -1,6 +1,6 @@
 import React from 'react'
 import style from "./MainHeader.module.css"
-import { headBarData } from './data/headBarData'
+import { headBarData } from '../../../utils/constants/headBar/headBarData'
 import { HeaderItem } from './HeaderItem'
 import info from "../../../assets/images/headbar/info.svg"
 
