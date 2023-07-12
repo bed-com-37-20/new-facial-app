@@ -10,7 +10,7 @@ function Home(): React.ReactElement {
           <div key={y} className={style.section}>
             <label className={style.title}>{section.title}</label>
             <div className={style.containerCards}>
-              {section.subItem.map((data, i) => (
+              {section.subItem.map((data: any, i: number) => (
                 <div key={i}>
                   <DashboardCard
                     program={data.program}
