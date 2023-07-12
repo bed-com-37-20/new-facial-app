@@ -4,4 +4,7 @@ import SimpleButtons from "./buttons/Button";
 import DashboardCard from "./card/CardComponent";
 import DropdownButtonComponent from "./buttons/DropdownButton";
 import FlyoutMenuComponent from "./menu/FlyoutMenu";
-export { SideBar, MainHeader, DashboardCard, SimpleButtons, Table, DropdownButtonComponent, FlyoutMenuComponent }
+import WithPadding from "./template/WithPadding";
+import WithBorder from "./template/WithBorder";
+
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder }

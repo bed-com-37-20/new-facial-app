@@ -11,5 +11,11 @@ interface SideBarSubItemProps {
     label: string
     showBadge: boolean
     icon: string
+    route: string
 }
-export type {SideBarItemProps, SideBarItemTitleProps, SideBarSubItemProps}
+
+interface SideBarCollapseProps {
+    collapsed: boolean
+    setCollapsed: (collapsed: boolean) => void
+}
+export type {SideBarItemProps, SideBarItemTitleProps, SideBarSubItemProps, SideBarCollapseProps}

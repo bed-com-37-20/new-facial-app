@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme: Theme) =>
             }
         },
         cell: {
-            padding: `${theme.spacing.unit / 2}px ${theme.spacing.unit * 7}px ${theme.spacing.unit /
-                2}px ${theme.spacing.unit * 3}px`,
+            padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) /
+                2}px ${theme.spacing(1) * 3}px`,
             '&:last-child': {
-                paddingRight: theme.spacing.unit * 3
+                paddingRight: theme.spacing(1) * 3
             },
             borderBottomColor: "rgba(224, 224, 224, 1)"
         },
