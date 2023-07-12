@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
-import { DashboardCards, Button, Home} from "../../pages";
+import { DashboardCards, Button, Home } from "../../pages";
 
 function RouteList() {
     return [
