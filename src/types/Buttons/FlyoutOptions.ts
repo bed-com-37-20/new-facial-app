@@ -1,7 +1,7 @@
 interface FlyoutOptionsProps {
     label: string
     divider: boolean
-    action: () => void
+    onClick: () => void
 
 }
 
