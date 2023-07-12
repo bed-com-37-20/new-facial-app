@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
-import { DashboardCards, Button, Home} from "../../pages";
+import { DashboardCards, Button, Home, DropdownButton} from "../../pages";
 import TableComponent from "../../pages/table/Table";
 
 function RouteList() {
@@ -30,6 +30,11 @@ function RouteList() {
             path: "/card",
             layout: SideBarLayout,
             component: DashboardCards
+        },
+        {
+            path: "/dropbutton",
+            layout: SideBarLayout,
+            component: DropdownButton
         }
     ]
 }
