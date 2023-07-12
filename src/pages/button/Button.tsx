@@ -1,46 +1,19 @@
 import React from "react";
 // eslint-disable-next-line import/extensions
-import { InfoOutlined } from "@material-ui/icons";
-import { ButtonComponent } from "../../components";
-
-const typesButtons = [
-  {
-    name: "Primary Button",
-    primary: "primary",
-    icon: <InfoOutlined/>
-  },
-  {
-    name: "Success Button",
-    success: "success"
-  },
-  {
-    name: "Error Button",
-    error: "error"
-  },
-  {
-    name: "Secondary Button",
-    secondary: "secondary"
-  },
-  {
-    name: "Info Button",
-    info: "info"
-  },
-  {
-    name: "Dark Button",
-    dark: "dark"
-  }
-];
+import { SimpleButtons, DropdownButtonComponent } from "../../components";
+import { IconUserGroup16 } from "@dhis2/ui";
+import { enrollmentOptions } from "../../components/buttons/options";
 
 function Button(): React.ReactElement {
   return (
     <div>
-      <div className="d-flex">
-        {typesButtons.map((x, i) => (
-          <div key={i} className="flex-grow">
-            <ButtonComponent key={x.name} {...x} />
-          </div>
-        ))}
-      </div>
+      <SimpleButtons />
+      <br />
+      <DropdownButtonComponent
+        name="Bulk enrollment"
+        icon={<IconUserGroup16 />}
+        options={enrollmentOptions}
+      />
     </div>
   );
 }
