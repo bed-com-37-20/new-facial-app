@@ -7,6 +7,64 @@
     width: 370px;
     background-color: var(--secondary-colort);
     padding: 20px 15px;
+    transition: width 0.3s ease-in-out;
+    overflow-x: hidden;
+}
+
+.SideBarContainer::-webkit-scrollbar {
+    width: 4px;
+    /* width of the entire scrollbar */
+}
+
+.SideBarContainer::-webkit-scrollbar-thumb {
+    background-color: rgb(133, 133, 133);
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+}
+
+.SideBarContainerCollapsed::-webkit-scrollbar-thumb {
+    background-color: rgb(133, 133, 133);
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+}
+
+.SideBarContainerCollapsed::-webkit-scrollbar {
+    width: 4px;
+    /* width of the entire scrollbar */
+}
+
+.SideBarContainerCollapsed {
+    height: 100%;
+    overflow-y: auto;
+    transition: width 0.3s ease-in-out;
+    width: 90px;
+    background-color: var(--secondary-colort);
+    padding: 20px 15px;
+    overflow-x: hidden;
+}
+
+.SideBarContainerCollapsed span {
+    opacity: 0;
+    white-space: nowrap;
+}
+
+.TooltipContainer {
+    background-color: rgba(0, 0, 0, 0.789);
+    padding: 15px 10px;
+    color: #FFF;
+    position: fixed;
+    display: none;
+    border-radius: 4px;
+    left: 100px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px;
+    z-index: 1;
+}
+
+.SideBarContainer span {
+    opacity: 1;
+    white-space: nowrap;
 }
 
 .SideBarItemContainer {
@@ -24,6 +82,7 @@
 }
 
 .SideBarSubItemContainer {
+    margin-bottom: 3px;
     list-style: none;
     color: var(--font-secondary-color);
     font-weight: 400;
@@ -32,23 +91,50 @@
     font-size: var(--sidebar-font-size);
     padding: 16px;
     display: flex;
+    position: relative;
     align-items: center;
     cursor: default;
 }
 
+.SideBarContainerCollapsed .SideBarSubItemContainer:hover .TooltipContainer {
+    display: block;
+}
+
+.SideBarSubItemContainerActive {
+    margin-bottom: 3px;
+    list-style: none;
+    color: var(--font-secondary-color);
+    font-weight: 400;
+    line-height: var(--sidebar-font-line-height);
+    font-style: normal;
+    font-size: var(--sidebar-font-size);
+    padding: 16px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    cursor: default;
+    background-color: rgba(0, 0, 0, 0.138);
+    border-radius: 5px !important;
+    color: black !important;
+}
+
 .SideBarSubItemContainer:hover {
-    background-color: #F6F8FA;
+    background-color: rgba(0, 0, 0, 0.138);
+    border-radius: 5px !important;
+    color: black !important;
 }
 
 .SideBarSubItemContainer img {
     margin-right: 16px;
-    width: 22px;
+    min-width: 22px !important;
 }
+
 
 .BadgeContainer {
     margin-left: auto;
 }
 
 .SideBarItemListContainer {
+    overflow-x: hidden;
     padding-left: 0 !important;
 }
