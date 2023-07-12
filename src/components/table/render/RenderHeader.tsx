@@ -1,7 +1,7 @@
 import React from 'react'
 import { RowTable, SortLabel } from '../components'
 import classNames from 'classnames';
-import { makeStyles, type Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
 import { type OptionSet } from '../../../types/generated';
 import HeaderCell from '../components/head/HeaderCell';
 
@@ -14,7 +14,7 @@ interface rowsHeaderProps {
 interface renderHeaderProps {
     rowsHeader: rowsHeaderProps[]
     orderBy: string
-    order: string
+    order: "asc" | "desc"
     // TODO resolve this bug.👇
     createSortHandler: (property: string) => any
 }
@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         row: { width: "100%" },
         cell: {
-            padding: `${theme.spacing.unit / 2}px ${theme.spacing.unit * 7}px ${theme.spacing.unit /
-                2}px ${theme.spacing.unit * 3}px`,
+            padding: `${theme.spacing(1) / 2}px ${theme.spacing(1) * 7}px ${theme.spacing(1) /
+                2}px ${theme.spacing(1) * 3}px`,
             '&:last-child': {
                 paddingRight: 2 * 3
             },
@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
         headerCell: {
             fontSize: theme.typography.pxToRem(12),
             color: theme.palette.text.secondary,
-            fontWeight: theme.typography.fontWeightMedium
+            fontWeight: 500
         },
         visuallyHidden: {
             border: 0,
@@ -66,7 +66,7 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
 
     const headerCells = rowsHeader?.map((column, index) => (
         <HeaderCell
-            innerRef={(instance: any) => { setColumnWidth(instance, index); }}
+            // innerRef={(instance: any) => { setColumnWidth(instance, index); }}
             key={column.id}
             className={classNames(classes.cell, classes.headerCell)}
         >
@@ -89,11 +89,13 @@ function RenderHeader(props: renderHeaderProps): React.ReactElement {
     ))
 
     return (
-        <RowTable
-            className={classes.row}
-        >
-            {headerCells}
-        </RowTable>
+        <thead>
+            <RowTable
+                className={classes.row}
+            >
+                {headerCells}
+            </RowTable>
+        </thead>
     )
 }
 

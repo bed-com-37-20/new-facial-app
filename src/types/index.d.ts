@@ -5,8 +5,6 @@ declare module "*.js"
 declare module "*.svg"
 declare module "*.png"
 declare module "react-select"
-
-declare module "@material-ui/core/styles" {
-    import type { Theme } from "@material-ui/core/styles";
-    interface DefaultTheme extends Theme { }
-}
+declare module "@material-ui/core"
+declare module "react-addons-update"
+declare module "react/jsx-runtime"

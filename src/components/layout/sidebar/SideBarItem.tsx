@@ -10,7 +10,7 @@ function SideBarItem({ title, subItems }: SideBarItemProps): React.ReactElement 
             <SideBarItemTitle title={title} />
             <ul className={style.SideBarItemListContainer}>
                 {subItems.map((subItem, index) => (
-                    <SideBarSubItem key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} />
+                    <SideBarSubItem route={subItem.route} key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} />
                 ))}
             </ul>
         </section>
