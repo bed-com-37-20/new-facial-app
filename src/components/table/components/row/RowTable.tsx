@@ -2,16 +2,16 @@ import classNames from 'classnames';
 import React from 'react'
 import defaultClasses from '../table.module.css';
 
-type tableProps = {
-    head: any,
-    footer: any,
+interface tableProps {
+    head: any
+    footer: any
 }
 
-type RowProps = {
-    children?: React.ReactNode,
-    className?: string,
-    passOnProps?: object,
-    table?: tableProps,
+interface RowProps {
+    children?: React.ReactNode
+    className?: string
+    passOnProps?: object
+    table?: tableProps
 }
 
 function RowTable(props: RowProps): React.ReactElement {
@@ -20,11 +20,11 @@ function RowTable(props: RowProps): React.ReactElement {
     const classes = classNames(
         defaultClasses.tableRow,
         {
-            [defaultClasses.tableRowBody]: !table,
-            [defaultClasses.tableRowHeader]: table && table.head,
-            [defaultClasses.tableRowFooter]: table && table.footer,
+            [defaultClasses.tableRowBody]: table == null,
+            [defaultClasses.tableRowHeader]: table?.head,
+            [defaultClasses.tableRowFooter]: table?.footer
         },
-        className,
+        className
     );
 
     return (
