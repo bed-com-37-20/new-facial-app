@@ -4,7 +4,7 @@ import React from "react";
 import style from "./card.module.css";
 import { Divider, IconButton, Tooltip } from "@material-ui/core";
 import { Add, InfoOutlined, Menu } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface CardProps {
   icon: string
@@ -17,7 +17,7 @@ interface CardProps {
 }
 
 export default function DashboardCard(props: CardProps): React.ReactElement {
-  const { icon, title, value, program, formLink, listLink, leftLabel } = props;
+  const { icon, title, value, listLink, leftLabel } = props;
 
   return (
     <Box height="245px" width="200px">
@@ -46,11 +46,13 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
             </IconButton>
           </Tooltip>
           &nbsp;
-          <Tooltip title={`List ${title}`}>
-              <IconButton size="small">
-                <Menu />
-              </IconButton>
-          </Tooltip>
+          <NavLink to={listLink}>
+            <Tooltip title={`List ${title}`}>
+                <IconButton size="small">
+                  <Menu />
+                </IconButton>
+            </Tooltip>
+          </NavLink>
         </div>
       </Card>
     </Box>
