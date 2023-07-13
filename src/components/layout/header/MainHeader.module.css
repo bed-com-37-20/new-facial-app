@@ -1,7 +1,7 @@
 @import "../../../assets/style/colors.css";
 
 .MainHeaderContainer {
-    height: 51px;
+    height: 40px;
     width: 100%;
     background-color: var(--secondary-colort);
     border-bottom: 1px solid #D0CCCC;
@@ -10,34 +10,23 @@
 }
 
 .HeaderItemContainer {
-    border-right: 1px #E1E5EB solid;
+    color: var(--grey-grey-600, #6E7A8A) !important;
+    font-family: Roboto !important;
+    display: flex !important;
+    align-items: center !important;
+    font-style: normal !important;
+    line-height: 20px !important;
 }
 
-.HeaderItemLabel {
-    color: var(--grey-grey-600, #6E7A8A);
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px;
-    margin-right: 12px;
+.HeaderItemContainer h5 {
+    font-weight: 400 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
 }
 
-.HeaderItemValue {
-    color: var(--grey-grey-900, #212934);
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
-    margin-right: 12px;
-}
-
-.HeaderIntenContent {
-    margin: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.HeaderItemContainer span {
+    color: black !important;
+    margin-right: 12px !important;
 }
 
 .AcademicYear {
