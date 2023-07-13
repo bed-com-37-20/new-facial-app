@@ -1,21 +1,24 @@
 import React from "react";
 // eslint-disable-next-line import/extensions
-import { SimpleButtons, DropdownButtonComponent } from "../../components";
-import { IconUserGroup16 } from "@dhis2/ui";
+import { SimpleButtons, DropdownButtonComponent, WithPadding } from "../../components";
+import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
 import { enrollmentOptions } from "../../components/buttons/options";
 
-function Button(): React.ReactElement {
+function Buttons(): React.ReactElement {
   return (
-    <div>
+    <WithPadding>
       <SimpleButtons />
       <br />
-      <DropdownButtonComponent
-        name="Bulk enrollment"
-        icon={<IconUserGroup16 />}
-        options={enrollmentOptions}
-      />
-    </div>
+      <ButtonStrip>
+        <Button icon={<IconAddCircle24 />}>Enrol single student</Button> <br /> <br />
+        <DropdownButtonComponent
+          name="Bulk enrollment"
+          icon={<IconUserGroup16 />}
+          options={enrollmentOptions}
+        />
+      </ButtonStrip>
+    </WithPadding>
   );
 }
 
-export default Button;
+export default Buttons;

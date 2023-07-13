@@ -1,6 +1,6 @@
-import Button from "./button/Button"
+import Buttons from "./button/Button"
 import DashboardCards from "./Card/Cards";
 import Home from "./home/Home";
-import DropdownButton from "./dropButton/DropButton";
+import Modal from "./modal/Modal";
 
-export {Home, Button, DashboardCards, DropdownButton}
+export {Home, Buttons, DashboardCards, Modal}

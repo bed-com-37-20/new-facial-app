@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
-import { DashboardCards, Button, Home, DropdownButton} from "../../pages";
+import { DashboardCards, Buttons, Home, Modal} from "../../pages";
 import TableComponent from "../../pages/table/Table";
 
 function RouteList() {
@@ -24,7 +24,7 @@ function RouteList() {
         {
             path: "/buttons",
             layout: SideBarLayout,
-            component: Button
+            component: Buttons
         },
         {
             path: "/card",
@@ -32,9 +32,9 @@ function RouteList() {
             component: DashboardCards
         },
         {
-            path: "/dropbutton",
+            path: "/modal",
             layout: SideBarLayout,
-            component: DropdownButton
+            component: Modal
         }
     ]
 }
