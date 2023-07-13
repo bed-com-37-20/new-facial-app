@@ -1,11 +1,12 @@
 import React from 'react'
-import { Pagination, TableComponent } from '../components'
+import { HeaderFilters, Pagination, TableComponent } from '../components'
 import RenderHeader from './RenderHeader'
 import RenderRows from './RenderRows'
 import { makeStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 import WithBorder from '../../template/WithBorder';
 import WithPadding from '../../template/WithPadding';
+import WorkingLits from '../components/filters/workingList/WorkingLits';
 
 const usetStyles = makeStyles({
     tableContainer: {
@@ -17,9 +18,11 @@ function Table() {
     const classes = usetStyles()
     return (
         <Paper>
-            <WithPadding>
+            <WorkingLits />
+            <WithBorder type='bottom' />
+            <WithPadding >
                 <WithBorder type='all' >
-                    <WithPadding />
+                    <HeaderFilters />
                     <div
                         className={classes.tableContainer}
                     >

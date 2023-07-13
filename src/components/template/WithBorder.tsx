@@ -8,7 +8,7 @@ const borderTypes = {
 
 type EnumType = "all" | "bottom" | "top"
 
-function WithBorder(props: { children: React.ReactNode, type: EnumType }): React.ReactElement {
+function WithBorder(props: { children?: React.ReactNode, type: EnumType }): React.ReactElement {
     // eslint-disable-next-line react/prop-types
     const { children, type } = props;
 
