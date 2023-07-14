@@ -1,12 +1,9 @@
-import { type Attribute } from "../generated"
+import { type Attribute } from '../generated/models';
+import { type Access } from "../generated"
 
 interface OptionSetProps {
     value: string
     label: string
-}
-
-enum CustomValueType {
-    LIST = "LIST"
 }
 
 export interface CustomAttributeProps {
@@ -16,14 +13,14 @@ export interface CustomAttributeProps {
     required: string | boolean
     name: string
     labelName: string
-    valueType: (typeof Attribute.valueType) & (typeof CustomValueType)
-    options: {
-        optionSet: [OptionSetProps]
-    }
+    valueType: typeof Attribute.valueType
+    options: { optionSet: [OptionSetProps] }
     visible: boolean
     disabled: boolean
     pattern?: string
     searchable?: boolean
     error?: boolean
     content?: string
+    key?: any
+    access?: Access
 }

@@ -1,9 +1,9 @@
 import { Popover, makeStyles } from '@material-ui/core';
 import React, { useState, useRef } from 'react'
-import WithPadding from '../tamplate/WithPadding.js';
-import SelectorContents from '../enrollment/content/SelectorContents.jsx';
-import RenderWithAppliedFilter from './RenderWithAppliedFilter.jsx';
-import RenderWithoutAppliedFilter from './RenderWithoutAppliedFilter.jsx';
+import RenderWithoutAppliedFilter from './RenderWithoutAppliedFilter';
+import WithPadding from '../../../../template/WithPadding';
+import SelectorContents from '../enrollment/content/SelectorContents';
+import RenderWithAppliedFilter from './RenderWithAppliedFilter';
 
 const POPOVER_ANCHOR_ORIGIN = {
     vertical: 'bottom',
@@ -21,7 +21,7 @@ interface SelectButtonProps {
     onChange: any
     filled: string
     onQuerySubmit: any
-    disableb: any
+    disabled: any
     disabledReset: any
     onResetFilters: any
     title: string
@@ -54,8 +54,7 @@ const useStyles = makeStyles({
 });
 
 function SelectButton(props: SelectButtonProps) {
-    // eslint-disable-next-line react/prop-types
-    const { colum, value, onChange, filled, onQuerySubmit, disableb, disabledReset, onResetFilters, title, tooltipContent } = props;
+    const { colum, value, onChange, filled, onQuerySubmit, disabled, disabledReset, onResetFilters, title, tooltipContent } = props;
     const classes = useStyles()
 
     const anchorRef = useRef(null)
@@ -78,7 +77,7 @@ function SelectButton(props: SelectButtonProps) {
     const openFilterSelector = () => {
         setselectorVisible(true);
 
-        if (filled.length > 0) {
+        if (filled?.length > 0) {
             activeFilterButtonInstance.current = null
             // activeFilterButtonInstance && activeFilterButtonInstance.clearIsHovered();
         }
@@ -90,10 +89,10 @@ function SelectButton(props: SelectButtonProps) {
                 data-test="filter-button-popover-anchor"
                 ref={anchorRef}
             >
-                {(filled.length > 0)
+                {(filled?.length > 0)
                     ? <RenderWithAppliedFilter
                         classes={classes}
-                        disabled={disableb}
+                        disabled={disabled}
                         filled={filled}
                         refActiveFilterInstance={refActiveFilterInstance}
                         onClose={onClose}
@@ -104,7 +103,7 @@ function SelectButton(props: SelectButtonProps) {
                     />
                     : <RenderWithoutAppliedFilter
                         classes={classes}
-                        disabled={disableb}
+                        disabled={disabled}
                         openFilterSelector={openFilterSelector}
                         title={title}
                         selectorVisible={selectorVisible}
@@ -130,7 +129,7 @@ function SelectButton(props: SelectButtonProps) {
                                         onChange={onChange}
                                         value={value}
                                         onQuerySubmit={onQuerySubmit}
-                                        disableb={disableb}
+                                        disabled={disabled}
                                         disabledReset={disabledReset}
                                     />
                                 </WithPadding>
