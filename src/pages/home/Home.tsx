@@ -1,6 +1,6 @@
 import React from "react";
 import style from "./home.module.css";
-import { DashboardCard } from "../../components";
+import { DashboardCard, Title } from "../../components";
 import { cardsData } from "../../utils/constants/dashboard/dashboardData";
 
 function Home(): React.ReactElement {
@@ -8,7 +8,7 @@ function Home(): React.ReactElement {
     <div className={style.bodyContainer}>
       {cardsData().map((section, y) => (
         <div key={y} className={style.section}>
-          <label className={style.title}>{section.title}</label>
+          <Title label={section.title}/>
           <div className={style.containerCards}>
             {section.subItem.map((data: any, i: number) => (
               <div key={i}>

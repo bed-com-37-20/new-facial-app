@@ -5,19 +5,6 @@
     margin: 10px 0px 10px 30px;
 }
 
-.title {
-    font-family: 'Roboto';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 100%;
-    letter-spacing: 0.15px;
-    color: rgba(0, 0, 0, 0.87);
-    flex: none;
-    order: 0;
-    flex-grow: 0;
-}
-
 .containerCards {
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);
