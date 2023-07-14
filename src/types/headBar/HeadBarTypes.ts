@@ -1,6 +1,6 @@
 interface HeadBarTypes {
     label: string
     value: string
-    icon: string
+    placeholder: string
 }
 export type {HeadBarTypes}

@@ -46,8 +46,24 @@
 }
 
 .SideBarContainerCollapsed span {
+    display: none;
+    white-space: nowrap;
+}
+
+.SideBarContainerCollapsed .SideBarItemTitle {
+    display: block;
     opacity: 0;
     white-space: nowrap;
+}
+
+.SideBarContainerCollapsed .SideBarSubItemContainer {
+    justify-content: center;
+    min-width: 40px;
+}
+
+.SideBarContainerCollapsed .SideBarSubItemContainer img {
+    margin-right: 0px;
+    min-width: 22px !important;
 }
 
 .TooltipContainer {
@@ -63,7 +79,7 @@
 }
 
 .SideBarContainer span {
-    opacity: 1;
+    display: block;
     white-space: nowrap;
 }
 
@@ -100,6 +116,10 @@
     display: block;
 }
 
+.SideBarContainerCollapsed .SideBarSubItemContainerActive:hover .TooltipContainer {
+    display: block;
+}
+
 .SideBarSubItemContainerActive {
     margin-bottom: 3px;
     list-style: none;
@@ -125,6 +145,11 @@
 }
 
 .SideBarSubItemContainer img {
+    margin-right: 16px;
+    min-width: 22px !important;
+}
+
+.SideBarSubItemContainerActive img {
     margin-right: 16px;
     min-width: 22px !important;
 }

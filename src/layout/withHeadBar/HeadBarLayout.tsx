@@ -1,9 +1,8 @@
 import React from 'react'
-import { type LayoutProps } from '../../types/layout/LayoutTypes'
 import style from "../Layout.module.css"
 import { MainHeader } from '../../components'
 
-function HeadBarLayout({ children }: LayoutProps) {
+function HeadBarLayout({ children }: { children: React.ReactNode }): React.ReactElement {
     return (
         <div className={style.HeadBarLayoutContainer}>
             <MainHeader />

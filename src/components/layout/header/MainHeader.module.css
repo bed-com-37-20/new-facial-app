@@ -1,7 +1,7 @@
 @import "../../../assets/style/colors.css";
 
 .MainHeaderContainer {
-    height: 51px;
+    height: 40px;
     width: 100%;
     background-color: var(--secondary-colort);
     border-bottom: 1px solid #D0CCCC;
@@ -10,34 +10,41 @@
 }
 
 .HeaderItemContainer {
-    border-right: 1px #E1E5EB solid;
+    color: var(--grey-grey-600, #6E7A8A) !important;
+    font-family: Roboto !important;
+    display: flex !important;
+    align-items: center !important;
+    font-style: normal !important;
+    line-height: 20px !important;
 }
 
-.HeaderItemLabel {
-    color: var(--grey-grey-600, #6E7A8A);
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px;
-    margin-right: 12px;
-}
-
-.HeaderItemValue {
-    color: var(--grey-grey-900, #212934);
-    font-family: Roboto;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 20px;
-    margin-right: 12px;
-}
-
-.HeaderIntenContent {
-    margin: 12px;
+.HeaderItemContainer {
     display: flex;
-    justify-content: center;
+    background: nne !important;
+    border-radius: 0 !important;
+    height: 39.5px;
+    -webkit-box-align: center;
     align-items: center;
+    padding: 0px 8px 0px 12px;
+    font-size: 14px;
+    line-height: 16px;
+    border: none !important;
+    box-shadow: rgb(213, 221, 229) 0px 0px 0px 1px !important;
+}
+
+.HeaderItemContainer svg {
+    margin-left: 0 !important;
+}
+
+.HeaderItemContainer h5 {
+    font-weight: 400 !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+}
+
+.HeaderItemContainer span {
+    color: black !important;
+    margin-right: 12px !important;
 }
 
 .AcademicYear {

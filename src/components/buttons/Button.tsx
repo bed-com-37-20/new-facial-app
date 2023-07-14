@@ -1,20 +1,20 @@
-import { Button } from '@dhis2/ui'
-import React from 'react'
-import { getTypesOfButton } from '../../utils/commons/getTypesButtons.js';
-import style from './button.module.css'
+import { Button, ButtonStrip } from "@dhis2/ui";
+import { InfoOutlined } from "@material-ui/icons";
+import React from "react";
 
-interface ButtonProps {
-    children?: React.ReactNode
-    name: string
-}
-function ButtonComponent(props: ButtonProps): React.ReactElement {
-    const { children, name } = props
-    return (
-        <Button className={style[getTypesOfButton(props)]} {...props} >
-           {children}
-            {name}
-        </Button>
-    )
+function SimpleButtons(): React.ReactElement {
+  return (
+    <ButtonStrip>
+      <Button icon={<InfoOutlined />}>Simple button</Button>
+      <Button primary>Simple button</Button>
+      <Button icon={<InfoOutlined />} destructive>
+        Simple button
+      </Button>
+      <Button icon={<InfoOutlined />} disabled>
+        Simple button
+      </Button>
+    </ButtonStrip>
+  );
 }
 
-export default ButtonComponent
+export default SimpleButtons;

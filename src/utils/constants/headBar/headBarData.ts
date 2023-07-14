@@ -1,4 +1,3 @@
-import chevronDown from "../../../assets/images/headbar/chevron-down.svg"
 import { type HeadBarTypes } from "../../../types/headBar/HeadBarTypes"
 
 function headBarData(): HeadBarTypes[] {
@@ -6,17 +5,17 @@ function headBarData(): HeadBarTypes[] {
         {
             label: "School",
             value: "Primary School ABCD",
-            icon: chevronDown
+            placeholder: "Search for organisation unit"
         },
         {
             label: "Grade",
             value: "Grade 1",
-            icon: chevronDown
+            placeholder: "Search for program"
         },
         {
-            label: "School",
+            label: "Class",
             value: "All",
-            icon: chevronDown
+            placeholder: "Search for program stage"
         }
     ]
 }
