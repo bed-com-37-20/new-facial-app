@@ -4,13 +4,14 @@ import WithPadding from "../template/WithPadding";
 import styles from "./modal.module.css";
 import { Col, Row } from "react-bootstrap";
 import { formFields } from "../../utils/constants/fields/fieldsAttributes";
+import Subtitle from "../text/subtitle";
 
 function ModalContentComponent(): React.ReactElement {
   return (
     <>
       {formFields().map((ff: any, i: number) => (
         <WithPadding key={i}>
-          <h6 className={styles.subTitle}>{ff.section}</h6>
+          <Subtitle label={ff.section}/>
           <WithPadding />
           <Label>{ff.description}</Label>
           <WithPadding p="0.2rem" />

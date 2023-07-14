@@ -10,5 +10,6 @@ import WithPadding from "./template/WithPadding";
 import WithBorder from "./template/WithBorder";
 import ModalComponent from "./modal/Modal";
 import ModalContentComponent from "./modal/ModalContent";
+import Subtitle from "./text/subtitle";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch}
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Subtitle}
