@@ -1,6 +1,6 @@
 import { type FormSectionProps } from "../../../types/fields/FieldsTypes";
 
-function cardsData(): FormSectionProps[] {
+function formFields(): FormSectionProps[] {
   return [
     {
       section: "Enrollment Details",
@@ -135,4 +135,4 @@ function cardsData(): FormSectionProps[] {
   ];
 }
 
-export { cardsData };
+export { formFields };
