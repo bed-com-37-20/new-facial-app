@@ -18,6 +18,24 @@
     line-height: 20px !important;
 }
 
+.HeaderItemContainer {
+    display: flex;
+    background: nne !important;
+    border-radius: 0 !important;
+    height: 39.5px;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 0px 8px 0px 12px;
+    font-size: 14px;
+    line-height: 16px;
+    border: none !important;
+    box-shadow: rgb(213, 221, 229) 0px 0px 0px 1px !important;
+}
+
+.HeaderItemContainer svg {
+    margin-left: 0 !important;
+}
+
 .HeaderItemContainer h5 {
     font-weight: 400 !important;
     margin: 0 !important;
