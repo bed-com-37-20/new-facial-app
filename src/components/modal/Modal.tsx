@@ -1,12 +1,10 @@
 import React from "react";
 import {
-  Button,
   Modal,
   ModalTitle,
-  ModalContent,
-  ModalActions,
-  ButtonStrip
+  ModalContent
 } from "@dhis2/ui";
+import styles from "./modal.module.css"
 
 interface ModalProps {
   open: boolean
@@ -18,7 +16,7 @@ interface ModalProps {
 function ModalComponent({ open, setOpen, title, children }: ModalProps): React.ReactElement {
   return (
     <Modal
-      large
+      className={styles.modalContainer}
       open={open}
       position={"middle"}
       onClose={() => {
@@ -27,37 +25,6 @@ function ModalComponent({ open, setOpen, title, children }: ModalProps): React.R
     >
       <ModalTitle>{title}</ModalTitle>
       <ModalContent>{children}</ModalContent>
-      <ModalActions>
-        <ButtonStrip end>
-          <Button
-            secondary
-            name="hide-modal"
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            Cancel
-          </Button>
-          <Button
-            primary
-            name="insert-preset"
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            Save and add new
-          </Button>
-          <Button
-            primary
-            name="insert-preset"
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            Save and close
-          </Button>
-        </ButtonStrip>
-      </ModalActions>
     </Modal>
   );
 }

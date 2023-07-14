@@ -7,5 +7,6 @@ import FlyoutMenuComponent from "./menu/FlyoutMenu";
 import WithPadding from "./template/WithPadding";
 import WithBorder from "./template/WithBorder";
 import ModalComponent from "./modal/Modal";
+import ModalContentComponent from "./modal/ModalContent";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent }
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent, ModalContentComponent }
