@@ -3,7 +3,8 @@
     box-shadow: 0px 0px 0px 1px #E0E0E0 !important;
     border-radius: 4px !important;
 }
-.carBox{
+
+.carBox {
 
     border-radius: 4px !important;
 }
@@ -63,7 +64,7 @@
     align-items: center;
 }
 
-.cardTotalLabel{
+.cardTotalLabel {
     font-size: 18px;
 }
 
@@ -80,7 +81,7 @@
     color: rgba(0, 0, 0, 0.8);
 }
 
-.cardInfoIcon{
+.cardInfoIcon {
     color: #56A44F !important;
 }
 
@@ -88,4 +89,48 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* ========== Summary Cards styles ============== */
+.success {
+    border: solid 1px #4CAF50;
+    background-color: #F4FBF4;
+    width: 120px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+.error {
+    border: solid 1px #DEA9A7;
+    background-color: #FFECE7;
+    width: 120px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+.secondary {
+    border: solid 1px #D5DDE5;
+    background-color: #FBFCFD;
+    width: 120px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+.success h5,
+.error h5,
+.secondary h5
+{
+text-align: center;
 }
