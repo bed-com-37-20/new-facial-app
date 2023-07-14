@@ -1,7 +1,7 @@
 import { Popover, makeStyles } from '@material-ui/core';
 import React, { useState, useRef } from 'react'
 import WithPadding from '../tamplate/WithPadding.js';
-import SelectorContents from '../../table/components/filters/enrollment/content/SelectorContents';
+import SelectorContents from '../enrollment/content/SelectorContents.jsx';
 import RenderWithAppliedFilter from './RenderWithAppliedFilter.jsx';
 import RenderWithoutAppliedFilter from './RenderWithoutAppliedFilter.jsx';
 
@@ -60,7 +60,7 @@ function SelectButton(props: SelectButtonProps) {
 
     const anchorRef = useRef(null)
     let activeFilterButtonInstance = useRef(null)
-    const [selectorVisible, setselectorVisible] = useState(false)
+    const [selectorVisible, setselectorVisible] = useState<boolean>(false)
 
     const closeFilterSelector = () => {
         setselectorVisible(false);
@@ -125,7 +125,6 @@ function SelectButton(props: SelectButtonProps) {
                             return (
                                 <WithPadding p={"1.5rem"}>
                                     <SelectorContents
-                                        selectorVisible={selectorVisible}
                                         colum={colum}
                                         onClose={onClose}
                                         onChange={onChange}

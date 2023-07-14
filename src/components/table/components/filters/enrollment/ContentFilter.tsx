@@ -5,10 +5,10 @@ import { format } from 'date-fns';
 import React, { useState, useEffect } from 'react';
 import SelectBottom from '../../../selectBottom/SelectBottom.js'
 import MenuFilters from './MenuFilters';
-import { type Attribute } from '../../../../../types/generated/models.js';
+import { type CustomAttributeProps } from '../../../../../types/table/AttributeColumns.js';
 
 interface ContentFilterProps {
-    headers: Attribute[]
+    headers: CustomAttributeProps[]
 }
 
 type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate: string }>;
@@ -17,7 +17,7 @@ function ContentFilter(props: ContentFilterProps) {
     const { headers } = props;
     const [filters, setFilters] = useState<FiltersValuesProps>({})
     const [filtersValues, setfiltersValues] = useState<FiltersValuesProps>({})
-    const [localFilters, setlocalFilters] = useState<Attribute[]>([])
+    const [localFilters, setlocalFilters] = useState<CustomAttributeProps[]>([])
     const [anchorEl, setAnchorEl] = useState(null)
     const [resetValues, setresetValues] = useState("")
     let queryBuilder: any[][];
@@ -31,7 +31,7 @@ function ContentFilter(props: ContentFilterProps) {
         setAnchorEl(event.currentTarget);
     };
 
-    const addSearchableHeaders = (e: Attribute) => {
+    const addSearchableHeaders = (e: CustomAttributeProps) => {
         const copyHeader = [...headers]
         const copyHeaderLocal = [...localFilters]
 
@@ -117,11 +117,11 @@ function ContentFilter(props: ContentFilterProps) {
                         onQuerySubmit={onQuerySubmit}
                         onChange={onChangeFilters}
                         disabledReset={typeof filtersValues[colums.id] === "object" ? filtersValues[colums.id].startDate !== undefined && filtersValues[colums.id].endDate === undefined : filtersValues[colums.id] === undefined}
-                        disableb={colums.valueType === "DATE"
+                        disableb={colums.valueType.DATE === "DATE"
                             ? Object.prototype.hasOwnProperty.call(filters, colums.id) ? filters[colums.id].startDate === filtersValues[colums.id].startDate && filters[colums.id].endDate === filtersValues[colums.id].endDate : !(Object.prototype.hasOwnProperty.call(filtersValues, colums.id) && Object.keys(filtersValues[colums.id]).length > 0)
                             : filters[colums.id] === filtersValues[colums.id]
                         }
-                        filled={colums.valueType === "DATE"
+                        filled={colums.valueType.DATE === "DATE"
                             // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/strict-boolean-expressions
                             ? Object.keys(filters[colums.id]).length > 0 && `${filters[colums.id].startDate && filters[colums.id]?.startDate}${(filters[colums.id]?.endDate) && "- ".concat(filters[colums.id].endDate)})`
                             : filters[colums.id] && filters[colums.id]

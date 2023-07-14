@@ -1,31 +1,41 @@
-import { Button } from '@dhis2/ui';
-import { withStyles } from '@material-ui/core';
 import React from 'react'
-import FIlterComponent from './FIlterComponent';
+import { Button } from '@dhis2/ui';
+import { makeStyles, createStyles, type Theme } from '@material-ui/core/styles';
+import FilterComponents from '../../fields/FilterComponents';
+import { type CustomAttributeProps } from '../../../../../../types/table/AttributeColumns';
 
-const getStyles = (theme) => ({
-    buttonsContainer: {
-        paddingTop: theme.typography.pxToRem(8),
-    },
-    buttonContainer: {
-        paddingRight: theme.typography.pxToRem(8),
-        display: 'inline-block',
-    },
-});
+const getStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        buttonsContainer: {
+            paddingTop: theme.typography.pxToRem(8)
+        },
+        buttonContainer: {
+            paddingRight: theme.typography.pxToRem(8),
+            display: 'inline-block'
+        }
+    })
+);
 
+interface SelectorContentsProps {
+    onClose: () => void
+    disabledReset: boolean
+    colum: CustomAttributeProps
+    onChange: () => void
+    value: any
+    onQuerySubmit: () => void
+    disableb: boolean
+}
 
-function SelectorContents(props) {
-    // eslint-disable-next-line react/prop-types
-    const { classes, onClose, disabledReset, onRemove, isRemovable, colum, onChange, value, onQuerySubmit, disableb: disabledUpdate } = props;
+function SelectorContents(props: SelectorContentsProps) {
+    const { onClose, disabledReset, colum, onQuerySubmit, disableb: disabledUpdate } = props;
 
+    const classes = getStyles()
 
     return (
         <>
-            <FIlterComponent
+            <FilterComponents
                 type={colum.valueType}
                 column={colum}
-                onChange={onChange}
-                value={value}
                 {...props}
             />
             <div
@@ -60,4 +70,4 @@ function SelectorContents(props) {
     )
 }
 
-export default withStyles(getStyles)(SelectorContents)
+export default SelectorContents
