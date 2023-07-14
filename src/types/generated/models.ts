@@ -532,6 +532,7 @@ export type Attribute = {
 
 export namespace Attribute {
     export enum valueType {
+        LIST = 'LIST',
         TEXT = 'TEXT',
         LONG_TEXT = 'LONG_TEXT',
         MULTI_TEXT = 'MULTI_TEXT',
