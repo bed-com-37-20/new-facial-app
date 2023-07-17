@@ -3,19 +3,21 @@ import style from "./MainHeader.module.css"
 import { DropdownButton, FlyoutMenu } from "@dhis2/ui"
 import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import { SimpleSearch } from '../../search'
-import { OrgUnitTree } from '../../orgUnitTree'
+import { componentMapping } from '../../../utils/commons/componentMapping'
 
-function HeaderItem({ label, value, placeholder }: HeadBarTypes): React.ReactElement {
+function HeaderItem({ label, value, placeholder, component }: HeadBarTypes): React.ReactElement {
+    const Component = (component != null) ? componentMapping[component] : null;
     return (
         <DropdownButton
             className={style.HeaderItemContainer}
             component={
                 <FlyoutMenu>
                     <SimpleSearch placeholder={placeholder}>
-                        <OrgUnitTree />
+                        {(Component != null) && <Component />}
                     </SimpleSearch>
                 </FlyoutMenu>
-            }>
+            }
+        >
             <h5>{label} <span>{value}</span></h5>
         </DropdownButton>
     )
