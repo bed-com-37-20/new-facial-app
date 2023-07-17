@@ -8,7 +8,7 @@ function MainHeader(): React.ReactElement {
     return (
         <nav className={style.MainHeaderContainer}>
             {headBarData().map((haderItem, index) => (
-                <HeaderItem key={index} placeholder={haderItem.placeholder} label={haderItem.label} value={haderItem.value} />
+                <HeaderItem key={index} component={haderItem.component} placeholder={haderItem.placeholder} label={haderItem.label} value={haderItem.value} />
             ))}
             <AcademicYear />
         </nav>
