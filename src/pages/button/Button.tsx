@@ -1,5 +1,4 @@
 import React from "react";
-// eslint-disable-next-line import/extensions
 import { SimpleButtons, DropdownButtonComponent, WithPadding } from "../../components";
 import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
 import { enrollmentOptions } from "../../components/buttons/options";

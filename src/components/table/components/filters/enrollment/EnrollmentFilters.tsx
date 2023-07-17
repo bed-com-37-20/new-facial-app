@@ -12,7 +12,7 @@ const headers: CustomAttributeProps[] =
             required: false,
             name: 'Enrollment Date',
             labelName: 'Id',
-            valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+            valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
             options: { optionSet: [{ value: '1', label: '1' }] },
             visible: false,
             disabled: false,

@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
-import MultiSelectBoxes from '../MultiSelectBoxes/MultiSelectBoxes';
-import { multiOrientations } from '../MultiSelectBoxes/multiSelectBoxes.const';
-import SingleSelectBoxes from '../SingleSelectBoxes/SingleSelectBoxes';
-import { singleOrientations } from '../SingleSelectBoxes/singleSelectBoxes.const';
+import MultiSelectBoxes from '../multiSelectBoxes/MultiSelectBoxes';
+import { multiOrientations } from '../multiSelectBoxes/multiSelectBoxes.const';
+import SingleSelectBoxes from '../singleSelectBoxes/SingleSelectBoxes';
+import { singleOrientations } from '../singleSelectBoxes/singleSelectBoxes.const';
 import { orientations } from './selectBoxes.const';
 
 function SelectBoxes(props) {

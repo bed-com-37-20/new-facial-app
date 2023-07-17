@@ -8,7 +8,7 @@ import {
   ButtonStrip
 } from "@dhis2/ui";
 import styles from "./modal.module.css";
-import { type ButtonActionProps } from "../../types/Buttons/ButtonActions";
+import { type ButtonActionProps } from "../../types/buttons/ButtonActions";
 
 interface ModalProps {
   open: boolean

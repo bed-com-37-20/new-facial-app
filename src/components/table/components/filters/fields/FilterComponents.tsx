@@ -1,8 +1,8 @@
 import React from 'react'
-import DateFilterManager from './components/Date/DateFilterManager';
-import SelectBoxes from './components/OptionSet/SelectBoxes/SelectBoxes';
-import TextFilter from './components/Text/Text'
-import TrueOnly from './components/TrueOnly/TrueOnly';
+import DateFilterManager from './components/date/DateFilterManager';
+import SelectBoxes from './components/OptionSet/selectBoxes/SelectBoxes';
+import TextFilter from './components/text/Text'
+import TrueOnly from './components/trueOnly/TrueOnly';
 import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
 import { Attribute } from '../../../../../types/generated/models';
 
@@ -14,7 +14,6 @@ interface FilterComponentProps {
 }
 
 function FilterComponents(props: FilterComponentProps) {
-    // eslint-disable-next-line react/prop-types
     const { type, column, onChange, value } = props;
 
     switch (type) {

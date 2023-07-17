@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-// eslint-disable-next-line import/extensions
 import { IconAddCircle24, Button } from "@dhis2/ui";
 import { ModalComponent, ModalContentComponent, WithPadding } from "../../components";
-import { type ButtonActionProps } from "../../types/Buttons/ButtonActions";
+import { type ButtonActionProps } from "../../types/buttons/ButtonActions";
 
 function Modal(): React.ReactElement {
   const [open, setOpen] = useState<boolean>(true);

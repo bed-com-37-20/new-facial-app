@@ -5,11 +5,10 @@ import { withStyles } from '@material-ui/core';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import React, { useState } from 'react';
 
-
 const getStyles = () => ({
     fromToContainer: {
         display: 'flex',
-        flexWrap: 'wrap',
+        flexWrap: 'wrap'
     },
     inputContainer: {},
     toLabelContainer: {
@@ -17,11 +16,11 @@ const getStyles = () => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 0,
+        paddingTop: 0
     },
     logicErrorContainer: {
-        paddingTop: 0,
-    },
+        paddingTop: 0
+    }
 });
 
 const DateFilterManager = (props) => {
@@ -36,7 +35,7 @@ const DateFilterManager = (props) => {
                         variant="inline"
                         format="yyyy/MM/dd"
                         style={{ width: 150 }}
-                        label={"De"}
+                        label={"From"}
                         maxDate={value?.endDate}
                         value={value?.startDate ? value?.startDate : null}
                         onChange={(e) => onChange(e, id, "DATE", "start")}
@@ -50,7 +49,7 @@ const DateFilterManager = (props) => {
                         format="yyyy/MM/dd"
                         style={{ width: 150 }}
                         minDate={value?.startDate}
-                        label={"Até"}
+                        label={"To"}
                         value={value?.endDate ? value?.endDate : null}
                         onChange={(e) => onChange(e, id, "DATE", "end")}
                     />

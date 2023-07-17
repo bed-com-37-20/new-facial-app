@@ -1,21 +1,28 @@
-import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import React from 'react'
-import SelectBoxes from './SelectBoxes/SelectBoxes';
+import SelectBoxes from './selectBoxes/SelectBoxes';
 
-
-const getStyles = () => ({
+const getStyles = makeStyles(() => ({
     selectBoxesContainer: {
         maxHeight: 250,
-        overflowY: 'auto',
+        overflowY: 'auto'
     },
     selectBoxesInnerContainer: {
-        marginLeft: 12,
-    },
-});
+        marginLeft: 12
+    }
+}));
 
+interface OptionSetProps {
+    onCommitValue: (value: string) => void
+    options: any[]
+    value: string
+    singleSelect: boolean
+}
 
-function OptionSet(props) {
-    const { onCommitValue, options, value, classes, singleSelect } = props;
+function OptionSet(props: OptionSetProps) {
+    const { onCommitValue, options, value, singleSelect } = props;
+    const classes = getStyles()
+
     return (
         <div
             className={classes.selectBoxesContainer}
@@ -26,7 +33,7 @@ function OptionSet(props) {
                     options={options}
                     value={value}
                     onBlur={onCommitValue}
-                    orientation={orientations.VERTICAL}
+                    orientation={"vertical"}
                     multiSelect={!singleSelect}
                     nullable
                 />
@@ -35,4 +42,4 @@ function OptionSet(props) {
     )
 }
 
-export default withStyles(getStyles)(OptionSet)
+export default OptionSet
