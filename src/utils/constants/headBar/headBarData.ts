@@ -5,7 +5,8 @@ function headBarData(): HeadBarTypes[] {
         {
             label: "School",
             value: "Primary School ABCD",
-            placeholder: "Search for organisation unit"
+            placeholder: "Search for organisation unit",
+            component: "orgUnitTree"
         },
         {
             label: "Grade",

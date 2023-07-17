@@ -1,7 +1,7 @@
 @import "../../../assets/style/colors.css";
 
 .MainHeaderContainer {
-    height: 40px;
+    height: auto;
     width: 100%;
     background-color: var(--secondary-colort);
     border-bottom: 1px solid #D0CCCC;
@@ -9,25 +9,21 @@
     align-items: center;
 }
 
-.HeaderItemContainer {
-    color: var(--grey-grey-600, #6E7A8A) !important;
-    font-family: Roboto !important;
-    display: flex !important;
-    align-items: center !important;
-    font-style: normal !important;
-    line-height: 20px !important;
+.MainHeaderContainer .jsx-3163060161 {
+    height: 100%;
 }
 
 .HeaderItemContainer {
-    display: flex;
-    background: nne !important;
+    background: none !important;
     border-radius: 0 !important;
-    height: 39.5px;
+    font-family: Roboto !important;
+    display: flex !important;
+    align-items: center !important;
+    min-height: 51px !important;
+    font-style: normal !important;
     -webkit-box-align: center;
-    align-items: center;
-    padding: 0px 8px 0px 12px;
+    padding: 7px 8px 7px 12px;
     font-size: 14px;
-    line-height: 16px;
     border: none !important;
     box-shadow: rgb(213, 221, 229) 0px 0px 0px 1px !important;
 }
@@ -37,6 +33,7 @@
 }
 
 .HeaderItemContainer h5 {
+    color: var(--grey-grey-600, #6E7A8A) !important;
     font-weight: 400 !important;
     margin: 0 !important;
     font-size: 14px !important;
@@ -44,6 +41,7 @@
 
 .HeaderItemContainer span {
     color: black !important;
+    font-weight: 450;
     margin-right: 12px !important;
 }
 
