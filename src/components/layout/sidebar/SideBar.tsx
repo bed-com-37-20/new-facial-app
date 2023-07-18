@@ -3,7 +3,7 @@ import style from "./SideBar.module.css"
 import { SideBarItem } from './SideBarItem'
 import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 
-function SideBar(): React.ReactElement {
+export default function SideBar(): React.ReactElement {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
     return (
@@ -15,4 +15,4 @@ function SideBar(): React.ReactElement {
             }
         </aside>
     )
-} export { SideBar }
+}

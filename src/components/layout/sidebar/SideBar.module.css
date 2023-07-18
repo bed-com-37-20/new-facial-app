@@ -9,6 +9,7 @@
     padding: 20px 15px;
     transition: width 0.3s ease-in-out;
     overflow-x: hidden;
+    border-right: 1px solid #e6e4e4;
 }
 
 .SideBarContainer::-webkit-scrollbar {
@@ -36,6 +37,7 @@
 }
 
 .SideBarContainerCollapsed {
+    border-right: 1px solid #e6e4e4;
     height: 100%;
     overflow-y: auto;
     transition: width 0.3s ease-in-out;

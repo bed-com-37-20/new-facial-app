@@ -4,7 +4,7 @@ import { headBarData } from '../../../utils/constants/headBar/headBarData'
 import { HeaderItem } from './HeaderItem'
 import { AcademicYear } from './AcademicYear'
 
-function MainHeader(): React.ReactElement {
+export default function MainHeader(): React.ReactElement {
     return (
         <nav className={style.MainHeaderContainer}>
             {headBarData().map((haderItem, index) => (
@@ -14,4 +14,3 @@ function MainHeader(): React.ReactElement {
         </nav>
     )
 }
-export { MainHeader }
