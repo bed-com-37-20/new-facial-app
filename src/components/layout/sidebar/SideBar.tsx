@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import style from "./SideBar.module.css"
-import { SideBarItem } from './SideBarItem'
+import SideBarItem from './SideBarItem'
 import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 
 export default function SideBar(): React.ReactElement {

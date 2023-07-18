@@ -33,7 +33,7 @@ function WorkingLits() {
 
         <div>
           <ButtonStrip>
-            <Button onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button> <br /> <br />
+            <Button onClick={() => { setOpen(true); }} icon={<IconAddCircle24 />}>Enrol single student</Button>
             <DropdownButtonComponent
               name="Bulk enrollment"
               icon={<IconUserGroup16 />}

@@ -5,7 +5,7 @@ import { type HeadBarTypes } from '../../../types/headBar/HeadBarTypes'
 import { SimpleSearch } from '../../search'
 import { componentMapping } from '../../../utils/commons/componentMapping'
 
-function HeaderItem({ label, value, placeholder, component }: HeadBarTypes): React.ReactElement {
+export default function HeaderItem({ label, value, placeholder, component }: HeadBarTypes): React.ReactElement {
     const Component = (component != null) ? componentMapping[component] : null;
     return (
         <DropdownButton
@@ -22,4 +22,3 @@ function HeaderItem({ label, value, placeholder, component }: HeadBarTypes): Rea
         </DropdownButton>
     )
 }
-export { HeaderItem }

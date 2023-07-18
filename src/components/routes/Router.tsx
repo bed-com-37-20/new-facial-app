@@ -2,7 +2,7 @@ import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import { RouteList } from '.';
 
-function Router() {
+export default function Router() {
     return (
         <HashRouter>
             <Routes>
@@ -23,4 +23,3 @@ function Router() {
         </HashRouter>
     )
 }
-export { Router }

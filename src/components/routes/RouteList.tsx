@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
-import { SideBarLayout, SimpleLayout, HeadBarLayout, FullLayout } from "../../layout"
+import { SideBarLayout, SimpleLayout, FullLayout } from "../../layout"
 import { Cards, Buttons, Home, Modal } from "../../pages";
 import TableComponent from "../../pages/table/Table";
 
-function RouteList() {
+export default function RouteList() {
     return [
         {
             path: "/",
@@ -38,4 +38,3 @@ function RouteList() {
         }
     ]
 }
-export { RouteList }
