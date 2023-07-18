@@ -5,9 +5,8 @@ interface BadgeProps {
     value: string
 }
 
-function Badge({ value }: BadgeProps): React.ReactElement {
+export default function Badge({ value }: BadgeProps): React.ReactElement {
     return (
         <span className={style.BadgeContainer}>{value}</span>
     )
 }
-export { Badge }

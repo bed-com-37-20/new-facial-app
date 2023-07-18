@@ -1,10 +1,3 @@
-
-
-.bodyContainer {
-    padding: 10px;
-    margin: 10px 0px 10px 30px;
-}
-
 .containerCards {
     display: grid;
     grid-template-columns: repeat(auto-fit, 200px);

@@ -11,7 +11,7 @@ const ORG_UNIT_QUERY = {
     }
 }
 
-function OrgUnitTree(): React.ReactElement {
+export default function OrgUnitTree(): React.ReactElement {
     const { loading, data, error } = useDataQuery(ORG_UNIT_QUERY);
 
     if (error != null) {
@@ -39,4 +39,3 @@ function OrgUnitTree(): React.ReactElement {
         />
     )
 }
-export { OrgUnitTree }
