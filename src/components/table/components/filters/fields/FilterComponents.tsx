@@ -4,7 +4,7 @@ import TextFilter from './components/text/Text'
 import TrueOnly from './components/trueOnly/TrueOnly';
 import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
 import { Attribute } from '../../../../../types/generated/models';
-import SelectBoxes from './components/optionSet/selectBoxes/SelectBoxes';
+import SelectBoxes from './components/OptionSet/selectBoxes/SelectBoxes';
 
 interface FilterComponentProps {
     type: CustomAttributeProps['valueType']
