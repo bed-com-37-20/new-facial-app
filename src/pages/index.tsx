@@ -1,5 +1,5 @@
 import Buttons from "./button/Button"
-import Cards from "./Card/Cards";
+import Cards from "./card/Cards";
 import Home from "./home/Home";
 import Modal from "./modal/Modal";
 
