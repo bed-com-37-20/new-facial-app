@@ -1,7 +1,7 @@
 import { SplitButton } from "@dhis2/ui";
 import React from "react";
 import FlyoutMenuComponent from "../menu/FlyoutMenu.js";
-import { type FlyoutOptionsProps } from "../../types/Buttons/FlyoutOptions.js";
+import { type FlyoutOptionsProps } from "../../types/buttons/FlyoutOptions.js";
 
 interface ButtonProps {
   name: string

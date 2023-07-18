@@ -49,7 +49,7 @@ function SelectorContents(props: SelectorContentsProps) {
                         onClick={onQuerySubmit}
                         disabled={disabledUpdate}
                     >
-                        {('Aplicar')}
+                        {('Apply')}
                     </Button>
                 </div>
                 <div
@@ -62,7 +62,7 @@ function SelectorContents(props: SelectorContentsProps) {
                         disabled={disabledReset}
 
                     >
-                        {('Restaurar')}
+                        {('Restore')}
                     </Button>
                 </div>
             </div>

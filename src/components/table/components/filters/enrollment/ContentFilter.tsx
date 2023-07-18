@@ -1,5 +1,4 @@
 import { Button } from '@material-ui/core';
-import { format } from 'date-fns';
 import React, { useState, useEffect } from 'react';
 import MenuFilters from './MenuFilters';
 import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
@@ -13,7 +12,7 @@ type FiltersValuesProps = Record<string, any | { endDate: string } | { startDate
 
 function ContentFilter(props: ContentFilterProps) {
     const { headers } = props;
-    const [filters, setFilters] = useState<FiltersValuesProps>({})
+    // const [filters, setFilters] = useState<FiltersValuesProps>({})
     const [filtersValues, setfiltersValues] = useState<FiltersValuesProps>({})
     const [localFilters, setlocalFilters] = useState<CustomAttributeProps[]>([])
     const [anchorEl, setAnchorEl] = useState(null)
@@ -30,6 +29,7 @@ function ContentFilter(props: ContentFilterProps) {
     };
 
     const addSearchableHeaders = (e: CustomAttributeProps) => {
+        console.log(e);
         const copyHeader = [...headers]
         const copyHeaderLocal = [...localFilters]
 
@@ -39,57 +39,11 @@ function ContentFilter(props: ContentFilterProps) {
     }
 
     const onChangeFilters = (value: any, key: string, type: string, pos: string) => {
-        let copyHeader = { ...filtersValues }
-        if (type === 'DATE') {
-            const date = copyHeader[key] as FiltersValuesProps
-
-            if (pos === 'start') {
-                (verifyIsFilled(value) ?? false)
-                    ? date.startDate = format(value, "yyyy-MM-dd")
-                    : delete date.startDate
-            } else {
-                (verifyIsFilled(value) ?? false)
-                    ? date.endDate = format(value, "yyyy-MM-dd")
-                    : delete date.endDate
-            }
-
-            copyHeader[key] = date
-        } else {
-            const { [key]: _, ...withoutKey } = copyHeader;
-            (verifyIsFilled(value) ?? false)
-                ? copyHeader[key] = value
-                : copyHeader = withoutKey
-        }
-
-        setfiltersValues(copyHeader);
-    }
-
-    function verifyIsFilled(value: string) {
-        if (value != null) {
-            return true
-        } else if (value === "") {
-            return false
-        }
+        console.log(value, key, type, pos);
     }
 
     const onQuerySubmit = () => {
-        const copyHeader = { ...filtersValues }
-        // for (const value of Object.keys(copyHeader)) {
-        //     if (typeof copyHeader[value] === 'object') {
-        //         queryBuilder.push([`${value}:ge:${copyHeader[value].startDate}:le:${copyHeader[value].endDate}`])
-        //     } else {
-        //         if (typeof value === 'boolean') {
-        //             queryBuilder.push([`${value}:eq:${copyHeader[value]}`])
-        //         } else
-        //             if (value.includes(',')) {
-        //                 const newValue = copyHeader[value].replaceAll(",", ";")
-        //                 queryBuilder.push([`${value}:in:${newValue}`])
-        //             } else {
-        //                 queryBuilder.push([`${value}:like:${copyHeader[value]}`])
-        //             }
-        //     }
-        // }
-        setFilters(copyHeader)
+
     }
 
     const onResetFilters = (id: string) => {

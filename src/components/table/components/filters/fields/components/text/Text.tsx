@@ -1,20 +1,23 @@
 import { TextField } from '@material-ui/core';
 import React from 'react'
 
-function TextFilter(props) {
-    // eslint-disable-next-line react/prop-types
+interface TextFilterProps {
+    value: string
+    onChange: (value: string, id: string) => void
+    id: string
+}
+
+function TextFilter(props: TextFilterProps) {
     const { value, onChange, id } = props;
-    // (props);
+
     return (
         <div>
             <TextField
                 value={value}
-                onChange={(e) => {
+                onChange={(e: any) => {
                     onChange(e.target.value, id)
                 }}
                 placeholder={"Digitar texto"}
-                // onBlur={handleBlur}
-                // {...props}
             />
         </div>
     )
