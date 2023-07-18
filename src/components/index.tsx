@@ -1,6 +1,6 @@
 import { Table } from "./table"
 import { SideBar, MainHeader } from "./layout/index"
-import SimpleButtons from "./buttons/Button";
+import Buttons from "./buttons/Button";
 import { OrgUnitTree } from "./orgUnitTree/index"
 import { SimpleSearch } from "./search/index"
 import DashboardCard from "./card/CardComponent";
@@ -13,5 +13,6 @@ import ModalContentComponent from "./modal/ModalContent";
 import Title from "./text/Title";
 import Subtitle from "./text/subtitle";
 import SummaryCard from "./card/SummaryCard";
+import SimpleButton from "./buttons/SimpleButton";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, SimpleButtons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard}
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton}

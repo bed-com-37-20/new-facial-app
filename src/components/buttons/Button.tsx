@@ -2,7 +2,7 @@ import { Button, ButtonStrip } from "@dhis2/ui";
 import { InfoOutlined } from "@material-ui/icons";
 import React from "react";
 
-function SimpleButtons(): React.ReactElement {
+function Buttons(): React.ReactElement {
   return (
     <ButtonStrip>
       <Button icon={<InfoOutlined />}>Simple button</Button>
@@ -17,4 +17,4 @@ function SimpleButtons(): React.ReactElement {
   );
 }
 
-export default SimpleButtons;
+export default Buttons;
