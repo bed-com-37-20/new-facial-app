@@ -13,6 +13,7 @@ import ModalContentComponent from "./modal/ModalContent";
 import Title from "./text/Title";
 import Subtitle from "./text/subtitle";
 import SummaryCard from "./card/SummaryCard";
-import SimpleButton from "./buttons/SimpleButton";
+import SimpleButton from "./buttons/MultipleButtons/SimpleButton";
+import SimpleDropdownButton from "./buttons/MultipleButtons/SimpleDropdownButton";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton}
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton}
