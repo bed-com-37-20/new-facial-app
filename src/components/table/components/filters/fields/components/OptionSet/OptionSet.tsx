@@ -20,7 +20,7 @@ interface OptionSetProps {
 }
 
 function OptionSet(props: OptionSetProps) {
-    const { onCommitValue, options, value, singleSelect } = props;
+    const { options, value, singleSelect } = props;
     const classes = getStyles()
 
     return (
@@ -30,12 +30,11 @@ function OptionSet(props: OptionSetProps) {
             <div className={classes.selectBoxesInnerContainer}>
                 { /* $FlowFixMe */}
                 <SelectBoxes
-                    options={options}
+                    optionSet={options}
                     value={value}
-                    onBlur={onCommitValue}
                     orientation={"vertical"}
-                    multiSelect={!singleSelect}
-                    nullable
+                    singleSelect={!singleSelect}
+                    onChange={props.onCommitValue}
                 />
             </div>
         </div>

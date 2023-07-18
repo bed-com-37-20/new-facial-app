@@ -1,10 +1,10 @@
 import React from 'react'
 import DateFilterManager from './components/date/DateFilterManager';
-import SelectBoxes from './components/OptionSet/selectBoxes/SelectBoxes';
 import TextFilter from './components/text/Text'
 import TrueOnly from './components/trueOnly/TrueOnly';
 import { type CustomAttributeProps } from '../../../../../types/table/attributeColumns';
 import { Attribute } from '../../../../../types/generated/models';
+import SelectBoxes from './components/optionSet/selectBoxes/SelectBoxes';
 
 interface FilterComponentProps {
     type: CustomAttributeProps['valueType']
@@ -18,7 +18,7 @@ function FilterComponents(props: FilterComponentProps) {
 
     switch (type) {
         case Attribute.valueType.LIST as unknown as CustomAttributeProps["valueType"]:
-            return <SelectBoxes {...column}
+            return <SelectBoxes
                 onChange={onChange}
                 value={value}
                 {...column}

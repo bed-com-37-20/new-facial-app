@@ -1,6 +1,5 @@
 import { Radio, spacersNum, colors } from '@dhis2/ui'
 import { makeStyles } from '@material-ui/core';
-import { withStyles } from '@material-ui/styles';
 import React from 'react'
 
 const useStyle = makeStyles(() => ({
@@ -13,17 +12,16 @@ const useStyle = makeStyles(() => ({
     }
 }));
 
-interface optionSetsProps {
+interface OptionProps {
     value: string
     label: string
 }
 
 interface SingleSelectBoxesProps {
-    optionSets: optionSetsProps[]
-    classes: any
-    id: string
-    onChange: (value: string, id: string) => void
-    value?: string
+    optionSets?: OptionProps[]
+    id?: string
+    onChange: (value: string, id?: string) => void
+    value: string
 }
 
 function SingleSelectBoxes(props: SingleSelectBoxesProps) {
@@ -37,13 +35,13 @@ function SingleSelectBoxes(props: SingleSelectBoxesProps) {
         return (value.length > 0 && value.includes(localValue));
     }
 
-    return optionSets.map(({ value, label }, index) => (
+    return optionSets?.map(({ value, label }, index) => (
         <Radio
             key={index}
             checked={isChecked(value)}
             label={label}
             name={`singleSelectBoxes-${index}`}
-            onChange={(e) => { handleOptionChange(e); }}
+            onChange={(e: any) => { handleOptionChange(e); }}
             value={value}
             className={classes.checkbox}
             dense
@@ -51,4 +49,4 @@ function SingleSelectBoxes(props: SingleSelectBoxesProps) {
     ));
 }
 
-export default withStyles(styles)(SingleSelectBoxes)
+export default SingleSelectBoxes

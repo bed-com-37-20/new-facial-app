@@ -4,8 +4,8 @@ import { Chip, IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dh
 import DropdownButtonComponent from '../../../../buttons/DropdownButton';
 import { enrollmentOptions } from '../../../../buttons/options';
 import ModalComponent from '../../../../modal/Modal';
-import { type ButtonActionProps } from '../../../../../types/Buttons/ButtonActions';
 import ModalContentComponent from '../../../../modal/ModalContent';
+import { type ButtonActionProps } from '../../../../../types/buttons/ButtonActions';
 
 function WorkingLits() {
   const [open, setOpen] = useState<boolean>(false);

@@ -56,13 +56,13 @@ const useStyles = makeStyles((theme: Theme) =>
 function RenderHeader(props: renderHeaderProps): React.ReactElement {
     const { rowsHeader, order, orderBy, createSortHandler } = props
     const classes = useStyles()
-    const columnHeaderInstances = []
+    // const columnHeaderInstances = []
 
-    function setColumnWidth(columnInstance: string, index: any) {
-        if (columnInstance.length > 0) {
-            columnHeaderInstances[index] = columnInstance;
-        }
-    }
+    // function setColumnWidth(columnInstance: string, index: any) {
+    //     if (columnInstance.length > 0) {
+    //         columnHeaderInstances[index] = columnInstance;
+    //     }
+    // }
 
     const headerCells = rowsHeader?.map((column, index) => (
         <HeaderCell

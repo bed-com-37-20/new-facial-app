@@ -1,11 +1,9 @@
-// @flow
-
 import DateFnsUtils from '@date-io/date-fns';
-import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import React, { useState } from 'react';
+import React from 'react';
 
-const getStyles = () => ({
+const getStyles = makeStyles(() => ({
     fromToContainer: {
         display: 'flex',
         flexWrap: 'wrap'
@@ -21,10 +19,22 @@ const getStyles = () => ({
     logicErrorContainer: {
         paddingTop: 0
     }
-});
+}));
 
-const DateFilterManager = (props) => {
-    const { classes, onChange, value, id } = props;
+interface ValueProps {
+    endDate: string
+    startDate: string
+}
+
+interface DateFilterManagerProps {
+    onChange: (e: any, id: string, type: string, position: string) => void
+    value: ValueProps
+    id: string
+}
+
+const DateFilterManager = (props: DateFilterManagerProps) => {
+    const { onChange, value = { startDate: "", endDate: "" }, id } = props;
+    const classes = getStyles();
 
     return (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -37,8 +47,8 @@ const DateFilterManager = (props) => {
                         style={{ width: 150 }}
                         label={"From"}
                         maxDate={value?.endDate}
-                        value={value?.startDate ? value?.startDate : null}
-                        onChange={(e) => onChange(e, id, "DATE", "start")}
+                        value={(value?.startDate.length > 0) ? value?.startDate : null}
+                        onChange={(e) => { onChange(e, id, "DATE", "start"); }}
                     />
                 </div>
                 <div className={classes.toLabelContainer} />
@@ -50,8 +60,8 @@ const DateFilterManager = (props) => {
                         style={{ width: 150 }}
                         minDate={value?.startDate}
                         label={"To"}
-                        value={value?.endDate ? value?.endDate : null}
-                        onChange={(e) => onChange(e, id, "DATE", "end")}
+                        value={((value?.endDate).length > 0) ? value?.endDate : null}
+                        onChange={(e) => { onChange(e, id, "DATE", "end"); }}
                     />
                 </div>
             </div>
@@ -60,4 +70,4 @@ const DateFilterManager = (props) => {
     );
 }
 
-export default withStyles(getStyles)(DateFilterManager);
+export default DateFilterManager
