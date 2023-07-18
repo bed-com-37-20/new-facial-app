@@ -14,6 +14,39 @@ const usetStyles = makeStyles({
     }
 });
 
+const headers = [
+    {
+        id: 'StudentNationalID',
+        header: 'Student National ID',
+        optionSets: []
+    },
+    {
+        id: 'ClassOrder',
+        header: 'Class Order',
+        optionSets: []
+    },
+    {
+        id: 'Firstname',
+        header: 'First name',
+        optionSets: []
+    },
+    {
+        id: 'Surname',
+        header: 'Surname',
+        optionSets: []
+    },
+    {
+        id: 'Dateofbirth',
+        header: 'Date of birth',
+        optionSets: []
+    },
+    {
+        id: 'EnrolmentStatus',
+        header: 'Enrolment Status',
+        optionSets: []
+    }
+]
+
 function Table() {
     const classes = usetStyles()
     return (
@@ -32,35 +65,21 @@ function Table() {
                                     createSortHandler={() => { }}
                                     order='asc'
                                     orderBy='desc'
-                                    rowsHeader={[
-                                        {
-                                            id: 'id',
-                                            header: 'Id',
-                                            optionSets: []
-                                        },
-                                        {
-                                            id: 'id2',
-                                            header: 'Id2',
-                                            optionSets: []
-                                        }
-                                    ]}
+                                    rowsHeader={headers}
                                 />
                                 <RenderRows
-                                    headerData={[
-                                        {
-                                            id: 'id',
-                                            header: 'ID',
-                                            optionSets: []
-                                        },
-                                        {
-                                            id: 'id2',
-                                            header: 'ID2',
-                                            optionSets: []
-                                        }
-                                    ]}
+                                    headerData={headers}
                                     rowsData={[
-                                        { id: "111", id2: "2222" },
-                                        { id: "222", id2: "2222" }
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" },
+                                        { StudentNationalID: "2023000234-01", ClassOrder: "01", Firstname: "Abayomi Baageshree", Surname: "Baageshree", Dateofbirth: "2023-03-01", EnrolmentStatus: "Active" }
                                     ]}
                                 />
                             </>
