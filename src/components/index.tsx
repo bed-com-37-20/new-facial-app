@@ -18,4 +18,3 @@ import SimpleDropdownButton from "./buttons/MultipleButtons/SimpleDropdownButton
 import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
 
 export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton, SwitchButtonView}
-
