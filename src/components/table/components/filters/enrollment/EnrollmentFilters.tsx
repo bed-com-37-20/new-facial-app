@@ -6,13 +6,13 @@ import { Attribute } from '../../../../../types/generated/models';
 const headers: CustomAttributeProps[] =
     [
         {
-            id: 'id',
+            id: 'id1',
             displayName: 'Enrollment Date',
             header: 'Enrollment Date',
             required: false,
             name: 'Enrollment Date',
             labelName: 'Id',
-            valueType: Attribute.valueType.TEXT as unknown as CustomAttributeProps["valueType"],
+            valueType: Attribute.valueType.DATE as unknown as CustomAttributeProps["valueType"],
             options: { optionSet: [{ value: '1', label: '1' }] },
             visible: false,
             disabled: false,
@@ -20,10 +20,10 @@ const headers: CustomAttributeProps[] =
             searchable: false,
             error: false,
             content: '',
-            key: 'id'
+            key: 'id1'
         },
         {
-            id: 'id',
+            id: 'id2',
             displayName: 'Student Nation',
             header: 'Student Nation',
             required: false,
@@ -37,10 +37,10 @@ const headers: CustomAttributeProps[] =
             searchable: false,
             error: false,
             content: '',
-            key: 'id'
+            key: 'id2'
         },
         {
-            id: 'id',
+            id: 'id3',
             displayName: 'Frist Name',
             header: 'Frist Name',
             required: false,
@@ -54,10 +54,10 @@ const headers: CustomAttributeProps[] =
             searchable: false,
             error: false,
             content: '',
-            key: 'id'
+            key: 'id3'
         },
         {
-            id: 'id',
+            id: 'id4',
             displayName: 'Surname',
             header: 'Surname',
             required: false,
@@ -71,10 +71,10 @@ const headers: CustomAttributeProps[] =
             searchable: false,
             error: false,
             content: '',
-            key: 'id'
+            key: 'id4'
         },
         {
-            id: 'id',
+            id: 'id5',
             displayName: 'Date of Birthday',
             header: 'Date of Birthday',
             required: false,
@@ -88,7 +88,7 @@ const headers: CustomAttributeProps[] =
             searchable: false,
             error: false,
             content: '',
-            key: 'id'
+            key: 'id5'
         }
     ]
 

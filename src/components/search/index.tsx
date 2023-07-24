@@ -1,2 +1,2 @@
-import { SimpleSearch } from "./SimpleSearch"
+import SimpleSearch from "./SimpleSearch"
 export { SimpleSearch }

@@ -1,2 +1,2 @@
-import { OrgUnitTree } from "./OrgUnitTree"
+import OrgUnitTree from "./OrgUnitTree"
 export { OrgUnitTree }

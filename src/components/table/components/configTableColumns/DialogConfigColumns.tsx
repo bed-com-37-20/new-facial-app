@@ -6,6 +6,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import React, { useState } from 'react'
 import DragDropList from '../../../dragDrop/DragDropList';
 import { Button } from 'react-bootstrap';
+import { type CustomAttributeProps } from '../../../../types/table/attributeColumns';
 
 interface DialogSelectColumnsProps {
     open: boolean
@@ -14,23 +15,16 @@ interface DialogSelectColumnsProps {
     updateVariables: (list: any[]) => void
 }
 
-interface columnsListProps {
-    id: string
-    visible: boolean
-    header: string
-}
-
 function DialogSelectColumns(props: DialogSelectColumnsProps) {
     const { open, onClose, headers = [], updateVariables } = props
 
-    const [columnsList, setcolumnsList] = useState<columnsListProps[]>([])
+    const [columnsList, setcolumnsList] = useState<CustomAttributeProps[]>([])
 
     function handleToggle(id: string) {
-        const localColumns = columnsList?.length > 0 ? [...columnsList] : [...headers]
+        const localColumns = columnsList?.length > 0 ? [...columnsList] : [...headers] as CustomAttributeProps[]
 
         const index = localColumns.findIndex(column => column.id === id);
 
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         localColumns[index] = { ...localColumns[index], visible: !(localColumns[index].visible) };
 
         setcolumnsList(localColumns)
@@ -42,7 +36,7 @@ function DialogSelectColumns(props: DialogSelectColumnsProps) {
         onClose()
     };
 
-    const handleUpdateListOrder = (sortedList: columnsListProps[]) => {
+    const handleUpdateListOrder = (sortedList: CustomAttributeProps[]) => {
         setcolumnsList(sortedList)
     };
 

@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
-import { SideBarLayout, SimpleLayout, HeadBarLayout } from "../../layout"
+import { SideBarLayout, SimpleLayout, FullLayout } from "../../layout"
 import { Cards, ButtonsPage, Home, Modal} from "../../pages";
 import TableComponent from "../../pages/table/Table";
 
-function RouteList() {
+export default function RouteList() {
     return [
         {
             path: "/",
@@ -18,7 +18,7 @@ function RouteList() {
         },
         {
             path: "/table",
-            layout: HeadBarLayout,
+            layout: FullLayout,
             component: () => <TableComponent />
         },
         {
@@ -38,4 +38,3 @@ function RouteList() {
         }
     ]
 }
-export { RouteList }

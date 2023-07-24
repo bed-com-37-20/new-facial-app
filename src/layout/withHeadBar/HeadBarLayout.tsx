@@ -2,7 +2,7 @@ import React from 'react'
 import style from "../Layout.module.css"
 import { MainHeader } from '../../components'
 
-function HeadBarLayout({ children }: { children: React.ReactNode }): React.ReactElement {
+export default function HeadBarLayout({ children }: { children: React.ReactNode }): React.ReactElement {
     return (
         <div className={style.HeadBarLayoutContainer}>
             <MainHeader />
@@ -10,4 +10,3 @@ function HeadBarLayout({ children }: { children: React.ReactNode }): React.React
         </div>
     )
 }
-export { HeadBarLayout }

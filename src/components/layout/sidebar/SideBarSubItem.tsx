@@ -1,9 +1,9 @@
 import React from 'react';
 import style from "./SideBar.module.css"
-import { Badge } from '../../badge/Badge';
+import Badge from '../../badge/Badge';
 import { type SideBarSubItemProps } from '../../../types/sideBar/SideBarTypes';
 
-function SideBarSubItem({ icon, label, showBadge, route }: SideBarSubItemProps) {
+export default function SideBarSubItem({ icon, label, showBadge, route }: SideBarSubItemProps) {
     return (
         <li className={location.hash.slice(1) === route ? style.SideBarSubItemContainerActive : style.SideBarSubItemContainer}>
             <img src={icon} /> <span>{label}</span>
@@ -14,4 +14,3 @@ function SideBarSubItem({ icon, label, showBadge, route }: SideBarSubItemProps) 
         </li>
     )
 }
-export { SideBarSubItem }

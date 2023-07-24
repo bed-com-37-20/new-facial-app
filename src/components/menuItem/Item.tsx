@@ -2,7 +2,7 @@ import React from 'react'
 import { MenuItem } from "@dhis2/ui"
 import { type MenuItemTypes } from '../../types/menu/MenuItemTypes'
 
-function Item(menuItens: MenuItemTypes[]): React.ReactElement {
+export default function Item(menuItens: MenuItemTypes[]): React.ReactElement {
     return (
         <>
             {
@@ -13,4 +13,3 @@ function Item(menuItens: MenuItemTypes[]): React.ReactElement {
         </>
     )
 }
-export { Item }
