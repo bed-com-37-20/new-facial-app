@@ -1,27 +1,60 @@
 import React, { useState } from "react";
-import { DropdownButton, FlyoutMenu, MenuItem } from "@dhis2/ui";
-import styles from "../button.module.css"
+import styles from "../button.module.css";
+import { Menu, MenuItem, Button } from "@material-ui/core";
+import { ExpandLess, ExpandMore } from "@material-ui/icons";
+import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
 
-export default function SimpleDropdownButton(): React.ReactElement {
-  const [open, setOpen] = useState<boolean>(false);
-  const [selectedTerm, setSelectedTerm] = useState<string>();
-  const items = [
-    { id: "Term1", label: "Term 1" },
-    { id: "Term2", label: "Term 2" },
-    { id: "Term3", label: "Term 3" },
-    { id: "Term4", label: "Term 4" }
-  ];
+interface ButtonProps {
+  items: SimpleButtonsProps[]
+  selectedTerm: any
+  setSelectedTerm: (arg: string) => void
+}
+
+export default function SimpleDropdownButton(props: ButtonProps): React.ReactElement {
+  const { items, selectedTerm, setSelectedTerm } = props;
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <DropdownButton
-    className={styles.simpleDropdownButton}
-    onClick={() => { setOpen(true) }}
-      component={ open &&
-        <FlyoutMenu>
-          {items.map((item) => (
-            <MenuItem active={selectedTerm === item.label} onClick={() => { setSelectedTerm(item.label); setOpen(false) }} key={item.id} label={item.label} />
-          ))}
-        </FlyoutMenu>
-      }
-    >{selectedTerm ?? "Terms"}</DropdownButton>
+    <>
+      <Button
+        className={styles.simpleDropdownButton}
+        variant="outlined"
+        onClick={handleClick}
+        endIcon={anchorEl === null ? <ExpandMore className={styles.dropdownIcon}/> : <ExpandLess className={styles.dropdownIcon}/>}
+      >
+        {selectedTerm ?? "Terms"}
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        getContentAnchorEl={null}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        transformOrigin={{ vertical: "top", horizontal: "center" }}
+        PaperProps={{
+          style: { boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px" }
+         }}
+      >
+        {items.map((item, i) => (
+          <MenuItem
+            key={i}
+            className={selectedTerm === item.label && styles.activeMenuItem}
+            style={{ minWidth: 127 }}
+            onClick={() => { setSelectedTerm(item.label); setAnchorEl(null); }}
+          >
+            {item.label}
+          </MenuItem>
+        ))}
+      </Menu>{" "}
+    </>
   );
 }

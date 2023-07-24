@@ -1,19 +1,24 @@
 import React from "react";
 import styles from "../button.module.css";
+import { ButtonStrip } from "@dhis2/ui";
+import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
 
-interface CardProps {
-  label: string
-  value: string
-  active?: string
+interface ButtonProps {
+  items: SimpleButtonsProps[]
+  selectedTerm: any
+  setSelectedTerm: (arg: string) => void
 }
 
-export default function SimpleButton(props: CardProps): React.ReactElement {
-  const { label, active } = props;
-  const activeStyle: boolean = active != null ? styles[active] : "";
+export default function SimpleButton(props: ButtonProps): React.ReactElement {
+  const { items, selectedTerm, setSelectedTerm } = props;
 
   return (
-    <div className={activeStyle || styles.simpleButton}>
-      <span className={styles.simpleButtonLabel}>{label}</span>
-    </div>
+    <ButtonStrip>
+      {items.map((item) => (
+        <div key={item.id} className={selectedTerm === item.label ? styles["active-button"] : styles.simpleButton} onClick={() => { setSelectedTerm(item.label) }}>
+          <span className={styles.simpleButtonLabel}>{item.label}</span>
+        </div>
+      ))}
+    </ButtonStrip>
   );
 }

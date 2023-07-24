@@ -15,5 +15,6 @@ import Subtitle from "./text/subtitle";
 import SummaryCard from "./card/SummaryCard";
 import SimpleButton from "./buttons/MultipleButtons/SimpleButton";
 import SimpleDropdownButton from "./buttons/MultipleButtons/SimpleDropdownButton";
+import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton}
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton, SwitchButtonView}
