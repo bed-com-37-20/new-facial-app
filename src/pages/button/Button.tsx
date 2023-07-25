@@ -1,8 +1,20 @@
 import React from "react";
 // eslint-disable-next-line import/extensions
-import { Buttons, DropdownButtonComponent, SwitchButtonView, WithPadding } from "../../components";
-import { IconUserGroup16, IconAddCircle24, Button, ButtonStrip } from "@dhis2/ui";
+import {
+  Buttons,
+  ButtonsGroup,
+  DropdownButtonComponent,
+  SwitchButtonView,
+  WithPadding
+} from "../../components";
+import {
+  IconUserGroup16,
+  IconAddCircle24,
+  Button,
+  ButtonStrip
+} from "@dhis2/ui";
 import { enrollmentOptions } from "../../components/buttons/options";
+import { buttonOptionsIcons, buttonOptionsLabels } from "../../components/buttons/GroupedButtons/options";
 
 function ButtonsPage(): React.ReactElement {
   return (
@@ -20,7 +32,14 @@ function ButtonsPage(): React.ReactElement {
       <br />
 
       <ButtonStrip>
-        <SwitchButtonView/>
+        <SwitchButtonView />
+      </ButtonStrip>
+
+      <br />
+
+      <ButtonStrip>
+        <ButtonsGroup options={buttonOptionsLabels} />
+        <ButtonsGroup options={buttonOptionsIcons} />
       </ButtonStrip>
     </WithPadding>
   );

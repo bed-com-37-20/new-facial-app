@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SimpleDropdownButton from "./SimpleDropdownButton";
 import SimpleButton from "./SimpleButton";
-import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsProps";
+import { type SimpleButtonsProps } from "../../../types/Buttons/GroupedButtons";
 
 export default function SwitchButtonView(): React.ReactElement {
   const [selectedTerm, setSelectedTerm] = useState<string>();

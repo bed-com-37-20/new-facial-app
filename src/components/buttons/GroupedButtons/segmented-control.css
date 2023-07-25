@@ -1,0 +1,43 @@
+
+button.jsx-2069710253.segment {
+    background-color: #ffff !important;
+    border-color: #9DB5CB !important;
+    color: black;
+    min-width: 37px !important;
+    height: 37px !important;
+    padding: 5px 10px;
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.4000000059604645px;
+    text-align: left;
+}
+
+
+button.jsx-2069710253.segment.selected {
+    background-color: #F6FAFD !important;
+    border-color: #9DB5CB !important;
+    color: black;
+    font-weight: 500;
+}
+
+.upper-case-labels button.jsx-2069710253.segment, .upper-case-labels button.jsx-2069710253.segment.selected {
+    text-transform: uppercase !important;
+}
+
+
+.present-icon{
+    color: #3DBC7F;
+    font-size: 37px;
+}
+
+.late-icon{
+    color: #EAB631;
+    font-size: 37px;
+}
+
+.absent-icon{
+    color: #F05C5C;
+    font-size: 37px;
+}

@@ -16,5 +16,6 @@ import SummaryCard from "./card/SummaryCard";
 import SimpleButton from "./buttons/MultipleButtons/SimpleButton";
 import SimpleDropdownButton from "./buttons/MultipleButtons/SimpleDropdownButton";
 import SwitchButtonView from "./buttons/MultipleButtons/SwitchButtonView";
+import ButtonsGroup from "./buttons/GroupedButtons/ButtonGroup";
 
-export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton, SwitchButtonView}
+export { SideBar, MainHeader, DashboardCard, Table, DropdownButtonComponent, FlyoutMenuComponent, Buttons, WithPadding, WithBorder, ModalComponent, ModalContentComponent, OrgUnitTree, SimpleSearch, Title, Subtitle, SummaryCard, SimpleButton, SimpleDropdownButton, SwitchButtonView, ButtonsGroup}
