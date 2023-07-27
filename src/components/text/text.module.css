@@ -5,6 +5,7 @@
     font-size: 18px;
     line-height: 23px;
     color: rgba(33, 41, 52, 0.9);
+    margin-bottom: 20px !important;
 }
 
 .title {
@@ -18,4 +19,5 @@
     flex: none;
     order: 0;
     flex-grow: 0;
+    margin-bottom: 20px !important;
 }

@@ -1,16 +1,16 @@
-import { Button, ButtonStrip } from "@dhis2/ui";
-import { InfoOutlined } from "@material-ui/icons";
 import React from "react";
+import { Button, ButtonStrip, IconAddCircle24, IconInfo24 } from "@dhis2/ui";
 
 function Buttons(): React.ReactElement {
   return (
     <ButtonStrip>
-      <Button icon={<InfoOutlined />}>Simple button</Button>
+      <Button icon={<IconAddCircle24 />}>Enrol single student</Button>
+      <Button>Simple button</Button>
       <Button primary>Simple button</Button>
-      <Button icon={<InfoOutlined />} destructive>
+      <Button icon={<IconInfo24 />} destructive>
         Simple button
       </Button>
-      <Button icon={<InfoOutlined />} disabled>
+      <Button icon={<IconInfo24 />} disabled>
         Simple button
       </Button>
     </ButtonStrip>

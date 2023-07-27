@@ -3,45 +3,58 @@ import React from "react";
 import {
   Buttons,
   ButtonsGroup,
-  DropdownButtonComponent,
+  SplitButtonComponent,
   SwitchButtonView,
+  Title,
   WithPadding
 } from "../../components";
 import {
   IconUserGroup16,
-  IconAddCircle24,
-  Button,
   ButtonStrip
 } from "@dhis2/ui";
 import { enrollmentOptions } from "../../components/buttons/options";
-import { buttonOptionsIcons, buttonOptionsLabels } from "../../components/buttons/GroupedButtons/options";
+import {
+  buttonOptionsIcons,
+  buttonOptionsLabels
+} from "../../components/buttons/GroupedButtons/options";
 
 function ButtonsPage(): React.ReactElement {
   return (
-    <WithPadding>
-      <Buttons />
-      <br />
-      <ButtonStrip>
-        <Button icon={<IconAddCircle24 />}>Enrol single student</Button>
-        <DropdownButtonComponent
-          name="Bulk enrollment"
-          icon={<IconUserGroup16 />}
-          options={enrollmentOptions}
-        />
-      </ButtonStrip>
-      <br />
+    <div>
+      <WithPadding p="15px">
+        <Title label="Default buttons" />
+        <Buttons />
+      </WithPadding>
+      <hr />
 
-      <ButtonStrip>
-        <SwitchButtonView />
-      </ButtonStrip>
+      <WithPadding p="15px">
+        <Title label="Split dropdown button" />
+        <ButtonStrip>
+          <SplitButtonComponent
+            name="Bulk enrollment"
+            icon={<IconUserGroup16 />}
+            options={enrollmentOptions}
+          />
+        </ButtonStrip>
+      </WithPadding>
+      <hr />
 
-      <br />
+      <WithPadding p="15px">
+        <Title label="Simple customized buttons" />
+        <ButtonStrip>
+          <SwitchButtonView />
+        </ButtonStrip>
+      </WithPadding>
+      <hr />
 
-      <ButtonStrip>
-        <ButtonsGroup options={buttonOptionsLabels} />
-        <ButtonsGroup options={buttonOptionsIcons} />
-      </ButtonStrip>
-    </WithPadding>
+      <WithPadding p="15px">
+        <Title label="Buttons group" />
+        <ButtonStrip>
+          <ButtonsGroup options={buttonOptionsLabels} />
+          <ButtonsGroup options={buttonOptionsIcons} />
+        </ButtonStrip>
+      </WithPadding>
+    </div>
   );
 }
 

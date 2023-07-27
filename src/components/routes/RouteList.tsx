@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout, FullLayout } from "../../layout"
-import { Cards, ButtonsPage, Home, Modal} from "../../pages";
+import { Cards, ButtonsPage, Home, Modal, Titles, TagAlerts} from "../../pages";
 import TableComponent from "../../pages/table/Table";
 
 export default function RouteList() {
@@ -35,6 +35,16 @@ export default function RouteList() {
             path: "/modal",
             layout: SideBarLayout,
             component: Modal
+        },
+        {
+            path: "/text",
+            layout: SideBarLayout,
+            component: Titles
+        },
+        {
+            path: "/tags",
+            layout: SideBarLayout,
+            component: TagAlerts
         }
     ]
 }
