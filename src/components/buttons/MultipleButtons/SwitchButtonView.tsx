@@ -12,10 +12,10 @@ const initialItems: SimpleButtonsProps[] = [
 
 export default function SwitchButtonView(): React.ReactElement {
   const [items, setItems] = useState<SimpleButtonsProps[]>(initialItems)
-  const [selectedTerm, setSelectedTerm] = useState<SimpleButtonsProps>(items[0]);
+  const [selectedTerm, setSelectedTerm] = useState<SimpleButtonsProps>();
 
   useEffect(() => {
-    if (!items.some(item => item.id === selectedTerm.id)) setSelectedTerm(items[items.length - 1]);
+    if ((selectedTerm != null) && !items.some(item => item.id === selectedTerm?.id)) setSelectedTerm(items[items.length - 1]);
   }, [items]);
 
   return (

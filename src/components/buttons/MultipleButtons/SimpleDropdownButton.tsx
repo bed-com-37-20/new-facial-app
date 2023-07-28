@@ -6,7 +6,7 @@ import { type SimpleButtonsProps } from "../../../types/Buttons/SimpleButtonsPro
 
 interface ButtonProps {
   items: SimpleButtonsProps[]
-  selectedTerm: SimpleButtonsProps
+  selectedTerm: SimpleButtonsProps | undefined
   setSelectedTerm: (arg: SimpleButtonsProps) => void
 }
 
@@ -30,7 +30,7 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         onClick={handleClick}
         endIcon={anchorEl === null ? <ExpandMore className={styles.dropdownIcon}/> : <ExpandLess className={styles.dropdownIcon}/>}
       >
-        {selectedTerm.label ?? "Terms"}
+        {selectedTerm?.label ?? "Items"}
       </Button>
       <Menu
         id="simple-menu"
@@ -47,7 +47,7 @@ export default function SimpleDropdownButton(props: ButtonProps): React.ReactEle
         {items.map((item, i) => (
           <MenuItem
             key={i}
-            className={selectedTerm.id === item.id && styles.activeMenuItem}
+            className={selectedTerm?.id === item.id && styles.activeMenuItem}
             style={{ minWidth: 127 }}
             onClick={() => { setSelectedTerm(item); setAnchorEl(null); }}
           >
