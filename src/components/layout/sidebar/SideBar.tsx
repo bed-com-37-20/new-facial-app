@@ -4,10 +4,10 @@ import SideBarItem from './SideBarItem'
 import { sideBarData } from "../../../utils/constants/sideBar/sideBarData"
 
 export default function SideBar(): React.ReactElement {
-    const [collapsed, setCollapsed] = useState<boolean>(false);
+    const [collapsed] = useState<boolean>(false);
 
     return (
-        <aside onClick={() => { setCollapsed(!collapsed); }} className={collapsed ? style.SideBarContainerCollapsed : style.SideBarContainer}>
+        <aside className={collapsed ? style.SideBarContainerCollapsed : style.SideBarContainer}>
             {
                 sideBarData().map((element, index) => (
                     <SideBarItem key={index} title={element.title} subItems={element.subItems} />

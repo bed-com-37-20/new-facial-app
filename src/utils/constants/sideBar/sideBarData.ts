@@ -3,83 +3,48 @@ import fileDocument from "../../../assets/images/sidebar/file-document.svg"
 import glyph from "../../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../../assets/images/sidebar/log-out.svg"
-import userGroup from "../../../assets/images/sidebar/user-group.svg"
 import { type SideBarItemProps } from "../../../types/sideBar/SideBarTypes"
 
 function sideBarData (): SideBarItemProps[] {
     return [
         {
-            title: "Students",
+            title: "Components",
             subItems: [
                 {
                     icon: listAdd,
-                    label: "Enrollment",
+                    label: "Cards",
                     showBadge: false,
-                    route: "/home"
+                    route: "/cards"
                 },
                 {
                     icon: glyph,
-                    label: "Attendance",
+                    label: "Buttons",
                     showBadge: false,
-                    route: "/home1"
-                },
-                {
-                    icon: fileDocument,
-                    label: "Performance",
-                    showBadge: false,
-                    route: "/home2"
+                    route: "/buttons"
                 },
                 {
                     icon: gauge,
-                    label: "Final result",
+                    label: "Modal",
                     showBadge: false,
-                    route: "/home3"
+                    route: "/modal"
                 },
                 {
                     icon: logOut,
-                    label: "Transfer",
-                    showBadge: true,
-                    route: "/home4"
-                }
-            ]
-        },
-        {
-            title: "Staff",
-            subItems: [
-                {
-                    icon: userGroup,
-                    label: "Teacher registry",
+                    label: "Table",
                     showBadge: false,
-                    route: "/home5"
+                    route: "/table"
                 },
                 {
-                    icon: userGroup,
-                    label: "Non-teacher registry",
+                    icon: fileDocument,
+                    label: "Tags",
                     showBadge: false,
-                    route: "/home6"
+                    route: "/tags"
                 },
                 {
-                    icon: glyph,
-                    label: "Attendance",
+                    icon: fileDocument,
+                    label: "Titles",
                     showBadge: false,
-                    route: "/home7"
-                },
-                {
-                    icon: logOut,
-                    label: "Transfer",
-                    showBadge: false,
-                    route: "/home8"
-                }
-            ]
-        },
-        {
-            title: "Academic Year",
-            subItems: [
-                {
-                    icon: listAdd,
-                    label: "School Calendar",
-                    showBadge: false,
-                    route: "/home9"
+                    route: "/text"
                 }
             ]
         }

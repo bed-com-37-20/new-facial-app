@@ -201,7 +201,7 @@
 .simpleButton {
     border: solid 1px #A0ADBA;
     background-color: #D8EED2;
-    width: 137px;
+    min-width: 137px;
     height: 35px;
     border-radius: 4px;
     padding: 10px 12px 10px 12px;
@@ -241,7 +241,7 @@
     font-size: 14px !important;
     text-transform: none !important;
     font-weight: 400 !important;
-    width: 127px !important;
+    min-width: 127px !important;
 }
 
 .dropdownIcon{

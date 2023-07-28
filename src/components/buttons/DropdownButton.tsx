@@ -8,7 +8,7 @@ interface ButtonProps {
   icon?: React.ReactNode
   options: FlyoutOptionsProps[]
 }
-function DropdownButtonComponent(props: ButtonProps): React.ReactElement {
+function SplitButtonComponent(props: ButtonProps): React.ReactElement {
   const { name, icon, options } = props;
 
   return (
@@ -21,4 +21,4 @@ function DropdownButtonComponent(props: ButtonProps): React.ReactElement {
   );
 }
 
-export default DropdownButtonComponent;
+export default SplitButtonComponent;
