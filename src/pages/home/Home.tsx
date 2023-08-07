@@ -1,11 +1,11 @@
 import React from "react";
 import style from "./home.module.css";
-import { DashboardCard, Title } from "../../components";
+import { DashboardCard, Title, WithPadding } from "../../components";
 import { cardsData } from "../../utils/constants/dashboard/dashboardData";
 
 function Home(): React.ReactElement {
   return (
-    <div className={style.bodyContainer}>
+    <WithPadding p="10px 30px">
       {cardsData().map((section, y) => (
         <div key={y} className={style.section}>
           <Title label={section.title}/>
@@ -27,7 +27,7 @@ function Home(): React.ReactElement {
           </div>
         </div>
       ))}
-    </div>
+    </WithPadding>
   );
 }
 export default Home;
