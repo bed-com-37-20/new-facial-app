@@ -9,7 +9,7 @@ export default function RouteList() {
         {
             path: "/",
             layout: SimpleLayout,
-            component: () => <Navigate to="/home" replace />
+            component: () => <Navigate to="/cards" replace />
         },
         {
             path: "/home",
