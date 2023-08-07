@@ -11,6 +11,7 @@ interface SideBarSubItemProps {
     label: string
     showBadge: boolean
     icon: string
+    disabled: boolean
     route: string
 }
 

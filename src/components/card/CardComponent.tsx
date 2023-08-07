@@ -14,10 +14,11 @@ interface CardProps {
   program: string
   formLink: string
   listLink: string
+  disabled?: boolean
 }
 
 export default function DashboardCard(props: CardProps): React.ReactElement {
-  const { icon, title, value, listLink, leftLabel } = props;
+  const { icon, title, value, formLink, listLink, leftLabel, disabled } = props;
 
   return (
     <Box height="245px" width="200px">
@@ -40,15 +41,17 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         </div>
         <Divider />
         <div className={style.cardActions}>
-          <Tooltip title={`Add ${title}`}>
-            <IconButton size="small">
-              <Add />
-            </IconButton>
-          </Tooltip>
+          <NavLink to={formLink} className={(disabled === true) && style.disabledLink}>
+            <Tooltip title={`Add ${title}`}>
+              <IconButton size="small" disabled={disabled}>
+                <Add />
+              </IconButton>
+            </Tooltip>
+          </NavLink>
           &nbsp;
-          <NavLink to={listLink}>
+          <NavLink to={listLink}className={(disabled === true) && style.disabledLink}>
             <Tooltip title={`List ${title}`}>
-                <IconButton size="small">
+                <IconButton size="small" disabled={disabled}>
                   <Menu />
                 </IconButton>
             </Tooltip>

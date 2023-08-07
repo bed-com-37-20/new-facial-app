@@ -17,7 +17,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-enrollment",
-          listLink: "list-enrollment"
+          listLink: "list-enrollment",
+          disabled: false
         },
         {
           icon: attendance,
@@ -25,7 +26,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-attendance",
-          listLink: "list-attendance"
+          listLink: "list-attendance",
+          disabled: true
         },
         {
           icon: performance,
@@ -33,7 +35,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-performance",
-          listLink: "list-performance"
+          listLink: "list-performance",
+          disabled: true
         },
         {
           icon: result,
@@ -41,7 +44,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Pending",
           formLink: "form-result",
-          listLink: "list-result"
+          listLink: "list-result",
+          disabled: true
         },
         {
           icon: transfer,
@@ -49,7 +53,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-transfer",
-          listLink: "list-transfer"
+          listLink: "list-transfer",
+          disabled: true
         }
       ]
     },
@@ -62,7 +67,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-teacher",
-          listLink: "list-teacher"
+          listLink: "list-teacher",
+          disabled: true
         },
         {
           icon: enrollment,
@@ -70,7 +76,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-non-teacher",
-          listLink: "list-non-teacher"
+          listLink: "list-non-teacher",
+          disabled: true
         },
         {
           icon: attendance,
@@ -78,7 +85,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-staff-attendance",
-          listLink: "list-staff-attendance"
+          listLink: "list-staff-attendance",
+          disabled: true
         },
         {
           icon: transfer,
@@ -86,7 +94,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           formLink: "form-staff-transfer",
-          listLink: "list-staff-transfer"
+          listLink: "list-staff-transfer",
+          disabled: true
         }
       ]
     },
@@ -99,7 +108,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "School days",
           formLink: "form-school-calendar",
-          listLink: "list-school-calendar"
+          listLink: "list-school-calendar",
+          disabled: true
         }
       ]
     }

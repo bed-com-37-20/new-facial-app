@@ -90,3 +90,8 @@
     align-items: center;
     justify-content: center;
 }
+
+.disabledLink{
+    pointer-events: none !important;
+    color: gray !important;
+}

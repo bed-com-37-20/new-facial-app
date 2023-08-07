@@ -15,31 +15,36 @@ function sideBarData (): SideBarItemProps[] {
                     icon: listAdd,
                     label: "Enrollment",
                     showBadge: false,
+                    disabled: false,
                     route: "/home"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    route: "/home1"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: fileDocument,
                     label: "Performance",
                     showBadge: false,
-                    route: "/home2"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: gauge,
                     label: "Final result",
                     showBadge: false,
-                    route: "/home3"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: true,
-                    route: "/home4"
+                    disabled: true,
+                    route: "#"
                 }
             ]
         },
@@ -50,25 +55,29 @@ function sideBarData (): SideBarItemProps[] {
                     icon: userGroup,
                     label: "Teacher registry",
                     showBadge: false,
-                    route: "/home5"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: userGroup,
                     label: "Non-teacher registry",
                     showBadge: false,
-                    route: "/home6"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: glyph,
                     label: "Attendance",
                     showBadge: false,
-                    route: "/home7"
+                    disabled: true,
+                    route: "#"
                 },
                 {
                     icon: logOut,
                     label: "Transfer",
                     showBadge: false,
-                    route: "/home8"
+                    disabled: true,
+                    route: "#"
                 }
             ]
         },
@@ -79,7 +88,8 @@ function sideBarData (): SideBarItemProps[] {
                     icon: listAdd,
                     label: "School Calendar",
                     showBadge: false,
-                    route: "/home9"
+                    disabled: true,
+                    route: "#"
                 }
             ]
         }

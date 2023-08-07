@@ -20,6 +20,7 @@ function Home(): React.ReactElement {
                   formLink={"#"}
                   leftLabel={data.leftLabel}
                   value={"30"}
+                  disabled={data.disabled}
                 />
                 &nbsp;&nbsp;
               </div>

@@ -10,5 +10,6 @@ interface CardSubItemProps {
     program: string
     formLink: string
     listLink: string
+    disabled?: boolean
 }
 export type {DashboardCardProps, CardSubItemProps}
