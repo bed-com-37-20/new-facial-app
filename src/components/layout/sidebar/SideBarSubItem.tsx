@@ -10,7 +10,7 @@ export default function SideBarSubItem({ icon, label, showBadge, disabled, route
     const { baseUrl } = useConfig()
 
     return (
-        <NavLink to={`${baseUrl}/api/apps/${appName}/index.html#/${route}`}>
+        <NavLink to={`${baseUrl}/api/apps/${appName}/index.html#/${route}`} className={style.subItemLink}>
             <li className={location.hash.slice(1) === route ? style.SideBarSubItemContainerActive : classNames(style.SideBarSubItemContainer, (Boolean(disabled)) && style.SideBarDisabledSubItem)}>
                 <img src={icon} /> <span className={style.SideBarSubItemLabel}>{label}</span>
                 {showBadge ? <div className={style.BadgeContainer}><Badge value='10' /></div> : null}

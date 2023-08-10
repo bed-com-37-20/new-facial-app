@@ -152,11 +152,17 @@
     border-radius: 5px !important;
     cursor: pointer;
 }
+
 .SideBarDisabledSubItem {
     color: #989898 !important;
 }
+
 .SideBarDisabledSubItem img {
     opacity: 0.4;
+}
+
+.subItemLink {
+    text-decoration: none !important;
 }
 
 .SideBarDisabledSubItem:hover {
