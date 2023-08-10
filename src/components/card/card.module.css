@@ -91,6 +91,18 @@
     justify-content: center;
 }
 
+.disabledCard .cardTitle, .disabledCard .cardTotalLabel {
+    color: #CDCECE !important;
+}
+
+.disabledCard img {
+    opacity: 0.4;
+}
+
+.disabledCard .infoButton {
+    pointer-events: none !important;
+}
+
 .disabledLink{
     pointer-events: none !important;
     color: gray !important;

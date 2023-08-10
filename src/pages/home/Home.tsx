@@ -16,7 +16,7 @@ function Home(): React.ReactElement {
                   program={data.program}
                   icon={data.icon}
                   title={data.title}
-                  listLink={"/table"}
+                  listLink={data.listLink}
                   formLink={"#"}
                   leftLabel={data.leftLabel}
                   value={"30"}

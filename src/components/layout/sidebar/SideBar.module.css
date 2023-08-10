@@ -144,12 +144,24 @@
     background-color: rgba(0, 0, 0, 0.138);
     border-radius: 5px !important;
     color: black !important;
+    cursor: pointer;
 }
 
 .SideBarSubItemContainer:hover {
     background-color: rgba(0, 0, 0, 0.138);
     border-radius: 5px !important;
-    color: black !important;
+    cursor: pointer;
+}
+.SideBarDisabledSubItem {
+    color: #989898 !important;
+}
+.SideBarDisabledSubItem img {
+    opacity: 0.4;
+}
+
+.SideBarDisabledSubItem:hover {
+    cursor: not-allowed;
+    background-color: transparent !important;
 }
 
 .SideBarSubItemContainer img {
@@ -181,7 +193,7 @@
 
 .ExpandCollapseSideBar {
     position: absolute;
-    top: 52px;
+    top: 2px;
     z-index: 1;
     right: -25px;
     cursor: pointer;

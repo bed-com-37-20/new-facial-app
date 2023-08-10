@@ -5,6 +5,7 @@ import style from "./card.module.css";
 import { Divider, IconButton, Tooltip } from "@material-ui/core";
 import { Add, InfoOutlined, Menu } from "@material-ui/icons";
 import { NavLink } from "react-router-dom";
+import classNames from "classnames";
 
 interface CardProps {
   icon: string
@@ -22,7 +23,7 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
 
   return (
     <Box height="245px" width="200px">
-      <Card className={style.cardContainer}>
+      <Card className={classNames(style.cardContainer, (disabled === true) && style.disabledCard)}>
         <div className={style.cardHeader}>
           <img src={icon} />
         </div>
@@ -31,8 +32,8 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         <div className={style.cardStatistics}>
           <strong className={style.cardTotalLabel}>{leftLabel}</strong>
           <div className={style.cardStatisticsTotal}>
-            <span className={style.cardStatisticsTotalValue}>{value}</span>
-            <Tooltip title={`Info`}>
+            <span className={style.cardStatisticsTotalValue}>{(disabled === true) ? "--" : value}</span>
+            <Tooltip title={`Info`} className={style.infoButton}>
               <IconButton size="small" className={style.cardInfoIcon}>
                 <InfoOutlined fontSize="small"/>
               </IconButton>
