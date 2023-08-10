@@ -16,7 +16,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Enrollment",
                     showBadge: false,
                     disabled: false,
-                    route: "/home"
+                    route: "/enrollment"
                 },
                 {
                     icon: glyph,
@@ -42,7 +42,7 @@ function sideBarData (): SideBarItemProps[] {
                 {
                     icon: logOut,
                     label: "Transfer",
-                    showBadge: true,
+                    showBadge: false,
                     disabled: true,
                     route: "#"
                 }
