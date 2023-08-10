@@ -13,6 +13,7 @@ interface SideBarSubItemProps {
     icon: string
     disabled: boolean
     route: string
+    appName: string
 }
 
 interface SideBarCollapseProps {

@@ -16,8 +16,9 @@ function cardsData(): DashboardCardProps[] {
           title: "Enrollment",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App-Name",
           formLink: "form-enrollment",
-          listLink: "/enrollment",
+          listLink: `enrollment?sectionType=student`,
           disabled: false
         },
         {
@@ -25,6 +26,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Attendance",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-attendance",
           listLink: "/attendance",
           disabled: true
@@ -34,6 +36,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Performance",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-performance",
           listLink: "/performance",
           disabled: true
@@ -43,6 +46,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Final result",
           program: "programId",
           leftLabel: "Pending",
+          appName: "DHIS2-App",
           formLink: "form-result",
           listLink: "/result",
           disabled: true
@@ -52,6 +56,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Transfer",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-transfer",
           listLink: "/transfer",
           disabled: true
@@ -66,6 +71,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Teacher registry",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-teacher",
           listLink: "/teacher",
           disabled: true
@@ -75,6 +81,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Non-teacher registry",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-non-teacher",
           listLink: "/non-teacher",
           disabled: true
@@ -84,6 +91,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Attendance",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-staff-attendance",
           listLink: "/staff-attendance",
           disabled: true
@@ -93,6 +101,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Transfer",
           program: "programId",
           leftLabel: "Total",
+          appName: "DHIS2-App",
           formLink: "form-staff-transfer",
           listLink: "/staff-transfer",
           disabled: true
@@ -107,6 +116,7 @@ function cardsData(): DashboardCardProps[] {
           title: "School Calendar",
           program: "programId",
           leftLabel: "School days",
+          appName: "DHIS2-App",
           formLink: "form-school-calendar",
           listLink: "/school-calendar",
           disabled: true

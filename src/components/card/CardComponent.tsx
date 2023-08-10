@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { useConfig } from "@dhis2/app-runtime";
 import { Box, Card } from "@dhis2/ui";
 import React from "react";
 import style from "./card.module.css";
@@ -16,14 +17,21 @@ interface CardProps {
   formLink: string
   listLink: string
   disabled?: boolean
+  appName: string
 }
 
 export default function DashboardCard(props: CardProps): React.ReactElement {
-  const { icon, title, value, formLink, listLink, leftLabel, disabled } = props;
+  const { baseUrl } = useConfig();
+  const { icon, title, value, listLink, leftLabel, disabled, appName } = props;
 
   return (
     <Box height="245px" width="200px">
-      <Card className={classNames(style.cardContainer, (disabled === true) && style.disabledCard)}>
+      <Card
+        className={classNames(
+          style.cardContainer,
+          disabled === true && style.disabledCard
+        )}
+      >
         <div className={style.cardHeader}>
           <img src={icon} />
         </div>
@@ -32,17 +40,22 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         <div className={style.cardStatistics}>
           <strong className={style.cardTotalLabel}>{leftLabel}</strong>
           <div className={style.cardStatisticsTotal}>
-            <span className={style.cardStatisticsTotalValue}>{(disabled === true) ? "--" : value}</span>
+            <span className={style.cardStatisticsTotalValue}>
+              {disabled === true ? "--" : value}
+            </span>
             <Tooltip title={`Info`} className={style.infoButton}>
               <IconButton size="small" className={style.cardInfoIcon}>
-                <InfoOutlined fontSize="small"/>
+                <InfoOutlined fontSize="small" />
               </IconButton>
             </Tooltip>
           </div>
         </div>
         <Divider />
         <div className={style.cardActions}>
-          <NavLink to={formLink} className={(disabled === true) && style.disabledLink}>
+          <NavLink
+            to={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
+            className={disabled === true && style.disabledLink}
+          >
             <Tooltip title={`Add ${title}`}>
               <IconButton size="small" disabled={disabled}>
                 <Add />
@@ -50,11 +63,14 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
             </Tooltip>
           </NavLink>
           &nbsp;
-          <NavLink to={listLink}className={(disabled === true) && style.disabledLink}>
+          <NavLink
+            to={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
+            className={disabled === true && style.disabledLink}
+          >
             <Tooltip title={`List ${title}`}>
-                <IconButton size="small" disabled={disabled}>
-                  <Menu />
-                </IconButton>
+              <IconButton size="small" disabled={disabled}>
+                <Menu />
+              </IconButton>
             </Tooltip>
           </NavLink>
         </div>

@@ -21,6 +21,7 @@ function Home(): React.ReactElement {
                   leftLabel={data.leftLabel}
                   value={"30"}
                   disabled={data.disabled}
+                  appName={data.appName}
                 />
                 &nbsp;&nbsp;
               </div>

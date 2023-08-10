@@ -16,6 +16,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Enrollment",
                     showBadge: false,
                     disabled: false,
+                    appName: "DHIS2-App-Name",
                     route: "/enrollment"
                 },
                 {
@@ -23,6 +24,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Attendance",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -30,6 +32,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Performance",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -37,6 +40,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Final result",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -44,6 +48,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Transfer",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 }
             ]
@@ -56,6 +61,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Teacher registry",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -63,6 +69,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Non-teacher registry",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -70,6 +77,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Attendance",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 },
                 {
@@ -77,6 +85,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Transfer",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 }
             ]
@@ -89,6 +98,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "School Calendar",
                     showBadge: false,
                     disabled: true,
+                    appName: "DHIS2-App-Name",
                     route: "#"
                 }
             ]
