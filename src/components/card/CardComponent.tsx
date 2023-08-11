@@ -63,8 +63,8 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
             </Tooltip>
           </NavLink>
           &nbsp;
-          <NavLink
-            to={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
+          <a
+            href={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
             className={disabled === true && style.disabledLink}
           >
             <Tooltip title={`List ${title}`}>
@@ -72,7 +72,7 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
                 <Menu />
               </IconButton>
             </Tooltip>
-          </NavLink>
+          </a>
         </div>
       </Card>
     </Box>

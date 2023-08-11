@@ -17,7 +17,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Enrollment",
-                    route: "/enrollment"
+                    route: "enrollment"
                 },
                 {
                     icon: glyph,
