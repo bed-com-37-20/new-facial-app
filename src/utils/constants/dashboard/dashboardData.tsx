@@ -16,7 +16,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Enrollment",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App-Name",
+          appName: "SEMIS-Enrollment",
           formLink: "form-enrollment",
           listLink: `enrollment?sectionType=student`,
           disabled: false

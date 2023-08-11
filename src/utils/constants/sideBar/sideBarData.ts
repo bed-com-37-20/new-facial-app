@@ -16,7 +16,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Enrollment",
                     showBadge: false,
                     disabled: false,
-                    appName: "DHIS2-App-Name",
+                    appName: "SEMIS-Enrollment",
                     route: "/enrollment"
                 },
                 {
