@@ -18,7 +18,7 @@ function cardsData(): DashboardCardProps[] {
           leftLabel: "Total",
           appName: "SEMIS-Enrollment",
           formLink: "form-enrollment",
-          listLink: `enrollment?sectionType=student`,
+          listLink: `enrollment?sectionType=student&academicYear=2023`,
           disabled: false
         },
         {
@@ -26,40 +26,40 @@ function cardsData(): DashboardCardProps[] {
           title: "Attendance",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Attendance",
           formLink: "form-attendance",
-          listLink: "/attendance",
-          disabled: true
+          listLink: "attendance?sectionType=student&academicYear=2023",
+          disabled: false
         },
         {
           icon: performance,
           title: "Performance",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Performance",
           formLink: "form-performance",
-          listLink: "/performance",
-          disabled: true
+          listLink: "performance?sectionType=student&academicYear=2023",
+          disabled: false
         },
         {
           icon: result,
           title: "Final result",
           program: "programId",
           leftLabel: "Pending",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Final-Result",
           formLink: "form-result",
-          listLink: "/result",
-          disabled: true
+          listLink: "enrollment?sectionType=student",
+          disabled: false
         },
         {
           icon: transfer,
           title: "Transfer",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Student-Transfer",
           formLink: "form-transfer",
-          listLink: "/transfer",
-          disabled: true
+          listLink: "student-transfer?sectionType=student",
+          disabled: false
         }
       ]
     },
@@ -68,58 +68,33 @@ function cardsData(): DashboardCardProps[] {
       subItem: [
         {
           icon: enrollment,
-          title: "Teacher registry",
+          title: "Staff registry",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Enrollment-Staff",
           formLink: "form-teacher",
-          listLink: "/teacher",
-          disabled: true
-        },
-        {
-          icon: enrollment,
-          title: "Non-teacher registry",
-          program: "programId",
-          leftLabel: "Total",
-          appName: "DHIS2-App",
-          formLink: "form-non-teacher",
-          listLink: "/non-teacher",
-          disabled: true
+          listLink: "enrollment?sectionType=staff&academicYear=2023",
+          disabled: false
         },
         {
           icon: attendance,
           title: "Attendance",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS-Attendance-Staff",
           formLink: "form-staff-attendance",
-          listLink: "/staff-attendance",
-          disabled: true
+          listLink: "staff-attendance?sectionType=staff&academicYear=2023",
+          disabled: false
         },
         {
           icon: transfer,
           title: "Transfer",
           program: "programId",
           leftLabel: "Total",
-          appName: "DHIS2-App",
+          appName: "SEMIS---Student-Transfer",
           formLink: "form-staff-transfer",
-          listLink: "/staff-transfer",
-          disabled: true
-        }
-      ]
-    },
-    {
-      title: "Academic Year",
-      subItem: [
-        {
-          icon: calendar,
-          title: "School Calendar",
-          program: "programId",
-          leftLabel: "School days",
-          appName: "DHIS2-App",
-          formLink: "form-school-calendar",
-          listLink: "/school-calendar",
-          disabled: true
+          listLink: "staff-transfer?sectionType=staff&academicYear=2023",
+          disabled: false
         }
       ]
     }

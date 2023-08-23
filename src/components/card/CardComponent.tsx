@@ -25,7 +25,7 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
   const { icon, title, value, listLink, leftLabel, disabled, appName } = props;
 
   return (
-    <Box height="245px" width="200px">
+    <Box width="180px">
       <Card
         className={classNames(
           style.cardContainer,
@@ -35,20 +35,9 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         <div className={style.cardHeader}>
           <img src={icon} />
         </div>
-        <div className={style.cardTitle}>{title}</div>
         <Divider />
         <div className={style.cardStatistics}>
-          <strong className={style.cardTotalLabel}>{leftLabel}</strong>
-          <div className={style.cardStatisticsTotal}>
-            <span className={style.cardStatisticsTotalValue}>
-              {disabled === true ? "--" : value}
-            </span>
-            <Tooltip title={`Info`} className={style.infoButton}>
-              <IconButton size="small" className={style.cardInfoIcon}>
-                <InfoOutlined fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          </div>
+          <strong className={style.cardTitle}>{title}</strong>
         </div>
         <Divider />
         <div className={style.cardActions}>

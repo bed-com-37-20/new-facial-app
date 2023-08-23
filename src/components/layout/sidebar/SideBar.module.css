@@ -4,7 +4,7 @@
 .SideBarContainer {
     border-right: 1px solid #e6e4e4;
     height: 100%;
-    width: 370px !important;
+    width: 270px !important;
     position: relative;
     background-color: var(--secondary-colort);
     transition: width 0.3s ease !important;
