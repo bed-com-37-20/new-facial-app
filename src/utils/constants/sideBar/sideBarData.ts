@@ -77,7 +77,7 @@ function sideBarData (): SideBarItemProps[] {
                     label: "Transfer",
                     showBadge: false,
                     disabled: false,
-                    appName: "SEMIS---Staff-Transfer",
+                    appName: "SEMIS-Staff-Transfer",
                     route: "staff-transfer?sectionType=student&academicYear=2023"
                 }
             ]

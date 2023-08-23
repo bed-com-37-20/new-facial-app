@@ -91,7 +91,7 @@ function cardsData(): DashboardCardProps[] {
           title: "Transfer",
           program: "programId",
           leftLabel: "Total",
-          appName: "SEMIS---Student-Transfer",
+          appName: "SEMIS-Staff-Transfer",
           formLink: "form-staff-transfer",
           listLink: "staff-transfer?sectionType=staff&academicYear=2023",
           disabled: false
