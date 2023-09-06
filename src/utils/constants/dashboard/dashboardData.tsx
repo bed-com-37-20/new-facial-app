@@ -72,7 +72,7 @@ function cardsData(): DashboardCardProps[] {
           leftLabel: "Total",
           appName: "SEMIS-Enrollment-Staff",
           formLink: "form-enrollment-teacher",
-          listLink: "enrollment?sectionType=staff&academicYear=2023",
+          listLink: "enrollment-teacher?sectionType=staff&academicYear=2023",
           disabled: false
         },
         {
