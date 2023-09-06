@@ -46,8 +46,8 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Pending",
           appName: "SEMIS-Final-Result",
-          formLink: "form-result",
-          listLink: "enrollment?sectionType=student",
+          formLink: "form-final-result",
+          listLink: "final-result?sectionType=student",
           disabled: false
         },
         {
@@ -56,7 +56,7 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           appName: "SEMIS-Student-Transfer",
-          formLink: "form-transfer",
+          formLink: "form-student-transfer",
           listLink: "student-transfer?sectionType=student",
           disabled: false
         }
@@ -71,7 +71,7 @@ function cardsData(): DashboardCardProps[] {
           program: "programId",
           leftLabel: "Total",
           appName: "SEMIS-Enrollment-Staff",
-          formLink: "form-teacher",
+          formLink: "form-enrollment-teacher",
           listLink: "enrollment?sectionType=staff&academicYear=2023",
           disabled: false
         },
