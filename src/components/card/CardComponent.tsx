@@ -22,7 +22,7 @@ interface CardProps {
 
 export default function DashboardCard(props: CardProps): React.ReactElement {
   const { baseUrl } = useConfig();
-  const { icon, title, value, listLink, leftLabel, disabled, appName } = props;
+  const { icon, title, listLink, formLink, disabled, appName } = props;
 
   return (
     <Box width="180px">
@@ -41,8 +41,8 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
         </div>
         <Divider />
         <div className={style.cardActions}>
-          <NavLink
-            to={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
+          <a
+            href={`${baseUrl}/api/apps/${appName}/index.html#/${formLink}`}
             className={disabled === true && style.disabledLink}
           >
             <Tooltip title={`Add ${title}`}>
@@ -50,7 +50,7 @@ export default function DashboardCard(props: CardProps): React.ReactElement {
                 <Add />
               </IconButton>
             </Tooltip>
-          </NavLink>
+          </a>
           &nbsp;
           <a
             href={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
