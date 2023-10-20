@@ -41,7 +41,7 @@ function sideBarData (): SideBarItemProps[] {
                     showBadge: false,
                     disabled: false,
                     appName: "SEMIS-Final-Result",
-                    route: "enrollment?sectionType=student"
+                    route: "final-result?sectionType=student"
                 },
                 {
                     icon: logOut,
