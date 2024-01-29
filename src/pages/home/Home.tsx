@@ -1,22 +1,23 @@
 import React from "react";
 import style from "./Home.module.css";
 import { DashboardCard, Title, WithPadding } from "../../components";
-import { cardsData } from "../../utils/constants/dashboard/dashboardData";
+import {menuData} from "../../utils/index"
+import { MenuDataItemProps, MenuDataProps } from "../../types/common/components";
 
 function Home(): React.ReactElement {
   return (
     <WithPadding padding="10px 30px">
-      {cardsData().map((section, y) => (
+      {menuData().map((section:MenuDataProps, y) => (
         <div key={y} className={style.section}>
           <Title label={section.title}/>
           <div className={style.containerCards}>
-            {section.subItem.map((data: any, i: number) => (
+            {section.subItem.map((data: MenuDataItemProps, i: number) => (
               <div key={i}>
                 <DashboardCard
                   program={data.program}
-                  icon={data.icon}
+                  icon={data.dashBoardIcon}
                   title={data.title}
-                  listLink={data.listLink}
+                  listLink={data.route}
                   formLink={"#"}
                   leftLabel={data.leftLabel}
                   value={"30"}
