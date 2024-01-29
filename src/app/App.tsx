@@ -5,11 +5,8 @@ import "react-select/dist/react-select.css";
 import { Router } from "../components/routes"
 import "../assets/style/globalStyle.css"
 
-function App() {
+export default function App() {
     return (
-        <>
-            <Router />
-        </>
+        <Router />
     )
 }
-export default App

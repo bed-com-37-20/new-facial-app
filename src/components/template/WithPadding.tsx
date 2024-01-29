@@ -1,11 +1,12 @@
 import React from 'react'
+import { WithPaddingProps } from '../../types/common/components';
 
-function WithPadding(props: { children?: React.ReactNode, p?: string }): React.ReactElement {
-    const { children, p = "0.5rem" } = props;
+function WithPadding(props: WithPaddingProps): React.ReactElement {
+    const { children, padding = "0.5rem" } = props;
 
     return (
         <div
-            style={{ padding: p }}
+            style={{ padding: padding }}
         >
             {children}
         </div>

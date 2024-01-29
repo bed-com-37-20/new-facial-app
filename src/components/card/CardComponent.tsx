@@ -2,25 +2,15 @@
 import { useConfig } from "@dhis2/app-runtime";
 import { Box, Card } from "@dhis2/ui";
 import React from "react";
-import style from "./card.module.css";
+import style from "./Card.module.css";
 import { Divider, IconButton, Tooltip } from "@material-ui/core";
-import { Add, InfoOutlined, Menu } from "@material-ui/icons";
-import { NavLink } from "react-router-dom";
+import { Add, Menu } from "@material-ui/icons";
 import classNames from "classnames";
+import { CardSubItemProps } from "../../types/common/components";
 
-interface CardProps {
-  icon: string
-  title: string
-  leftLabel: string
-  value: string
-  program: string
-  formLink: string
-  listLink: string
-  disabled?: boolean
-  appName: string
-}
 
-export default function DashboardCard(props: CardProps): React.ReactElement {
+
+export default function DashboardCard(props: CardSubItemProps): React.ReactElement {
   const { baseUrl } = useConfig();
   const { icon, title, listLink, formLink, disabled, appName } = props;
 

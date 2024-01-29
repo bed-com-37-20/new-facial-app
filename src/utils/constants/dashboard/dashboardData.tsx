@@ -3,7 +3,7 @@ import attendance from "../../../assets/images/home/attendance.png";
 import performance from "../../../assets/images/home/performance.png";
 import transfer from "../../../assets/images/home/transfer.png";
 import result from "../../../assets/images/home/result.png";
-import { type DashboardCardProps } from "../../../types/dashboard/CardTypes";
+import { type DashboardCardProps } from "../../../types/common/components";
 
 function cardsData(): DashboardCardProps[] {
   return [

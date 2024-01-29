@@ -1,9 +1,7 @@
 import React from "react";
 import styles from "./text.module.css";
+import { SubtitleProps } from "../../types/common/components";
 
-interface SubtitleProps {
-  label: string
-}
 function Subtitle(props: SubtitleProps): React.ReactElement {
   const { label } = props;
 
