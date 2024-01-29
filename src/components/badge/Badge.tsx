@@ -3,10 +3,8 @@ import style from "./Badge.module.css"
 import { BadgeProps } from '../../types/common/components'
 
 
-function Badge({ value }: BadgeProps): React.ReactElement {
+export default function Badge({ value }: BadgeProps): React.ReactElement {
     return (
         <span className={style.badgeContainer}>{value}</span>
     )
 }
-
-export {Badge}

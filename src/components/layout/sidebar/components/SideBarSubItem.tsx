@@ -4,6 +4,7 @@ import { Badge } from '../../../badge';
 import { type SideBarSubItemProps } from '../../../../types/common/components';
 import classNames from 'classnames';
 import { useConfig } from '@dhis2/app-runtime';
+import { Badge } from '../../../badge';
 
 export default function SideBarSubItem({ icon, label, showBadge, disabled, route, appName }: SideBarSubItemProps) {
     const { baseUrl } = useConfig()

@@ -1,6 +1,6 @@
 import React from 'react';
 import { HashRouter, Route, Routes } from 'react-router-dom';
-import { RouteList } from '.';
+import RouteList from './RouteList';
 
 export default function Router() {
     return (

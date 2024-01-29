@@ -101,5 +101,3 @@ function cardsData(): DashboardCardProps[] {
 }
 
 export { cardsData };
-
-//Enrollment e Transfer execute
