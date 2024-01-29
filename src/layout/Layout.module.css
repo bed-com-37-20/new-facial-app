@@ -1,6 +1,6 @@
 @import "../assets/style/colors.css";
 
-.LayoutContainer {
+.layoutContainer {
     width: 100vw;
     height: inherit;
     display: flex;
@@ -11,7 +11,7 @@
     background-color: var(--primary-color);
 }
 
-.HeadBarLayoutContainer {
+.headBarLayoutContainer {
     width: 100vw;
     height: inherit;
     display: flex;
@@ -19,13 +19,13 @@
     background-color: inherit;
 }
 
-.MainContentContainer {
+.mainContentContainer {
     flex: 1;
     overflow-y: auto;
     padding: 20px;
 }
 
-.FullLayoutContainer {
+.fullLayoutContainer {
     display: flex;
     flex-direction: column;
     flex: 1;

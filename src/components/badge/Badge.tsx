@@ -5,7 +5,7 @@ import { BadgeProps } from '../../types/common/components'
 
 function Badge({ value }: BadgeProps): React.ReactElement {
     return (
-        <span className={style.BadgeContainer}>{value}</span>
+        <span className={style.badgeContainer}>{value}</span>
     )
 }
 

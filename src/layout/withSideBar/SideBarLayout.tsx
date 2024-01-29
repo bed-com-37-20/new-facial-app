@@ -5,9 +5,9 @@ import { SideBarLayoutProps } from '../../types/common/components'
 
 export default function SideBarLayout({ children }: SideBarLayoutProps): React.ReactElement {
     return (
-        <div className={style.LayoutContainer}>
+        <div className={style.layoutContainer}>
             <SideBar />
-            <main className={style.MainContentContainer}>{children}</main>
+            <main className={style.mainContentContainer}>{children}</main>
         </div>
     )
 }

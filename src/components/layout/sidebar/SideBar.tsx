@@ -8,8 +8,8 @@ export default function SideBar(): React.ReactElement {
     const [collapsed, setCollapsed] = useState<boolean>(false);
 
     return (
-        <aside className={collapsed ? style.SideBarContainerCollapsed : style.SideBarContainer}>
-            <div className={style.SideBarMenu}>
+        <aside className={collapsed ? style.sideBarContainerCollapsed : style.sideBarContainer}>
+            <div className={style.sideBarMenu}>
                 {
                     sideBarData().map((element, index) => (
                         <SideBarItem key={index} title={element.title} subItems={element.subItems} />

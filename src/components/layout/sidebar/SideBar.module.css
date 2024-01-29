@@ -1,7 +1,7 @@
 @import "../../../assets/style/colors.css";
 @import "../../../assets/style/font.css";
 
-.SideBarContainer {
+.sideBarContainer {
     border-right: 1px solid #e6e4e4;
     height: 100%;
     width: 270px !important;
@@ -10,7 +10,7 @@
     transition: width 0.3s ease !important;
 }
 
-.SideBarContainerCollapsed {
+.sideBarContainerCollapsed {
     border-right: 1px solid #e6e4e4;
     height: 100%;
     max-width: 90px;
@@ -19,25 +19,25 @@
     transition: width 0.3s ease !important;
 }
 
-.SideBarContainer::-webkit-scrollbar {
+.sideBarContainer::-webkit-scrollbar {
     width: 4px;
 }
 
-.SideBarContainer::-webkit-scrollbar-thumb {
+.sideBarContainer::-webkit-scrollbar-thumb {
     background-color: rgb(133, 133, 133);
     border-radius: 20px;
 }
 
-.SideBarContainerCollapsed::-webkit-scrollbar-thumb {
+.sideBarContainerCollapsed::-webkit-scrollbar-thumb {
     background-color: rgb(133, 133, 133);
     border-radius: 20px;
 }
 
-.SideBarContainerCollapsed::-webkit-scrollbar {
+.sideBarContainerCollapsed::-webkit-scrollbar {
     width: 4px;
 }
 
-.SideBarMenu {
+.sideBarMenu {
     height: 100%;
     padding: 20px 15px;
     flex: inherit;
@@ -46,34 +46,34 @@
 }
 
 
-.SideBarContainerCollapsed .SideBarMenu .SideBarSubItemLabel {
+.sideBarContainerCollapsed .sideBarMenu .sideBarSubItemLabel {
     display: none;
     white-space: nowrap;
 }
 
-.SideBarContainerCollapsed .SideBarMenu .BadgeContainer {
+.sideBarContainerCollapsed .sideBarMenu .badgeContainer {
     display: none;
     white-space: nowrap;
 }
 
-.SideBarContainerCollapsed .SideBarMenu .SideBarItemTitle {
+.sideBarContainerCollapsed .sideBarMenu .sideBarItemTitle {
     display: inline-block !important;
     opacity: 0;
     white-space: nowrap !important;
 }
 
-.SideBarContainerCollapsed .SideBarSubItemContainer {
+.sideBarContainerCollapsed .sideBarSubItemContainer {
     justify-content: center;
     min-width: 40px;
     height: 56px !important;
 }
 
-.SideBarContainerCollapsed .SideBarSubItemContainer img {
+.sideBarContainerCollapsed .sideBarSubItemContainer img {
     margin-right: 0px;
     min-width: 22px !important;
 }
 
-.TooltipContainer {
+.tooltipContainer {
     background-color: rgba(0, 0, 0, 0.789);
     padding: 15px 10px;
     color: #FFF;
@@ -85,18 +85,18 @@
     z-index: 2;
 }
 
-.SideBarContainer .SideBarMenu span {
+.sideBarContainer .sideBarMenu span {
     display: block;
     white-space: nowrap;
 }
 
-.SideBarItemContainer {
+.sideBarItemContainer {
     width: 100%;
     height: auto;
     margin-bottom: 24px;
 }
 
-.SideBarItemTitle {
+.sideBarItemTitle {
     color: var(--font-third-color);
     font-family: var(--primary-font-family);
     font-size: var(--sidebar-font-size);
@@ -104,7 +104,7 @@
     line-height: var(--sidebar-font-line-height);
 }
 
-.SideBarSubItemContainer {
+.sideBarSubItemContainer {
     margin-bottom: 3px;
     list-style: none;
     color: var(--font-secondary-color);
@@ -120,15 +120,15 @@
     cursor: default;
 }
 
-.SideBarContainerCollapsed .SideBarSubItemContainer:hover .TooltipContainer {
+.tideBarContainerCollapsed .sideBarSubItemContainer:hover .tooltipContainer {
     display: block;
 }
 
-.SideBarContainerCollapsed .SideBarSubItemContainerActive:hover .TooltipContainer {
+.tideBarContainerCollapsed .sideBarSubItemContainerActive:hover .tooltipContainer {
     display: block;
 }
 
-.SideBarSubItemContainerActive {
+.sideBarSubItemContainerActive {
     margin-bottom: 3px;
     list-style: none;
     color: var(--font-secondary-color);
@@ -147,17 +147,17 @@
     cursor: pointer;
 }
 
-.SideBarSubItemContainer:hover {
+.sideBarSubItemContainer:hover {
     background-color: rgba(0, 0, 0, 0.138);
     border-radius: 5px !important;
     cursor: pointer;
 }
 
-.SideBarDisabledSubItem {
+.sideBarDisabledSubItem {
     color: #989898 !important;
 }
 
-.SideBarDisabledSubItem img {
+.sideBarDisabledSubItem img {
     opacity: 0.4;
 }
 
@@ -165,39 +165,39 @@
     text-decoration: none !important;
 }
 
-.SideBarDisabledSubItem:hover {
+.sideBarDisabledSubItem:hover {
     cursor: not-allowed;
     background-color: transparent !important;
 }
 
-.SideBarSubItemContainer img {
+.sideBarSubItemContainer img {
     margin-right: 16px;
     min-width: 22px !important;
 }
 
-.SideBarSubItemContainerActive img {
+.sideBarSubItemContainerActive img {
     margin-right: 16px;
     min-width: 22px !important;
 }
 
 
-.BadgeContainer {
+.badgeContainer {
     margin-left: auto;
 }
 
-.SideBarItemListContainer {
+.sideBarItemListContainer {
     overflow-x: hidden;
     padding-left: 0 !important;
 }
 
 
 @media screen and (max-width: 768px) {
-    .SideBarContainer {
+    .sideBarContainer {
         flex: 0 0 100%;
     }
 }
 
-.ExpandCollapseSideBar {
+.expandCollapseSideBar {
     position: absolute;
     top: 2px;
     z-index: 1;
@@ -205,17 +205,17 @@
     cursor: pointer;
 }
 
-.ExpandCollapseSideBar .IconContainer {
+.expandCollapseSideBar .iconContainer {
     position: relative;
 }
 
-.ExpandCollapseSideBar .ArrowIConLeft {
+.expandCollapseSideBar .arrowIConLeft {
     position: absolute;
     left: 5px;
     top: 22px;
 }
 
-.ExpandCollapseSideBar .ArrowIConRight {
+.expandCollapseSideBar .arrowIConRight {
     position: absolute;
     left: 5px;
     top: 22px;

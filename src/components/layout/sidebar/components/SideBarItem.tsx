@@ -6,9 +6,9 @@ import { type SideBarItemProps } from '../../../../types/common/components'
 
 export default function SideBarItem({ title, subItems }: SideBarItemProps): React.ReactElement {
     return (
-        <section className={style.SideBarItemContainer}>
+        <section className={style.sideBarItemContainer}>
             <SideBarItemTitle title={title} />
-            <ul className={style.SideBarItemListContainer}>
+            <ul className={style.sideBarItemListContainer}>
                 {subItems.map((subItem, index) => (
                     <SideBarSubItem route={subItem.route} key={index} icon={subItem.icon} label={subItem.label} showBadge={subItem.showBadge} disabled={subItem.disabled} appName={subItem.appName} />
                 ))}

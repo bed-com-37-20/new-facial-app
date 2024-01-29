@@ -1,6 +1,6 @@
 @import "../../assets/style/font.css";
 
-.BadgeContainer {
+.badgeContainer {
     display: flex;
     padding: 2px 8px;
     justify-content: center;
