@@ -6,7 +6,7 @@ import style from "./Card.module.css";
 import { Divider, IconButton, Tooltip } from "@material-ui/core";
 import { Add, Menu } from "@material-ui/icons";
 import classNames from "classnames";
-import { CardSubItemProps } from "../../types/common/components";
+import { CardSubItemProps } from "../../types/card/CardTypes";
 
 
 

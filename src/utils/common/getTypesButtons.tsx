@@ -1,4 +1,4 @@
-import { GetTypesOfButtonProps } from "../../types/common/utils"
+import { GetTypesOfButtonProps } from "../../types/button/ButtonTypes"
 
 export function getTypesOfButton(props: GetTypesOfButtonProps) {
     const possibleTypes = ['primary', 'success', 'error', 'secondary', 'info', 'dark', 'warning']

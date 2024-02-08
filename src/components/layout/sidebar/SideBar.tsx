@@ -3,7 +3,7 @@ import style from "./SideBar.module.css"
 import SideBarItem from './components/SideBarItem'
 import SibeBarCollapseButton from './components/SibeBarCollapseButton';
 import { menuData } from '../../../utils';
-import { MenuDataProps } from '../../../types/common/components';
+import { MenuDataProps } from '../../../types/menu/MenuTypes';
 
 export default function SideBar(): React.ReactElement {
     const [collapsed, setCollapsed] = useState<boolean>(false);

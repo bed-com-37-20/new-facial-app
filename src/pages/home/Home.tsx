@@ -2,7 +2,7 @@ import React from "react";
 import style from "./Home.module.css";
 import { DashboardCard, Title, WithPadding } from "../../components";
 import {menuData} from "../../utils/index"
-import { MenuDataItemProps, MenuDataProps } from "../../types/common/components";
+import { MenuDataItemProps, MenuDataProps } from "../../types/menu/MenuTypes";
 
 function Home(): React.ReactElement {
   return (

@@ -2,7 +2,7 @@ import React from 'react'
 import style from "../SideBar.module.css"
 import SideBarItemTitle from './SideBarItemTitle'
 import SideBarSubItem from './SideBarSubItem'
-import { MenuDataItemProps, MenuDataProps, type SideBarItemProps } from '../../../../types/common/components'
+import { MenuDataItemProps, MenuDataProps } from '../../../../types/menu/MenuTypes'
 
 export default function SideBarItem({ title, subItem }: MenuDataProps): React.ReactElement {
     return (
