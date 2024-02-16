@@ -9,9 +9,9 @@ import glyph from "../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../assets/images/sidebar/listAdd.svg"
 import logOut from "../../assets/images/sidebar/log-out.svg"
 import userGroup from "../../assets/images/sidebar/user-group.svg"
-import { MenuDataProps } from "../../types/common/components";
+import { MenuDataProps } from "../../types/menu/MenuTypes";
 
-function menuData(): MenuDataProps[] {
+function menuData(currentAcademicYear: string): MenuDataProps[] {
     return [
         {
             title: "Students",
@@ -25,7 +25,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Enrollment",
                     formLink: "form-enrollment",
-                    route: `enrollment?sectionType=student&academicYear=2023`,
+                    route: `enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -37,7 +37,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Attendance",
                     formLink: "form-attendance",
-                    route: "attendance?sectionType=student&academicYear=2023",
+                    route: `attendance?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -49,7 +49,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Performance",
                     formLink: "form-performance",
-                    route: "performance?sectionType=student&academicYear=2023",
+                    route: `performance?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -61,7 +61,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Pending",
                     appName: "SEMIS-Final-Result",
                     formLink: "form-final-result",
-                    route: "final-result?sectionType=student",
+                    route: "final-result?sectionType=student&academicYear=${currentAcademicYear}",
                     disabled: false
                 },
                 {
@@ -90,7 +90,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Enrollment-Staff",
                     formLink: "form-enrollment-teacher",
-                    route: "enrollment-teacher?sectionType=staff&academicYear=2023",
+                    route: `enrollment-teacher?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -102,7 +102,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Attendance-Staff",
                     formLink: "form-staff-attendance",
-                    route: "staff-attendance?sectionType=staff&academicYear=2023",
+                    route: `staff-attendance?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -114,7 +114,7 @@ function menuData(): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Staff-Transfer",
                     formLink: "form-staff-transfer",
-                    route: "staff-transfer?sectionType=staff&academicYear=2023",
+                    route: `staff-transfer?sectionType=staff`,
                     disabled: false
                 }
             ]
