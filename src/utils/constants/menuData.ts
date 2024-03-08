@@ -61,7 +61,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Pending",
                     appName: "SEMIS-Final-Result",
                     formLink: "form-final-result",
-                    route: "final-result?sectionType=student&academicYear=${currentAcademicYear}",
+                    route: `final-result?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -73,7 +73,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Student-Transfer",
                     formLink: "form-student-transfer",
-                    route: "student-transfer?sectionType=student",
+                    route: "transfer?sectionType=student",
                     disabled: false
                 }
             ]
@@ -90,7 +90,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Enrollment-Staff",
                     formLink: "form-enrollment-teacher",
-                    route: `enrollment-teacher?sectionType=staff&academicYear=${currentAcademicYear}`,
+                    route: `enrollment?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -102,7 +102,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Attendance-Staff",
                     formLink: "form-staff-attendance",
-                    route: `staff-attendance?sectionType=staff&academicYear=${currentAcademicYear}`,
+                    route: `attendance?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -114,7 +114,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "SEMIS-Staff-Transfer",
                     formLink: "form-staff-transfer",
-                    route: `staff-transfer?sectionType=staff`,
+                    route: `transfer?sectionType=staff`,
                     disabled: false
                 }
             ]
