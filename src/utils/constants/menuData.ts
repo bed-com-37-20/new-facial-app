@@ -71,7 +71,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS-Student-Transfer",
+                    appName: "SEMIS-Transfer",
                     formLink: "form-student-transfer",
                     route: "transfer?sectionType=student",
                     disabled: false
@@ -88,7 +88,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS-Enrollment-Staff",
+                    appName: "SEMIS-Enrollment",
                     formLink: "form-enrollment-teacher",
                     route: `enrollment?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
@@ -100,7 +100,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     title: "Attendance",
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS-Attendance-Staff",
+                    appName: "SEMIS-Attendance",
                     formLink: "form-staff-attendance",
                     route: `attendance?sectionType=staff&academicYear=${currentAcademicYear}`,
                     disabled: false
@@ -112,7 +112,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     title: "Transfer",
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS-Staff-Transfer",
+                    appName: "SEMIS-Transfer",
                     formLink: "form-staff-transfer",
                     route: `transfer?sectionType=staff`,
                     disabled: false
