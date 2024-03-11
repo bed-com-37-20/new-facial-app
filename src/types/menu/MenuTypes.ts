@@ -1,5 +1,6 @@
 interface MenuDataProps {
     title: string
+    displayInDashboard?: boolean
     subItem: MenuDataItemProps[]
 }
 

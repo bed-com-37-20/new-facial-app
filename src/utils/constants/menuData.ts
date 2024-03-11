@@ -4,6 +4,7 @@ import performance from "../../assets/images/home/performance.png";
 import transfer from "../../assets/images/home/transfer.png";
 import result from "../../assets/images/home/result.png";
 import gauge from "../../assets/images/sidebar/gauge.svg"
+import home from "../../assets/images/sidebar/home.svg"
 import fileDocument from "../../assets/images/sidebar/file-document.svg"
 import glyph from "../../assets/images/sidebar/Glyph.svg"
 import listAdd from "../../assets/images/sidebar/listAdd.svg"
@@ -14,7 +15,26 @@ import { MenuDataProps } from "../../types/menu/MenuTypes";
 function menuData(currentAcademicYear: string): MenuDataProps[] {
     return [
         {
+            title: "Navigation",
+            displayInDashboard: false,
+            subItem: [
+                {
+                    dashBoardIcon: home,
+                    sidebarIcon: home,
+                    title: "Home",
+                    showBadge:false,
+                    program: "programId",
+                    leftLabel: "Total",
+                    appName: "SEMIS",
+                    formLink: "home",
+                    route: `home`,
+                    disabled: false
+                }
+            ]
+        },
+        {
             title: "Students",
+            displayInDashboard: true,
             subItem: [
                 {
                     dashBoardIcon: enrollment,
@@ -80,6 +100,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
         },
         {
             title: "Staff",
+            displayInDashboard: true,
             subItem: [
                 {
                     dashBoardIcon: enrollment,

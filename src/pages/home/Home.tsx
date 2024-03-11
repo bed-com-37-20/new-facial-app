@@ -10,7 +10,7 @@ function Home(): React.ReactElement {
     
     return (
     <WithPadding padding="10px 30px">
-      {menuData(currentAcademicYear).map((section:MenuDataProps, y) => (
+      {menuData(currentAcademicYear).filter(item => item.displayInDashboard === true).map((section:MenuDataProps, y) => (
         <div key={y} className={style.section}>
           <Title label={section.title}/>
           <div className={style.containerCards}>
