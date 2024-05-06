@@ -31,7 +31,7 @@ export default function DashboardCard(props: CardSubItemProps): React.ReactEleme
         </div>
         <Divider />
         <div className={style.cardActions}>
-          <a
+          {/* <a
             href={`${baseUrl}/api/apps/${appName}/index.html#/${formLink}`}
             className={disabled === true && style.disabledLink}
           >
@@ -41,7 +41,7 @@ export default function DashboardCard(props: CardSubItemProps): React.ReactEleme
               </IconButton>
             </Tooltip>
           </a>
-          &nbsp;
+          &nbsp; */}
           <a
             href={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
             className={disabled === true && style.disabledLink}
