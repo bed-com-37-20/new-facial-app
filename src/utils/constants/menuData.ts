@@ -137,6 +137,18 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     formLink: "form-staff-transfer",
                     route: `transfer?sectionType=staff`,
                     disabled: false
+                },
+                {
+                    dashBoardIcon: result,
+                    sidebarIcon: gauge,
+                    showBadge:false,
+                    title: "Re-enroll",
+                    program: "programId",
+                    leftLabel: "Total",
+                    appName: "SEMIS-Staff-Re-enroll",
+                    formLink: "form-staff-reenroll",
+                    route: `final-result?sectionType=staff`,
+                    disabled: false
                 }
             ]
         }
