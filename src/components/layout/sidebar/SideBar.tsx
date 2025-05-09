@@ -19,6 +19,7 @@ export default function SideBar(): React.ReactElement {
                 }
             </div>
             <SibeBarCollapseButton collapsed={collapsed} setCollapsed={setCollapsed} />
+            
         </aside>
     )
 }

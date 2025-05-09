@@ -15,7 +15,7 @@ import { MenuDataProps } from "../../types/menu/MenuTypes";
 function menuData(currentAcademicYear: string): MenuDataProps[] {
     return [
         {
-            title: "Navigation",
+            title: "Navigations",
             displayInMenu: true,
             displayInDashboard: false,
             subItem: [
@@ -36,10 +36,12 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
         },
         {
             title: "Students",
-            displayInDashboard: true,
+            displayInMenu: true,
+            displayInDashboard: false,
             subItem: [
                 {
                     dashBoardIcon: enrollment,
+                    displayInMenu: true,
                     sidebarIcon: listAdd,
                     title: "Enrollment",
                     program: "programId",
@@ -52,6 +54,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: attendance,
+                    displayInMenu: true,
                     sidebarIcon: glyph,
                     title: "Attendance",
                     program: "programId",
@@ -64,6 +67,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: performance,
+                    displayInMenu: true,
                     sidebarIcon: fileDocument,
                     title: "Performance",
                     showBadge:false,
@@ -76,6 +80,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: result,
+                    displayInMenu: true,
                     sidebarIcon: gauge,
                     title: "Final result",
                     showBadge:false,
@@ -88,6 +93,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: transfer,
+                    displayInMenu: true,
                     sidebarIcon: logOut,
                     title: "Transfer",
                     showBadge:false,
@@ -102,10 +108,12 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
         },
         {
             title: "Staff",
+            displayInMenu: true,
             displayInDashboard: true,
             subItem: [
                 {
                     dashBoardIcon: enrollment,
+                    displayInMenu: true,
                     sidebarIcon: userGroup,
                     title: "Staff registry",
                     showBadge:false,
@@ -118,6 +126,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: attendance,
+                    displayInMenu: true,
                     sidebarIcon: glyph,
                     showBadge:false,
                     title: "Attendance",
@@ -130,6 +139,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: transfer,
+                    displayInMenu: true,
                     sidebarIcon: logOut,
                     showBadge:false,
                     title: "Transfer",
@@ -142,6 +152,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                 },
                 {
                     dashBoardIcon: result,
+                    displayInMenu: true,
                     sidebarIcon: gauge,
                     showBadge:false,
                     title: "Re-enroll",

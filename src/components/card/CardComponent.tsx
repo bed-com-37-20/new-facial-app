@@ -7,6 +7,7 @@ import { Divider, IconButton, Tooltip } from "@material-ui/core";
 import { Add, Menu } from "@material-ui/icons";
 import classNames from "classnames";
 import { CardSubItemProps } from "../../types/card/CardTypes";
+import { Link } from "react-router-dom";
 
 
 
@@ -42,16 +43,16 @@ export default function DashboardCard(props: CardSubItemProps): React.ReactEleme
             </Tooltip>
           </a>
           &nbsp; */}
-          <a
-            href={`${baseUrl}/api/apps/${appName}/index.html#/${listLink}`}
+          <Link
+            to={formLink}
             className={disabled === true && style.disabledLink}
           >
-            <Tooltip title={`List ${title}`}>
+            <Tooltip title={`${title}`}>
               <IconButton size="small" disabled={disabled}>
                 <Menu />
               </IconButton>
             </Tooltip>
-          </a>
+          </Link>
         </div>
       </Card>
     </Box>

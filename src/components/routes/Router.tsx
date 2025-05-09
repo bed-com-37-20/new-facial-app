@@ -13,6 +13,7 @@ export default function Router() {
                             path={route.path}
                             element={
                                 <route.layout>
+                                    
                                     {route.component()}
                                 </route.layout>
                             }

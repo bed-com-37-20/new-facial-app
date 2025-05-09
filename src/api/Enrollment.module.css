@@ -1,0 +1,150 @@
+.enrollment-container {
+    padding: 10px;
+    position: relative;
+  }
+  
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #f44336;
+    cursor: pointer;
+  }
+  
+  .filter-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-family: Roboto, sans-serif;
+    gap: 20px;
+  }
+  
+  .academic-year {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+  }
+  
+  .academic-year .year {
+    color: red;
+    margin-left: 5px;
+  }
+  
+  .enrollments-section {
+    margin-top: 20px;
+  }
+  
+  .action-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    color: #ccc;
+  }
+  
+  .search-wrapper input {
+    padding: 5px 10px 5px 30px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .enrollment-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .enrollment-table th,
+  .enrollment-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+  
+  .enrollment-table th {
+    background: #f8f8f8;
+  }
+  
+  .profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  .action-buttons button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .no-results {
+    text-align: center;
+    font-weight: bold;
+    font-style: italic;
+    margin-top: 40px;
+    font-size: 1.3rem;
+  }
+  
+  .instructions-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100vh;
+    background-color: #f4f4f4;
+    padding: 20px;
+    font-family: Roboto, sans-serif;
+  }
+  
+  .instructions-box {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 700px;
+    width: 90%;
+    margin-top: 100px;
+  }
+  
