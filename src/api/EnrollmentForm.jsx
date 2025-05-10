@@ -75,10 +75,14 @@ const EnrollmentForm = ({ school, onSubmit, editingEnrollment }) => {
                 <Divider />
                 <h3 className={styles.formSection}>Enrollment Details</h3>
 
-                <InputField name="school" label="School" value={formData.school} disabled />
+        
+                <label className={styles.label}>School Name</label>
 
-                <InputField name="regNumber" label="Registration Number" value={formData.regNumber} onChange={handleChange} />
+                <InputField name="school" value={formData.school} disabled />
 
+                <label className={styles.label}>Registration Number</label>
+                <InputField name="regNumber" value={formData.regNumber} onChange={handleChange} />
+                <label className={styles.label}>Academic Year</label>
                 <SingleSelect
                     name="academicYear"
                     selected={formData.academicYear}
@@ -89,6 +93,7 @@ const EnrollmentForm = ({ school, onSubmit, editingEnrollment }) => {
                     <SingleSelectOption value="2025-2026" label="2025-2026" />
                 </SingleSelect>
 
+                <label className={styles.label} htmlFor="Year Of Study"> Year Of Study</label>
                 <SingleSelect
                     name="yearOfStudy"
                     selected={formData.yearOfStudy}
@@ -100,6 +105,7 @@ const EnrollmentForm = ({ school, onSubmit, editingEnrollment }) => {
                     ))}
                 </SingleSelect>
 
+                <label className={styles.label} htmlFor="Program Of Study"> Program Of Study</label>
                 <SingleSelect
                     name="programOfStudy"
                     selected={formData.programOfStudy}
@@ -112,11 +118,10 @@ const EnrollmentForm = ({ school, onSubmit, editingEnrollment }) => {
                     <SingleSelectOption value="Arts" label="Bachelor of Arts" />
                     <SingleSelectOption value="InformationSystem" label="Information System" />
                 </SingleSelect>
-
+                <label className={styles.label} htmlFor="Enrollment Date"> Enrollment Date</label>
                 <InputField
                     type="date"
                     name="enrollmentDate"
-                    label="Enrollment Date"
                     value={formData.enrollmentDate}
                     onChange={handleChange}
                 />

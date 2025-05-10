@@ -10,6 +10,7 @@ import enrollmentIcon from "../../assets/images/home/enrollment.png"
 import examIcon from "../../assets/images/home/transfer.png" 
 import attendancIcon from "../../assets/images/home/enrollment.png" 
 import reportIcon from "../../assets/images/home/result.png" 
+import { Divider } from "@material-ui/core";
 
 
 function Home(): React.ReactElement {
@@ -24,19 +25,19 @@ function Home(): React.ReactElement {
     },
     {
       title: "New Exam",
-      formLink: "/new-exam",
+      formLink: "/api/attendance/attendances",
       icon: examIcon,
       appName: "new-exam",
     },
     {
       title: "Attendance",
-      formLink: "/attendance",
+      formLink: "/api/attendance/attendances",
       icon: attendancIcon,
       appName: "attendance",
     },
     {
       title: "Reports",
-      formLink: "/enrollments",
+      formLink: "/api/reports/report",
       icon: reportIcon,
       appName: "reports",
     },
@@ -44,6 +45,17 @@ function Home(): React.ReactElement {
 
   return (
     <WithPadding padding="10px 30px">
+      <div style={{ marginBottom: "20px" }}>
+        <Title label="Welcome to the Facial Attendance System" />
+        <p>
+          This application is designed to streamline the process of tracking student attendance during exams. 
+          By utilizing facial recognition technology, it ensures accurate and efficient attendance marking, 
+          identifying students and recording their presence automatically.
+        </p>
+      </div>
+
+      <Divider style={{ margin: "20px 0" }} />  
+    
       <div style={{ display: "flex", gap: "50px", margin: "5px", flexWrap: "wrap" }}>
         {appCards.map((card, index) => (
           <DashboardCard
@@ -52,6 +64,8 @@ function Home(): React.ReactElement {
             formLink={card.formLink}
             icon={card.icon}
             appName={card.appName}
+            
+            
           />
         ))}
       </div>
