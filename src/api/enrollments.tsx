@@ -8,6 +8,7 @@ import {
   Search
 } from 'lucide-react';
 import './Enrollment.css';
+import { useFetchOrganisationUnits } from '../hooks/api-calls/apis';
 
 interface Enrollment {
     regNumber: string;
@@ -28,8 +29,21 @@ const EnrollmentPage: React.FC = () => {
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
   const [editingEnrollment, setEditingEnrollment] = useState<{ enrollment: Enrollment; index: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [orgUnitId, setOrgUnitId] = useState('');
 
-  const handleSchoolChange = (e) => setSelectedSchool(e.target.value);
+    const { loading, error, organisationUnits } = useFetchOrganisationUnits();
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading data</div>;
+  if (!organisationUnits || organisationUnits.length === 0) { 
+    return <div>No organization units found</div>;
+  }else{
+    console.log(organisationUnits);
+  }
+
+  // const handleSchoolChange = (e) => {
+  //   setSelectedSchool(e.target.value);
+  // console.log(e.target.value);
+  // }
 
   const handleEnrollStudentClick = () => {
     setEditingEnrollment(null);
@@ -71,6 +85,7 @@ const EnrollmentPage: React.FC = () => {
                     school={selectedSchool}
                     onSubmit={handleFormSubmit}
                     editingEnrollment={editingEnrollment}
+                    orgUnitId={orgUnitId} 
                   />
                 </div>
               </div>
@@ -79,17 +94,26 @@ const EnrollmentPage: React.FC = () => {
             {!showEnrollmentForm && (
               <div className="filter-card">
                 <div className="filter-bar">
-                  <label>
+                    <label>
                     School
-                    <select onChange={handleSchoolChange}>
-                      <option value="">Select a school</option>
-                      {["UNIMA", "MUBAS", "LUANAR", "MUST", "MZUNI", "KUHES"].map((school) => (
-                        <option key={school} value={school}>
-                          {school}
-                        </option>
+                    <select
+                      onChange={(e) => {
+                      const selectedSchool = organisationUnits.find(
+                        (school) => school.displayName === e.target.value
+                      );
+                      setSelectedSchool(e.target.value);
+                      setOrgUnitId(selectedSchool?.id || '');
+                      console.log(orgUnitId);
+                      }}
+                    >
+                      <option value={organisationUnits[1]}>Select a school</option>
+                      {organisationUnits.map((school) => (
+                      <option key={school.id} value={school.displayName}>
+                        {school.displayName}
+                      </option>
                       ))}
                     </select>
-                  </label>
+                    </label>
                   <label>
                     Grade
                     <select>
