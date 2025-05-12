@@ -1,0 +1,32 @@
+.container {
+    max-width: 600px;
+    margin: auto;
+  }
+  
+  .formSection {
+    margin-top: 20px;
+  }
+  
+  .imageWrapper {
+    text-align: center;
+    position: relative;
+  }
+  
+  .profileImage {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+  }
+  
+  .uploadBtn {
+    margin-top: 10px;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+  

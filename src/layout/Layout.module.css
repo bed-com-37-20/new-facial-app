@@ -1,0 +1,34 @@
+@import "../assets/style/colors.css";
+
+.layoutContainer {
+    width: 100vw;
+    height: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+    background-color: var(--primary-color);
+}
+
+.headBarLayoutContainer {
+    width: 100vw;
+    height: inherit;
+    display: flex;
+    flex-direction: column;
+    background-color: inherit;
+}
+
+.mainContentContainer {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.fullLayoutContainer {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    background-color: inherit;
+}
