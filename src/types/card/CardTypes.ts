@@ -4,7 +4,7 @@ interface DashboardCardProps {
 }
 
 interface CardSubItemProps {
-    icon: React.ReactElement
+    icon: string
     title: string
     leftLabel: string
     program: string
