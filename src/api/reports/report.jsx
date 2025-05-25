@@ -83,8 +83,8 @@ const FilterCard = ({ organisationUnits, handleSchoolChange }) => (
 
 // Instructions Component
 const Instructions = () => (
-    <div className="instructions-container">
-      <div className="instructions-box">
+    <div className="instructions-container" style={styles.instructionsContainer}>
+      <div className="instructions-box" style={styles.instructionsBox}>
             <h3>SEMIS-Report</h3>
             <p>Follow the instructions to proceed:</p>
             <ul>
@@ -103,6 +103,21 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#f5f5f5',
+    },
+
+    instructionsContainer: {
+        width: '100%', 
+        display: 'flex',
+        justifyContent: 'center', 
+        marginTop: '20px',
+    },
+    instructionsBox: {
+        width: '600px', 
+        backgroundColor: '#ffffff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        textAlign: 'left',
     },
 };
 
