@@ -476,6 +476,7 @@ const EmptyState: React.FC<{ message: string; instructions?: string[] }> = ({ me
 const FilterBar: React.FC<{
   organisationUnits: { id: string; displayName: string }[];
   selectedSchool: string;
+
   onSchoolChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }> = ({ organisationUnits, selectedSchool, onSchoolChange }) => (
   <div className="filter-card">
@@ -499,19 +500,26 @@ const FilterBar: React.FC<{
 
       <div className="filter-group">
         <label htmlFor="grade-select">Year of Study</label>
-        <select id="grade-select">
+        <select id="grade-select"
+          onChange={onSchoolChange}
+          
+        >
           <option value="">Select a year</option>
           {[1, 2, 3, 4, 5].map((grade) => (
             <option key={grade} value={grade}>
               {grade}
             </option>
           ))}
+          
         </select>
       </div>
 
       <div className="filter-group">
         <label htmlFor="program-select">Program</label>
-        <select id="program-select">
+        <select id="program-select"
+          onChange={onSchoolChange}
+        
+        >
           <option value="">Program of Study</option>
           {[
             "Computer Science",
@@ -527,9 +535,9 @@ const FilterBar: React.FC<{
         </select>
       </div>
 
-      <div className="academic-year">
+      <div style={{border:'solid 1px blue',borderRadius:'10px'}} className="academic-year">
         <span>Academic Year</span>
-        <span className="year">2025</span>
+        <span style={{color:'red'}} className="year">2025</span>
       </div>
     </div>
   </div>
