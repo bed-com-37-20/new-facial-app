@@ -6,9 +6,10 @@ import {
     Button,
     Divider,
 } from '@dhis2/ui';
-import styles from './Enrollment.css';
+import styles from './EnrollmentForm.css';
 // import { useFetchPrograms } from '../hooks/api-calls/apis';
 import { useEnrollStudent } from '../hooks/api-calls/apis';
+import { useNavigate } from 'react-router-dom';
 
 const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
     const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
         profilePicture: null,
         // enrollIntoProgram: '',
     });
-
+ const navigate = useNavigate();
     // const { loading, error, programs } = useFetchPrograms();
     // const [selectedProgramId, setSelectedProgramId] = useState('');
     const { enrollStudent, loadingEnrol, errorEnrol } = useEnrollStudent()
@@ -59,11 +60,42 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        enrollStudent('N6eVEDUrpYU', 'TLvAWiCKRgq', orgUnitId, formData);
-        onSubmit(formData);
+        try {
+            const enrollmentPromise = enrollStudent('N6eVEDUrpYU', 'TLvAWiCKRgq', orgUnitId, formData);
+
+            // Show progress bar while enrollment is in progress
+            const progressBar = document.createElement('div');
+            progressBar.style.position = 'fixed';
+            progressBar.style.top = '0';
+            progressBar.style.left = '0';
+            progressBar.style.width = '0';
+            progressBar.style.height = '5px';
+            progressBar.style.backgroundColor = '#4caf50';
+            progressBar.style.transition = 'width 0.5s ease';
+            document.body.appendChild(progressBar);
+
+            const interval = setInterval(() => {
+                progressBar.style.width = `${Math.min(parseInt(progressBar.style.width) + 10, 100)}%`;
+            }, 500);
+
+            await enrollmentPromise;
+
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+
+            setTimeout(() => {
+                document.body.removeChild(progressBar);
+            }, 500);
+
+            // Navigate to the enrollments page on success
+            navigate('/api/examPage/select-students')
+            onSubmit(formData); // Notify parent component
+        } catch (error) {
+            alert('Error enrolling student: ' + error.message);
+        }
     };
 
     const handleCancel = (e) => {
@@ -83,7 +115,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
             // profilePicture: null,
             // enrollIntoProgram: '',
         });
-        // onSubmit();
+        onSubmit(formData);
     };
     if (loadingEnrol) {
         return <div>Loading...</div>;
@@ -95,26 +127,22 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
   
 
     return (
-        <div className={styles.container}>
-            <h2>Student Enrollment Form</h2>
+        <div className='main'>
+            <h2 className='formTitle'>Student Enrollment Form</h2>
 
-            {/* {loading && <div>Loading...</div>}
-            {error && <div>Error loading data</div>}
-            {!loading && !error && programs.length === 0 && <div>No programs found</div>}
-
-            {!loading && !error && programs.length > 0 && ( */}
-            <form onSubmit={handleSubmit} className='enrollment-form'>
-                <Divider />
+            <form onSubmit={handleSubmit} className='enrollmentForm'>
+                <Divider className='divider' />
                 <h3 className={styles.formSection}>Enrollment Details</h3>
 
                 <label className={styles.label}>School Name</label>
-                <InputField name="school" value={formData.school} disabled />
+                <InputField className='inputField' name="school" value={formData.school} disabled />
 
                 <label className={styles.label}>Registration Number</label>
-                <InputField name="regNumber" value={formData.regNumber} onChange={handleChange} />
+                <InputField className='inputField' name="regNumber" value={formData.regNumber} onChange={handleChange} />
 
                 <label className={styles.label}>Academic Year</label>
                 <SingleSelect
+                    className='selectField'
                     name="academicYear"
                     selected={formData.academicYear}
                     onChange={({ selected }) =>
@@ -128,6 +156,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
 
                 <label className={styles.label} htmlFor="Year Of Study">Year Of Study</label>
                 <SingleSelect
+                    className='selectField'
                     name="yearOfStudy"
                     selected={formData.yearOfStudy}
                     onChange={({ selected }) =>
@@ -142,6 +171,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
 
                 <label className={styles.label} htmlFor="Program Of Study">Program Of Study</label>
                 <SingleSelect
+                    className='selectField'
                     name="programOfStudy"
                     selected={formData.programOfStudy}
                     onChange={({ selected }) =>
@@ -156,42 +186,27 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
                     <SingleSelectOption value="InformationSystem" label="Information System" />
                 </SingleSelect>
 
-                {/* <label className={styles.label} htmlFor="Enroll Into">Enroll Into</label>
-                    <SingleSelect
-                        name="enrollIntoProgram"
-                        selected={formData.enrollIntoProgram}
-                        onChange={({ selected }) => setSelectedProgramId(selected)}
-                        label="Enroll Into"
-                    >
-                        {programs.map(program => (
-                            <SingleSelectOption
-                                key={program.id}
-                                value={program.id}
-                                label={program.displayName}
-                            />
-                        ))}
-                    </SingleSelect> */}
-
                 <label className={styles.label} htmlFor="Enrollment Date">Enrollment Date</label>
                 <InputField
+                    className='inputField'
                     type="date"
                     name="enrollmentDate"
                     value={formData.enrollmentDate}
                     onChange={handleChange}
                 />
-                <Divider />
+                <Divider className='divider' />
                 <h3 className="formSection">Student Profile</h3>
 
                 <div className="imageWrapper">
                     {formData.profilePicture ? (
                         <>
                             <img src={formData.profilePicture} alt="Profile" className="profileImage" />
-                            <Button small onClick={() => document.getElementById('profileInput').click()}>Change</Button>
+                            <Button small className='changeButton' onClick={() => document.getElementById('profileInput').click()}>Change</Button>
                         </>
                     ) : (
                         <Button
+                            className='uploadButton'
                             onClick={() => document.getElementById('profileInput').click()}
-                            className={styles.uploadBtn}
                         >
                             Upload Profile Picture
                         </Button>
@@ -204,12 +219,13 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
                         onChange={handleFileChange}
                     />
                 </div>
-                <label htmlFor="sirName">First Name</label>
-                <InputField name="firstName" value={formData.firstName} onChange={handleChange} />
-                <label htmlFor="sirName">Last Name</label>
-                <InputField name="surname" value={formData.surname} onChange={handleChange} />
-                <label htmlFor="gender"> Gender</label>
+                <label className={styles.label} htmlFor="sirName">First Name</label>
+                <InputField className='inputField' name="firstName" value={formData.firstName} onChange={handleChange} />
+                <label className={styles.label} htmlFor="sirName">Last Name</label>
+                <InputField className='inputField' name="surname" value={formData.surname} onChange={handleChange} />
+                <label className={styles.label} htmlFor="gender"> Gender</label>
                 <SingleSelect
+                    className='selectField'
                     name="gender"
                     selected={formData.gender}
                     onChange={({ selected }) => handleChange({ name: 'gender', value: selected })}
@@ -219,39 +235,39 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment }) => {
                     <SingleSelectOption value="female" label="Female" />
                     <SingleSelectOption value="other" label="Other" />
                 </SingleSelect>
-                <label htmlFor="sirName">Date Of Birth</label>
+                <label className={styles.label} htmlFor="sirName">Date Of Birth</label>
                 <InputField
+                    className='inputField'
                     type="date"
                     name="dateOfBirth"
                     value={formData.dateOfBirth}
                     onChange={handleChange}
                 />
-                <label htmlFor="sirName">Nationality</label>
+                <label className={styles.label} htmlFor="sirName">Nationality</label>
                 <InputField
+                    className='inputField'
                     name="nationality"
-
                     value={formData.nationality}
                     onChange={handleChange}
                 />
-                <label htmlFor="sirName">Guardian's Name</label>
+                <label className={styles.label} htmlFor="sirName">Guardian's Name</label>
                 <InputField
+                    className='inputField'
                     name="guardianName"
-
                     value={formData.guardianName}
                     onChange={handleChange}
                 />
-                <Divider />
+                <Divider className='divider' />
 
                 <div className="buttonGroup">
-                    <Button className="buttons" destructive onClick={handleCancel}>
+                    <Button className="clearButton" destructive onClick={handleCancel}>
                         Clear and Cancel
                     </Button>
-                    <Button className="buttons" primary type="submit">
+                    <Button className="submitButton" primary type="submit">
                         Save and Submit
                     </Button>
                 </div>
             </form>
-
         </div>
     );
 };

@@ -853,7 +853,7 @@ const EnrollmentPage: React.FC = () => {
 
       {showEnrollmentForm && (
         <div className="modal-backdrop">
-          <div className="modal-content form-modal">
+          <div style={{width:'100%'}} className="modal-content form-modal">
             <button className="modal-close" onClick={handleCloseForm}>
               &times;
             </button>
