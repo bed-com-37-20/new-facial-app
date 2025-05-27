@@ -420,12 +420,15 @@ interface ApiError {
   message: string;
   details?: string;
 }
+interface TrackedEntityAttribute {
+  attribute: string;
+  code: string;
+  value: string;
+}
+
 interface TrackedEntityInstance {
   trackedEntityInstance: string;
-  attributes: Array<{
-    attribute: string;
-    value: string;
-  }>;
+  attributes: TrackedEntityAttribute[];
 }
 
 const ErrorModal: React.FC<{ error: ApiError | null; onClose: () => void }> = ({ error, onClose }) => {
@@ -589,7 +592,7 @@ const EnrollmentTable: React.FC<{
               <td>{enrollment.yearOfStudy}</td>
               <td>{enrollment.nationality}</td>
               <td>{enrollment.gender}</td>
-              <td>{new Date(enrollment.enrollDate).toLocaleDateString()}</td>
+              <td>{enrollment.enrollDate}</td>
               <td className="action-buttons">
                 <button
                   onClick={() => onEdit(enrollment, index)}
@@ -611,6 +614,7 @@ const EnrollmentTable: React.FC<{
     </div>
   );
 };
+
 
 const ActionBar: React.FC<{
   searchQuery: string;
@@ -661,7 +665,7 @@ const EnrollmentPage: React.FC = () => {
 
   const engine = useDataEngine();
   const { loading: orgUnitsLoading, error: orgUnitsError, organisationUnits } = useFetchOrganisationUnits();
-
+  // const { enrollStudent, loadingEnrol, errorEnrol } = useEnrollStudent();
 
   const fetchTrackedEntityInstances = useCallback(async (ouId: string) => {
     if (!ouId) return;
@@ -675,9 +679,9 @@ const EnrollmentPage: React.FC = () => {
           resource: 'trackedEntityInstances',
           params: {
             ou: ouId,
-            // program: 'YOUR_PROGRAM_ID', // Replace with your actual program ID
-            // fields: 'trackedEntityInstance,attributes[attribute,value]',
-            // paging: false
+            // program: 'N6eVEDUrpYU', // Using the trackedEntityType from your XML
+            fields: 'trackedEntityInstance,attributes[attribute,code,value]',
+            paging: false
           }
         }
       });
@@ -687,24 +691,25 @@ const EnrollmentPage: React.FC = () => {
       }
 
       const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
-        const attributes = tei.attributes?.reduce((acc: Record<string, string>, attr) => {
-          acc[attr.attribute] = attr.value;
+        const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
+          // Map attributes by their codes from your XML
+          acc[attr.code] = attr.value;
           return acc;
-        }, {} as Record<string, string>) || {};
+        }, {} as Record<string, string>);
 
         return {
-          regNumber: attributes['REG_NUMBER_ATTRIBUTE_ID'] || '',
-          firstName: attributes['FIRST_NAME_ATTRIBUTE_ID'] || '',
-          surname: attributes['SURNAME_ATTRIBUTE_ID'] || '',
-          school: attributes['SCHOOL_ATTRIBUTE_ID'] || selectedSchool,
-          programOfStudy: attributes['PROGRAM_ATTRIBUTE_ID'] || '',
-          yearOfStudy: attributes['YEAR_ATTRIBUTE_ID'] || '',
-          nationality: attributes['NATIONALITY_ATTRIBUTE_ID'] || '',
-          gender: attributes['GENDER_ATTRIBUTE_ID'] || '',
-          dateOfBirth: attributes['DOB_ATTRIBUTE_ID'] || '',
-          enrollDate: attributes['ENROLL_DATE_ATTRIBUTE_ID'] || '',
-          academicYear: attributes['ACADEMIC_YEAR_ATTRIBUTE_ID'] || '',
-          guardian: attributes['GUARDIAN_ATTRIBUTE_ID'] || '',
+          regNumber: attributes['regnumber'] || '',
+          firstName: attributes['fname'] || '',
+          surname: attributes['lname'] || '',
+          school: attributes['school name'] || selectedSchool,
+          programOfStudy: attributes['program of study'] || '',
+          yearOfStudy: attributes['year of study'] || '',
+          nationality: attributes['nationality'] || '',
+          gender: attributes['gender'] || '',
+          dateOfBirth: attributes['dateOfBirth'] || '',
+          enrollDate: attributes['enroll_date'] || '',
+          academicYear: attributes['academic year'] || '',
+          guardian: attributes['guardian'] || '',
         };
       });
 
@@ -809,12 +814,6 @@ const EnrollmentPage: React.FC = () => {
     setSearchQuery(e.target.value);
   };
 
-  // Refresh enrollments when orgUnit changes
-  // useEffect(() => {
-  //   if (orgUnitId) {
-  //     refetchTrackedEntities();
-  //   }
-  // }, [orgUnitId, refetchTrackedEntities]);
 
   if (orgUnitsLoading) return <LoadingIndicator message="Loading organization units..." />;
   if (orgUnitsError) return <ErrorDisplay error={orgUnitsError} onRetry={() => window.location.reload()} />;
@@ -822,6 +821,23 @@ const EnrollmentPage: React.FC = () => {
     return <EmptyState message="No organization units found" />;
   }
 
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return '';
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch {
+      return dateString;
+    }
+  };
+
+  // Format program of study (remove camel case)
+  const formatProgram = (program: string) => {
+    return program
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, str => str.toUpperCase())
+      .trim();
+  };
 
   return (
     <div className="enrollment-container">
@@ -871,12 +887,18 @@ const EnrollmentPage: React.FC = () => {
                 onRetry={() => fetchTrackedEntityInstances(orgUnitId)}
               />
             ) : (
-              <EnrollmentTable
-                enrollments={enrollments}
-                onEdit={handleEditClick}
-                onDelete={handleDeleteClick}
-                searchQuery={searchQuery}
-              />
+                  <EnrollmentTable
+                    enrollments={enrollments.map(enrollment => ({
+                      ...enrollment,
+                      programOfStudy: formatProgram(enrollment.programOfStudy),
+                      enrollDate: formatDate(enrollment.enrollDate),
+                      dateOfBirth: formatDate(enrollment.dateOfBirth),
+                      yearOfStudy: enrollment.yearOfStudy ? `${enrollment.yearOfStudy}` : '',
+                    }))}
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteClick}
+                    searchQuery={searchQuery}
+                  />
             )}
           </div>
         ) : (
