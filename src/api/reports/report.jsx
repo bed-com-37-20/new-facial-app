@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFetchOrganisationUnits } from '../../hooks/api-calls/apis';
 
-const Report = () => {
+export default function Report(){
     const { organisationUnits, loading, error } = useFetchOrganisationUnits();
     const [selectedSchool, setSelectedSchool] = useState('');
     const [orgUnitId, setOrgUnitId] = useState('');
@@ -120,5 +120,3 @@ const styles = {
         textAlign: 'left',
     },
 };
-
-export default Report;
