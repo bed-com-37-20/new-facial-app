@@ -21,9 +21,7 @@ const STUDENTS_QUERY = {
         resource: 'trackedEntityInstances',
         params: ({ orgUnitId }) => ({
             ou: orgUnitId,
-            // program: 'TLvAWiCKRgq', // Replace with your actual program ID
-            // fields: 'trackedEntityInstance,attributes[attribute,value]',
-            // paging: false
+          
         })
     }
 };
