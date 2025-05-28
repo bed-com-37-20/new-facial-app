@@ -1,19 +1,19 @@
+
 import React, { useState } from 'react';
 import { useFetchOrganisationUnits } from '../../hooks/api-calls/apis';
+import './report.css';
 
-export default function Report(){
+export default function Report() {
     const { organisationUnits, loading, error } = useFetchOrganisationUnits();
     const [selectedSchool, setSelectedSchool] = useState('');
     const [orgUnitId, setOrgUnitId] = useState('');
 
-    // Handle loading and error states
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error loading data</div>;
     if (!organisationUnits || organisationUnits.length === 0) {
         return <div>No organization units found</div>;
     }
 
-    // Handle school selection
     const handleSchoolChange = (e) => {
         const selectedSchool = organisationUnits.find(
             (school) => school.displayName === e.target.value
@@ -24,7 +24,7 @@ export default function Report(){
     };
 
     return (
-        <div style={styles.container}>
+        <div className="container">
             <FilterCard
                 organisationUnits={organisationUnits}
                 handleSchoolChange={handleSchoolChange}
@@ -32,9 +32,8 @@ export default function Report(){
             <Instructions />
         </div>
     );
-};
+}
 
-// FilterCard Component
 const FilterCard = ({ organisationUnits, handleSchoolChange }) => (
     <div className="filter-card">
         <div className="filter-bar">
@@ -81,10 +80,9 @@ const FilterCard = ({ organisationUnits, handleSchoolChange }) => (
     </div>
 );
 
-// Instructions Component
 const Instructions = () => (
-    <div className="instructions-container" style={styles.instructionsContainer}>
-      <div className="instructions-box" style={styles.instructionsBox}>
+    <div className="instructions-container">
+        <div className="instructions-box">
             <h3>SEMIS-Report</h3>
             <p>Follow the instructions to proceed:</p>
             <ul>
@@ -94,29 +92,3 @@ const Instructions = () => (
         </div>
     </div>
 );
-
-// Styles
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#f5f5f5',
-    },
-
-    instructionsContainer: {
-        width: '100%', 
-        display: 'flex',
-        justifyContent: 'center', 
-        marginTop: '20px',
-    },
-    instructionsBox: {
-        width: '600px', 
-        backgroundColor: '#ffffff',
-        padding: '20px',
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        textAlign: 'left',
-    },
-};

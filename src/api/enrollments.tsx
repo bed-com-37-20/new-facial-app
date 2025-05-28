@@ -399,6 +399,7 @@ import { useEnrollStudent, useFetchOrganisationUnits, useEnrolledStudents } from
 import { generatePDF } from '../utils/pdfGenerator';
 import { validateEnrollmentForm } from '../utils/validation';
 import './Enrollment.css';
+import './reports/report.css';
 import { useDataEngine } from '@dhis2/app-runtime';
 
 interface Enrollment {
@@ -461,7 +462,7 @@ const ErrorDisplay: React.FC<{ error: Error; onRetry: () => void }> = ({ error, 
 );
 
 const EmptyState: React.FC<{ message: string; instructions?: string[] }> = ({ message, instructions }) => (
-  <div className="empty-state">
+  <div className="instructions-container">
     <h3>{message}</h3>
     {instructions && (
       <ol>
@@ -534,11 +535,16 @@ const FilterBar: React.FC<{
           ))}
         </select>
       </div>
-
-      <div style={{border:'solid 1px blue',borderRadius:'10px'}} className="academic-year">
+      
+      <div className="academic-year">
+        <span>Academic Year</span>
+        <span className="year">2025</span>
+      </div>
+      {/* <div style={{border:'solid 1px blue',borderRadius:'10px'}} className="academic-year">
         <span>Academic Year</span>
         <span style={{color:'red'}} className="year">2025</span>
-      </div>
+      </div> */}
+
     </div>
   </div>
 );
@@ -910,14 +916,24 @@ const EnrollmentPage: React.FC = () => {
             )}
           </div>
         ) : (
-          <EmptyState
-            message="SEMIS Enrollment System"
-            instructions={[
-              "Select a school from the dropdown menu",
-              "Use the filters to narrow down results",
-              "Click 'Enroll Student' to add new students"
-            ]}
-          />
+            <div className="instructions-container">
+              <div className="instructions-box">
+                <h3>SEMIS-Enrollment</h3>
+                <p>Follow the instructions to proceed:</p>
+                <ul>
+                  <li>Select the Organization unit you want to view the Registered Student</li>
+                  <li>Use global filters (Class, Grade, and Academic Year)</li>
+                </ul>
+              </div>
+            </div>
+          // <EmptyState
+          //   message="SEMIS Enrollment System"
+          //   instructions={[
+          //     "Select a school from the dropdown menu",
+          //     "Use the filters to narrow down results",
+          //     "Click 'Enroll Student' to add new students"
+          //   ]}
+          // />
         )}
       </div>
     </div>
