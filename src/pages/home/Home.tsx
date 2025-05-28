@@ -24,8 +24,8 @@ function Home(): React.ReactElement {
       appName: "enrollments",
     },
     {
-      title: "New Exam",
-      formLink: "/api/attendance/attendances",
+      title: "Exams Information",
+      formLink: "/api/examPage/newExam",
       icon: examIcon,
       appName: "new-exam",
     },
@@ -41,10 +41,11 @@ function Home(): React.ReactElement {
       icon: reportIcon,
       appName: "reports",
     },
+
     {
-      title: "AttendanceSession",
+      title: "AttendanceListener",
       formLink: "/api/AttendanceListener",
-      appName: "Session",
+      appName: "AttendanceListener",
     },
   ];
 
@@ -68,7 +69,8 @@ function Home(): React.ReactElement {
             title={card.title}
             formLink={card.formLink}
             icon={card.icon}
-            appName={card.appName} leftLabel={""} program={""} listLink={""}            
+            appName={card.appName}
+            
             
           />
         ))}
@@ -79,28 +81,3 @@ function Home(): React.ReactElement {
 }
 export default Home;
 
-     {/* {menuData?.filter(item => item.displayInDashboard && item.displayInMenu).map((section: MenuDataProps, y) => (
-        <div key={y} className={style.section}>
-          <Title label={section.title} />
-       
-          <div className={style.containerCards}>
-            {section.subItem?.filter((data: MenuDataItemProps) => data.displayInMenu).map((data: MenuDataItemProps, i: number) => (
-              <div key={i}>
-                <DashboardCard
-                  program={data.program}
-                  icon={data.dashBoardIcon}
-                  title={data.title}
-                  listLink={data.route}
-                  formLink={"#"}
-                  leftLabel={data.leftLabel}
-                  value={"30"}
-                  disabled={data.disabled}
-                  appName={data.appName}
-                />
-                &nbsp;&nbsp;
-                
-              </div>
-            ))}
-          </div>
-        </div>
-      ))} */}

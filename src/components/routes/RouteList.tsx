@@ -1,4 +1,3 @@
-import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout } from "../../layout"
 import { Home } from "../../pages";
