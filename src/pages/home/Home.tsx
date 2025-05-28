@@ -41,6 +41,11 @@ function Home(): React.ReactElement {
       icon: reportIcon,
       appName: "reports",
     },
+    {
+      title: "AttendanceSession",
+      formLink: "/api/AttendanceListener",
+      appName: "Session",
+    },
   ];
 
   return (
@@ -63,8 +68,7 @@ function Home(): React.ReactElement {
             title={card.title}
             formLink={card.formLink}
             icon={card.icon}
-            appName={card.appName}
-            
+            appName={card.appName} leftLabel={""} program={""} listLink={""}            
             
           />
         ))}

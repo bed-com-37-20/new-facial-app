@@ -196,7 +196,4 @@ const Attendances = () => {
   );
 };
 
-
-
-
 export default Attendances;

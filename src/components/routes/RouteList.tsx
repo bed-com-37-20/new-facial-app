@@ -6,6 +6,7 @@ import EnrollmentPage from "../../api/enrollments";
 import Attendances from "../../api/attendance/attendances";
 import ExamTracking from "../../api/attendance/ExamTracking";
 import Report from "../../api/reports/report";
+import AttendanceListener from "../../api/AttendanceListener";
 
 export default function RouteList() {
     return [
@@ -37,6 +38,12 @@ export default function RouteList() {
             layout: SideBarLayout,
             component: ()=> <EnrollmentPage/>
         },
+
+        {
+            path: "/api/AttendanceListener",
+            layout: SideBarLayout,
+            component: ()=> <AttendanceListener/>
+        }
       
       
     ]
