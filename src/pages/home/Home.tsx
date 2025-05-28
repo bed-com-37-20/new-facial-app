@@ -31,7 +31,7 @@ function Home(): React.ReactElement {
     },
     {
       title: "Attendance",
-      formLink: "/api/attendance/attendances",
+      formLink: "/api/filestore",
       icon: attendancIcon,
       appName: "attendance",
     },
@@ -55,6 +55,7 @@ function Home(): React.ReactElement {
       </div>
 
       <Divider style={{ margin: "20px 0" }} />  
+      <a href="/api/filestore">go to</a>
     
       <div style={{ display: "flex", gap: "50px", margin: "5px", flexWrap: "wrap" }}>
         {appCards.map((card, index) => (

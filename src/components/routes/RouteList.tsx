@@ -6,6 +6,7 @@ import EnrollmentPage from "../../api/enrollments";
 import Report from "../../api/reports/report";
 import NewExam from "../../api/examPage/newExam";
 import SelectStudents from "../../api/examPage/select-students";
+import ImageUploadForm from "../../api/filestore";
 
 export default function RouteList() {
     return [
@@ -34,6 +35,10 @@ export default function RouteList() {
             path: "/api/examPage/select-students",
             layout: SideBarLayout,
             component: () => <SelectStudents />
+        }, {
+            path: "/api/filestore",
+            layout: SimpleLayout,
+            component: () => <ImageUploadForm />
         }
 
 
