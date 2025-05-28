@@ -55,7 +55,7 @@ function Home(): React.ReactElement {
       </div>
 
       <Divider style={{ margin: "20px 0" }} />  
-      <a href="/api/filestore">go to</a>
+      <a href="/api/filestore">Go To</a>
     
       <div style={{ display: "flex", gap: "50px", margin: "5px", flexWrap: "wrap" }}>
         {appCards.map((card, index) => (

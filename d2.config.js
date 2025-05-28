@@ -7,5 +7,4 @@ const config = {
         app: './src/app/App.tsx',
     },
 }
-
 module.exports = config

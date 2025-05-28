@@ -44,6 +44,6 @@ See the section about [deploying](https://platform.dhis2.nu/#/scripts/deploy) fo
 You can learn more about the platform in the [DHIS2 Application Platform Documentation](https://platform.dhis2.nu/).
 
 You can learn more about the runtime in the [DHIS2 Application Runtime Documentation](https://runtime.dhis2.nu/).
-
+   
 To learn React, check out the [React documentation](https://reactjs.org/).
 >>>>>>> 28c73824b8127fd925d32aee78e06f0a7f925945

@@ -18,4 +18,4 @@ msgid "Save"
 msgstr "Save"
 
 msgid "No data to display"
-msgstr "No data to display"
+msgstr "No data to display"  

@@ -27,9 +27,9 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS",
+                    appName: "",
                     formLink: "home",
-                    route: `home`,
+                    route: "/" ,//`home`,
                     disabled: false
                 }
             ]
@@ -47,9 +47,9 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     program: "programId",
                     showBadge:false,
                     leftLabel: "Total",
-                    appName: "SEMIS-Enrollment",
+                    appName: "",
                     formLink: "form-enrollment",
-                    route: `enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "api/enrollments",//"form-enrollment", //`enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -60,9 +60,9 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     program: "programId",
                     showBadge:false,
                     leftLabel: "Total",
-                    appName: "SEMIS-Attendance",
+                    appName: "",
                     formLink: "form-attendance",
-                    route: `attendance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "/api/filestore", //`attendance?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
@@ -86,9 +86,9 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Pending",
-                    appName: "SEMIS-Final-Result",
+                    appName: "",
                     formLink: "form-final-result",
-                    route: `final-result?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "/api/reports/report",//`final-result?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
