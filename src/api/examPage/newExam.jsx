@@ -52,13 +52,10 @@ const NewExam = () => {
     );
 
     const handleCreateExam = () => {
+        // console.log(newExam)
         setShowPopup(false);
         navigate('/api/examPage/select-students', {
-            state: {
-                newExam: {
-                    ...newExam
-                },
-            },
+            state: newExam 
         });
     };
 
@@ -74,7 +71,11 @@ const NewExam = () => {
                         onChange={(e) => setFilter(e.target.value)}
                         style={{ color: '#101345', backgroundColor: 'white', border: '1px solid #101345' }}
                     />
-                    <button
+                    <button 
+                        style={{
+                            backgroundColor: 'darkblue',
+                            color: 'white',
+                        }}
                         className="primary-btn"
                         onClick={() => setShowPopup(true)}
                         // style={{ color: '#101345', backgroundColor: 'white', border: '1px solid #101345' }}
@@ -113,6 +114,9 @@ const NewExam = () => {
                                 <strong>Time:</strong> {exam.startTime} - {exam.endTime}
                             </p>
                             <button
+                                style={{
+                                    color: 'white'
+                                }}
                                 className="secondary-btn"
                                 onClick={() => navigate('/api/reports/report', {
                                     state: { exam }

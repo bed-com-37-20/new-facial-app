@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDataQuery } from '@dhis2/app-runtime';
 import './selectstudents.css';
 import { Divider } from '@material-ui/core';
+import { useLocation } from 'react-router-dom';
+import useRegisterEvent from '../../hooks/api-calls/dataMutate'
 
 // Define DHIS2 queries
 const ORG_UNITS_QUERY = {
@@ -150,7 +152,18 @@ const SelectStudents = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStudents, setSelectedStudents] = useState([]);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [examDetails, setExamDetails] = useState(null);
 
+    const location = useLocation();
+
+    const { loading,
+        error,
+        data,
+        registerEvent, } = useRegisterEvent
+     // fallback to {} to avoid errors
+    const { courseName, date, room, supervisorName, startTime, endTime } = location.state || {}
+    
+   
     // Fetch organization units
     const { data: orgUnitData, loading: orgUnitsLoading } = useDataQuery(ORG_UNITS_QUERY);
 
@@ -198,10 +211,38 @@ const SelectStudents = () => {
         );
     };
 
-    const handleCreateExam = () => {
+    const handleCreateExam = async() => {
         setShowSuccessAlert(true);
         setTimeout(() => setShowSuccessAlert(false), 3000);
+        console.log(courseName,
+            date,
+            room,
+            supervisorName,
+            startTime,
+            endTime)
+      
+            const result = await registerEvent({
+                program: 'FnpXlAn2N2t',
+                orgUnit: 'ORG_UNIT_UID',
+                programStage: '', // if applicable
+                date: '2023-11-15', // ISO format
+                attendance: '45',
+                startTime: '09:00',
+                endTime: '11:00',
+                courseName: 'Mathematics',
+                examRoom: 'Room 101',
+                supervisor: 'John Doe'
+            });
+
+            if (result.success) {
+                // Handle success
+            }
+        };
+        
     };
+
+
+
 
     return (
         <div className="select-students-container">

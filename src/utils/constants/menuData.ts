@@ -62,48 +62,48 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "",
                     formLink: "form-attendance",
-                    route: "/api/filestore", //`attendance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "api/filestore", //`attendance?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {
                     dashBoardIcon: performance,
                     displayInMenu: true,
                     sidebarIcon: fileDocument,
-                    title: "Performance",
+                    title: "Exams Info",
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Total",
-                    appName: "SEMIS-Performance",
+                    appName: "",
                     formLink: "form-performance",
-                    route: `performance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: `api/examPage/newExam`,
                     disabled: false
                 },
                 {
                     dashBoardIcon: result,
                     displayInMenu: true,
                     sidebarIcon: gauge,
-                    title: "Final result",
+                    title: "Reports",
                     showBadge:false,
                     program: "programId",
                     leftLabel: "Pending",
                     appName: "",
                     formLink: "form-final-result",
-                    route: "/api/reports/report",//`final-result?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "api/reports/report",//`final-result?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
-                {
-                    dashBoardIcon: transfer,
-                    displayInMenu: true,
-                    sidebarIcon: logOut,
-                    title: "Transfer",
-                    showBadge:false,
-                    program: "programId",
-                    leftLabel: "Total",
-                    appName: "SEMIS-Transfer",
-                    formLink: "form-student-transfer",
-                    route: "transfer?sectionType=student",
-                    disabled: false
-                }
+                // {
+                //     dashBoardIcon: transfer,
+                //     displayInMenu: true,
+                //     sidebarIcon: logOut,
+                //     title: "Transfer",
+                //     showBadge:false,
+                //     program: "programId",
+                //     leftLabel: "Total",
+                //     appName: "SEMIS-Transfer",
+                //     formLink: "form-student-transfer",
+                //     route: "transfer?sectionType=student",
+                //     disabled: false
+                // }
             ]
         },
         {
