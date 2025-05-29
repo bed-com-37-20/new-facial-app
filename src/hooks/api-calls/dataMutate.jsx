@@ -33,12 +33,16 @@ const useFetchEvents = (programId) => {
 export default useFetchEvents;
 
 
+
 const useRegisterEvent = () => {
-    'FnpXlAn2N2t'
     const mutation = {
         type: 'create',
         resource: 'events',
         data: ({
+            trackedEntityInstance,
+            program,
+            orgUnit,
+            programStage,
             attendance,
             startTime,
             endTime,
@@ -46,46 +50,43 @@ const useRegisterEvent = () => {
             courseName,
             examRoom,
             supervisor,
-            orgUnit,          // Required
-            program,          // Required
-            programStage      // Required if program has stages
         }) => ({
-            trackedEntityInstance, 
+            trackedEntityInstance,
             program,
             orgUnit,
-            programStage,     // Include if needed
-            eventDate: date,  // DHIS2 expects 'eventDate' field
-            status: 'ACTIVE', // Optional but recommended
+            programStage,
+            eventDate: date,
+            status: 'ACTIVE',
             dataValues: [
-                { dataElement: 'xIgmOIGKlkr', value: attendance }, // Use actual data element UIDs
-                { dataElement: 'FnpXlAn2N2t', value: startTime },
-                { dataElement: 'FnpXlAn2N2t', value: endTime },
-                { dataElement: 'Tak38cNTsWA', value: courseName },
-                { dataElement: 'FnpXlAn2N2t', value: examRoom },
-                { dataElement: 'FnpXlAn2N2t', value: supervisor },
-                { dataElement:' sV4hJkorxay', value: date}
+                { dataElement: 'xIgmOIGKlkr', value: attendance },   // Attendance
+                { dataElement: 'ZCvzGgOWhpD', value: startTime },    // Start Time
+                { dataElement: 'wS32daZ8JYx', value: endTime },      // End Time
+                { dataElement: 'Tak38cNTsWA', value: courseName },   // Course Name
+                { dataElement: 'ABcXlR45qPt', value: examRoom },     // Exam Room
+                { dataElement: 'uK7gdfDsLPx', value: supervisor },   // Supervisor
+                { dataElement: 'sV4hJkorxay', value: date },         // Exam Date
             ],
         }),
-    };
+    }
 
-    const [mutate, { loading, error, data }] = useDataMutation(mutation);
+    const [mutate, { loading, error, data }] = useDataMutation(mutation)
 
     const registerEvent = async (eventData) => {
         try {
-            await mutate(eventData);
-            return { success: true };
+            await mutate(eventData)
+            return { success: true, data }
         } catch (err) {
-            console.error('Error registering event:', err);
-            return { success: false, error: err };
+            console.error('Error registering event:', err)
+            return { success: false, error: err }
         }
-    };
+    }
 
     return {
+        registerEvent,
         loading,
         error,
         data,
-        registerEvent,
-    };
-};
+    }
+}
 
-export { useRegisterEvent };
+export { useRegisterEvent }

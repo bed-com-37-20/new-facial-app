@@ -31,7 +31,7 @@ function Home(): React.ReactElement {
     },
     {
       title: "Attendance",
-      formLink: "/api/",
+      formLink: "api/attendance",
       icon: attendancIcon,
       appName: "attendance",
     },
