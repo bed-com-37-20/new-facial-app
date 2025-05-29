@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import './attendance.css'; // Import the CSS file
 
 const Attendance = () => {
   // State management
@@ -6,7 +7,8 @@ const Attendance = () => {
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [pollingInterval, setPollingInterval] = useState(null);
+  const [activeTab, setActiveTab] = useState('current');
+  const [refreshInterval, setRefreshInterval] = useState(5000); // 5 seconds
 
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
@@ -29,55 +31,10 @@ const Attendance = () => {
 
     setSessions(prev => [newSession, ...prev]);
     setCurrentSessionId(newSession.id);
+    setActiveTab('current');
     
     return newSession;
   }, []);
-
-  // Add student to current session
-  const addStudentToSession = useCallback((studentData) => {
-    setSessions(prev => prev.map(session => {
-      if (session.id === currentSessionId) {
-        // Check if student already exists in this session
-        const exists = session.students.some(
-          s => s.registrationNumber === studentData.registrationNumber
-        );
-        
-        if (!exists) {
-          return {
-            ...session,
-            students: [
-              ...session.students,
-              {
-                ...studentData,
-                id: `student_${Date.now()}`,
-                timestamp: new Date().toISOString(),
-                status: studentData.status || 'present'
-              }
-            ]
-          };
-        }
-      }
-      return session;
-    }));
-  }, [currentSessionId]);
-
-  // End current session
-  const endCurrentSession = useCallback(() => {
-    if (!currentSessionId) return;
-    
-    setSessions(prev => prev.map(session => 
-      session.id === currentSessionId 
-        ? { ...session, endTime: new Date().toISOString() }
-        : session
-    ));
-    setCurrentSessionId(null);
-    
-    // Clear the polling interval when session ends
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-      setPollingInterval(null);
-    }
-  }, [currentSessionId, pollingInterval]);
 
   // Fetch attendance data from the endpoint
   const fetchAttendanceData = useCallback(async () => {
@@ -88,321 +45,253 @@ const Attendance = () => {
       }
       const data = await response.json();
       
-      if (data && data.length > 0) {
-        // Process the attendance data
-        data.forEach(student => {
-          if (!currentSessionId) {
-            // Auto-create session if none exists
-            initNewSession({
-              examId: 'auto-generated',
-              examName: 'Auto-created Session'
-            });
+      if (data && data.length > 0 && currentSessionId) {
+        // Update current session with new data
+        setSessions(prev => prev.map(session => {
+          if (session.id === currentSessionId) {
+            // Filter out existing students to avoid duplicates
+            const newStudents = data.filter(newStudent => 
+              !session.students.some(existing => 
+                existing.registrationNumber === newStudent.registrationNumber
+              )
+            ).map(student => ({
+              ...student,
+              id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+              timestamp: new Date().toISOString(),
+              status: student.status || 'present'
+            }));
+
+            return {
+              ...session,
+              students: [...session.students, ...newStudents]
+            };
           }
-          addStudentToSession(student);
-        });
+          return session;
+        }));
       }
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
     }
-  }, [currentSessionId, initNewSession, addStudentToSession]);
+  }, [currentSessionId]);
 
-  // Start polling for attendance data
-  const startPolling = useCallback(() => {
-    // Clear any existing interval
-    if (pollingInterval) {
-      clearInterval(pollingInterval);
-    }
+  // Set up polling for attendance data
+  useEffect(() => {
+    let intervalId;
     
-    // Fetch immediately and then set up interval
-    fetchAttendanceData();
-    const interval = setInterval(fetchAttendanceData, 5000); // Poll every 5 seconds
-    setPollingInterval(interval);
+    if (currentSessionId) {
+      // Fetch immediately
+      fetchAttendanceData();
+      
+      // Then set up interval
+      intervalId = setInterval(fetchAttendanceData, refreshInterval);
+    }
     
     return () => {
-      if (interval) clearInterval(interval);
+      if (intervalId) clearInterval(intervalId);
     };
-  }, [fetchAttendanceData, pollingInterval]);
-
-  // Start polling when a new session is created
-  useEffect(() => {
-    if (currentSessionId && !pollingInterval) {
-      startPolling();
-    }
-  }, [currentSessionId, pollingInterval, startPolling]);
-
-  // Load saved sessions from local storage on mount
-  useEffect(() => {
-    const loadSessions = async () => {
-      setIsLoading(true);
-      try {
-        const savedSessions = localStorage.getItem('attendanceSessions');
-        if (savedSessions) {
-          setSessions(JSON.parse(savedSessions));
-        }
-      } catch (err) {
-        console.error('Failed to load sessions:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadSessions();
-  }, []);
-
-  // Save sessions to local storage when they change
-  useEffect(() => {
-    if (sessions.length > 0) {
-      localStorage.setItem('attendanceSessions', JSON.stringify(sessions));
-    }
-  }, [sessions]);
+  }, [currentSessionId, fetchAttendanceData, refreshInterval]);
 
   // Status badge component
   const StatusBadge = ({ status }) => {
-    const statusMap = {
-      present: { color: 'bg-green-100 text-green-800', text: 'Present' },
-      absent: { color: 'bg-red-100 text-red-800', text: 'Absent' },
-      late: { color: 'bg-yellow-100 text-yellow-800', text: 'Late' },
-      default: { color: 'bg-gray-100 text-gray-800', text: 'Unknown' }
+    const statusClasses = {
+      present: 'status-badge present',
+      absent: 'status-badge absent',
+      late: 'status-badge late',
+      default: 'status-badge default'
     };
     
-    const { color, text } = statusMap[status] || statusMap.default;
+    const statusText = {
+      present: 'Present',
+      absent: 'Absent',
+      late: 'Late',
+      default: 'Unknown'
+    };
     
     return (
-      <span className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}>
-        {text}
+      <span className={statusClasses[status] || statusClasses.default}>
+        {statusText[status] || statusText.default}
       </span>
     );
   };
 
+  // Format date and time
+  const formatDateTime = (isoString) => {
+    if (!isoString) return 'N/A';
+    const date = new Date(isoString);
+    return date.toLocaleString();
+  };
+
   return (
-    <div className="select-students-container">
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex justify-between items-start flex-wrap gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-1">
-              Facial Recognition Attendance
-            </h1>
-          </div>
-          <div className="flex items-center gap-4">
-            {currentSession && (
-              <button
-                onClick={endCurrentSession}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm"
-              >
-                End Session
-              </button>
-            )}
-          </div>
+    <div className="container">
+      <div className="header">
+        <div>
+          <h1>Attendance Monitoring</h1>
+          <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+        </div>
+        <div>
+          {currentSession ? (
+            <button
+              onClick={() => {
+                setSessions(prev => prev.map(s => 
+                  s.id === currentSessionId ? {...s, endTime: new Date().toISOString()} : s
+                ));
+                setCurrentSessionId(null);
+              }}
+              className="end-session"
+            >
+              End Session
+            </button>
+          ) : (
+            <button
+              onClick={() => initNewSession({
+                examId: `exam_${Date.now()}`,
+                examName: 'New Session'
+              })}
+              className="start-session"
+            >
+              Start New Session
+            </button>
+          )}
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-red-700">{error}</p>
-            </div>
-          </div>
+        <div className="error-message">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="icon">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          <span>{error}</span>
         </div>
       )}
 
-      {/* Current Session */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          {currentSession ? 'Current Session' : 'No Active Session'}
-        </h2>
-        
-        {currentSession ? (
-          <div className="student-table-container">
-            <div className="p-4 border-b">
-              <div className="flex flex-wrap justify-between items-center gap-4">
-                <div>
-                  <h3 className="text-lg font-medium text-gray-900">
-                    {currentSession.examName}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {currentSession.examId} • {currentSession.metadata.course || 'No course'}
-                  </p>
-                </div>
-                <div className="text-sm text-gray-500">
-                  Started: {new Date(currentSession.startTime).toLocaleString()}
-                </div>
-              </div>
-            </div>
-            
-            <table className="student-table">
-              <thead className="student-table-header">
-                <tr>
-                  <th scope="col">
-                    Reg Number
-                  </th>
-                  <th scope="col">
-                    Name
-                  </th>
-                  <th scope="col">
-                    Status
-                  </th>
-                  <th scope="col">
-                    Time
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentSession.students.length > 0 ? (
-                  currentSession.students.map((student) => (
-                    <tr key={student.id}>
-                      <td>
-                        {student.registrationNumber}
-                      </td>
-                      <td>
-                        {student.name || 'N/A'}
-                      </td>
-                      <td>
-                        <StatusBadge status={student.status} />
-                      </td>
-                      <td>
-                        {new Date(student.timestamp).toLocaleTimeString()}
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="no-students">
-                      No students marked yet
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-            
-            <div className="px-4 py-3 bg-gray-50 text-right text-sm font-medium">
-              <span className="text-gray-500">
-                {currentSession.students.length} student{currentSession.students.length !== 1 ? 's' : ''} marked
-              </span>
-            </div>
-          </div>
-        ) : (
-          <div className="bg-white shadow rounded-lg p-8 text-center">
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No active session</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Click "Start New Session" to begin monitoring attendance
-            </p>
-            <button
-              onClick={() => initNewSession({
-                examId: 'manual-start',
-                examName: 'Manual Session'
-              })}
-              className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm"
-            >
-              Start New Session
-            </button>
-          </div>
-        )}
+      <div className="tab-navigation">
+        <button
+          onClick={() => setActiveTab('current')}
+          className={activeTab === 'current' ? 'active' : ''}
+        >
+          Current Session
+        </button>
+        <button
+          onClick={() => setActiveTab('history')}
+          className={activeTab === 'history' ? 'active' : ''}
+        >
+          Session History
+        </button>
       </div>
 
-      {/* Session History */}
-      <div>
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Session History</h2>
-        
-        <div className="student-table-container">
-          <table className="student-table">
-            <thead className="student-table-header">
+      {activeTab === 'history' && (
+      <div className="session-history">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Exam</th>
+              <th>Details</th>
+              <th>Duration</th>
+              <th>Students</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sessions.length > 0 ? (
+              sessions.map((session) => (
+                <React.Fragment key={session.id}>
+                  <tr>
+                    <td>{session.examName}</td>
+                    <td>{session.metadata.course || 'N/A'}</td>
+                    <td>{formatDateTime(session.startTime)} to {formatDateTime(session.endTime)}</td>
+                    <td>{session.students.length}</td>
+                    <td>{session.endTime ? 'Completed' : 'Active'}</td>
+                    <td>
+                      <button onClick={() => setCurrentSessionId(session.id)}>View</button>
+                      <button onClick={() => console.log('Exporting session:', session)}>Export</button>
+                    </td>
+                  </tr>
+                  {currentSessionId === session.id && (
+                    <tr>
+                      <td colSpan="6">
+                        <div className="student-details">
+                          <h4>Students Attended</h4>
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Time Recorded</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {session.students.length > 0 ? (
+                                session.students.map((student) => (
+                                  <tr key={student.id}>
+                                    <td>{student.registrationNumber}</td>
+                                    <td>{student.name || 'N/A'}</td>
+                                    <td><StatusBadge status={student.status} /></td>
+                                    <td>{formatDateTime(student.timestamp)}</td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan="4">No students attended this session</td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
               <tr>
-                <th scope="col">
-                  Exam
-                </th>
-                <th scope="col">
-                  Course
-                </th>
-                <th scope="col">
-                  Period
-                </th>
-                <th scope="col">
-                  Students
-                </th>
-                <th scope="col">
-                  Status
-                </th>
-                <th scope="col">
-                  Actions
-                </th>
+                <td colSpan="6">No sessions available</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+      {activeTab === 'history' && (
+        <div className="session-history">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Exam</th>
+                <th>Details</th>
+                <th>Duration</th>
+                <th>Students</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {sessions.length > 0 ? (
                 sessions.map((session) => (
-                  <tr key={session.id} className={session.id === currentSessionId ? 'bg-blue-50' : ''}>
+                  <tr key={session.id}>
+                    <td>{session.examName}</td>
+                    <td>{session.metadata.course || 'N/A'}</td>
+                    <td>{formatDateTime(session.startTime)} to {formatDateTime(session.endTime)}</td>
+                    <td>{session.students.length}</td>
+                    <td>{session.endTime ? 'Completed' : 'Active'}</td>
                     <td>
-                      <div className="text-sm font-medium text-gray-900">{session.examName}</div>
-                      <div className="text-sm text-gray-500">{session.examId}</div>
-                    </td>
-                    <td>
-                      {session.metadata.course || 'N/A'}
-                    </td>
-                    <td>
-                      <div>
-                        {new Date(session.startTime).toLocaleDateString()}
-                      </div>
-                      <div className="text-xs text-gray-400">
-                        {session.endTime 
-                          ? `${new Date(session.startTime).toLocaleTimeString()} - ${new Date(session.endTime).toLocaleTimeString()}`
-                          : 'Active'}
-                      </div>
-                    </td>
-                    <td>
-                      {session.students.length}
-                    </td>
-                    <td>
-                      {session.endTime ? (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                          Completed
-                        </span>
-                      ) : (
-                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          Active
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          // View session details
-                          console.log('View session:', session);
-                        }}
-                        className="text-blue-600 hover:text-blue-900 mr-3"
-                      >
-                        View
-                      </button>
-                      <button
-                        onClick={() => {
-                          // Export session data
-                          console.log('Export session:', session);
-                        }}
-                        className="text-gray-600 hover:text-gray-900"
-                      >
-                        Export
-                      </button>
+                      <button onClick={() => setCurrentSessionId(session.id)}>View</button>
+                      <button onClick={() => console.log('Exporting session:', session)}>Export</button>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="no-students">
-                    {isLoading ? 'Loading sessions...' : 'No attendance sessions recorded yet'}
-                  </td>
+                  <td colSpan="6">No sessions available</td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
-      </div>
+      )}
     </div>
   );
 };
