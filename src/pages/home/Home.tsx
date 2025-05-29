@@ -41,12 +41,6 @@ function Home(): React.ReactElement {
       icon: reportIcon,
       appName: "reports",
     },
-
-    {
-      title: "AttendanceListener",
-      formLink: "/api/AttendanceListener",
-      appName: "AttendanceListener",
-    },
   ];
 
   return (

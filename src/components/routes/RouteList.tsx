@@ -37,13 +37,5 @@ export default function RouteList() {
             layout: SideBarLayout,
             component: ()=> <EnrollmentPage/>
         },
-
-        {
-            path: "/api/AttendanceListener",
-            layout: SideBarLayout,
-            component: ()=> <AttendanceListener/>
-        }
-      
-      
     ]
 }

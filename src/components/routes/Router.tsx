@@ -8,16 +8,18 @@ export default function Router() {
             <Routes>
                 {
                     RouteList().map((route, index) => (
-                        <Route
-                            key={index}
-                            path={route.path}
-                            element={
-                                <route.layout>
-                                    
-                                    {route.component()}
-                                </route.layout>
-                            }
-                        />
+                        route && (
+                            <Route
+                                key={index}
+                                path={route.path}
+                                element={
+                                    <route.layout>
+                                        
+                                        {route.component()}
+                                    </route.layout>
+                                }
+                            />
+                        )
                     ))
                 }
             </Routes>
