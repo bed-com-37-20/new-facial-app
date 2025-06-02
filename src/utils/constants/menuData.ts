@@ -49,7 +49,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "",
                     formLink: "form-enrollment",
-                    route: "api/enrollments",//"form-enrollment", //`enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "api/enrollment/enrollments",//"form-enrollment", //`enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {

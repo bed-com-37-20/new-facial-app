@@ -19,7 +19,7 @@ function Home(): React.ReactElement {
   const appCards = [
     {
       title: "Enrollment",
-      formLink: "/api/enrollments",
+      formLink: "/api/enrollment/enrollments",
       icon:    enrollmentIcon,
       appName: "enrollments",
     },
