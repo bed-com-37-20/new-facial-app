@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import EnrollmentForm from './EnrollmentForm';
 import { UserPlus, Download, Pencil, Trash2, Search } from 'lucide-react';
-import { useEnrollStudent, useFetchOrganisationUnits, useEnrolledStudents } from '../hooks/api-calls/apis';
-import { generatePDF } from '../utils/pdfGenerator';
-import { validateEnrollmentForm } from '../utils/validation';
+import { useEnrollStudent, useFetchOrganisationUnits, useEnrolledStudents } from '../../hooks/api-calls/apis';
+import { generatePDF } from '../../utils/pdfGenerator';
+import { validateEnrollmentForm } from '../../utils/validation';
 import './Enrollment.css';
 import './reports/report.css';
 import { useDataEngine } from '@dhis2/app-runtime';
