@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
+import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
 
 const Attendance = () => {
   const [sessions, setSessions] = useState([]);
@@ -11,9 +12,10 @@ const Attendance = () => {
   const [activeTab, setActiveTab] = useState('current');
   const [refreshInterval, setRefreshInterval] = useState(5000);
   const [matchedTeiIds, setMatchedTeiIds] = useState([]);
-  const [teiArray, setTeiArray] = useState([]); 
+  const [teiArray, setTeiArray] = useState([]);
 
   const location = useLocation();
+
   const {
     courseName,
     date,
@@ -26,7 +28,7 @@ const Attendance = () => {
   console.log('Location state:', location.state);
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
-console.log(location.state)
+  console.log(location.state)
   // Adjust these as needed
   const PROGRAM_ID = 'TLvAWiCKRgq';
   const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
@@ -36,7 +38,7 @@ console.log(location.state)
   const teiQuery = {
     students: {
       resource: 'trackedEntityInstances',
-      params:{
+      params: {
         ou: ORG_UNIT_UID,
       }
     }
@@ -44,7 +46,12 @@ console.log(location.state)
 
   const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
 
-  console.log('TEI Data:', teiData);
+
+  const { registerEvent,
+    loading,
+    errors,
+    data, } = useRegisterEvent()
+// console.log(teiData)
   // Initialize a new session
   const initNewSession = useCallback((sessionData) => {
     const newSession = {
@@ -68,11 +75,17 @@ console.log(location.state)
     return newSession;
   }, []);
 
+  const findTei = (stNumber) => {
+    return teiArray.find((ti) => stNumber === ti.regNumber);
+  }
+
   // Fetch attendance data
   const fetchAttendanceData = useCallback(async () => {
     try {
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      if (!response.ok) {
+        alert('There is error from server..')
+      };
 
       const data = await response.json();
 
@@ -98,6 +111,30 @@ console.log(location.state)
           return session;
         }));
       }
+      data.map((st) => {
+        if (st.status != "absent") {
+          const teiId = findTei(st.registrationNumber)
+          const Id = teiId.entityInstanceId
+
+        const eventData = {
+              trackedEntityInstance: Id,
+              program: 'TLvAWiCKRgq',
+              orgUnit: orgUnit,
+              programStage: 'TLvAWiCKRgq',
+              attendance: 'Present',
+              startTime: startTime,
+              endTime: endTime,
+              date: date,
+              courseName: courseName,
+              examRoom: room,
+              supervisor: supervisorName,
+            };
+
+          const result = registerEvent(eventData);
+          console.log(result)
+
+        }
+      })
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
@@ -159,25 +196,39 @@ console.log(location.state)
     const date = new Date(isoString);
     return date.toLocaleString();
   };
-  // New state for storing TEI data
-
+  // Update teiArray whenever teiData changes
   // Update teiArray whenever teiData changes
   useEffect(() => {
     if (teiData?.students?.trackedEntityInstances) {
       const extractedData = teiData.students.trackedEntityInstances.map(tei => {
-        const regNumberAttr = tei.attributes.find(attr => attr.attribute === REG_NUM_ATTR_UID);
-        const firstNameAttr = tei.attributes.find(attr => attr.attribute === 'fname'); // Replace 'fname' with the actual UID for the first name attribute if different
+        // Find registration number (using both attribute and code for compatibility)
+        const regNumberAttr = tei.attributes.find(attr =>
+          attr.attribute === REG_NUM_ATTR_UID || attr.code === 'regnumber'
+        );
+
+        // Find first name (using both attribute and code for compatibility)
+        const firstNameAttr = tei.attributes.find(attr =>
+          attr.attribute === 'fname' || attr.code === 'fname'
+        );
+
         return {
           entityInstanceId: tei.trackedEntityInstance,
-          regNumber: regNumberAttr ? regNumberAttr.value : null,
-          firstName: firstNameAttr ? firstNameAttr.value : null,
+          regNumber: regNumberAttr?.value || null,
+          firstName: firstNameAttr?.value || null,
         };
       });
-      setTeiArray(extractedData);
-    }
-  }, [teiData]);
 
-  console.log('TEI Array:', teiArray); // Log the updated array
+      setTeiArray(extractedData);
+      console.log('Extracted TEI Data:', extractedData); // Log immediately after extraction
+    }
+  }, [teiData, REG_NUM_ATTR_UID]); // Add REG_NUM_ATTR_UID as dependency
+
+  // Add separate useEffect to log teiArray when it updates
+  useEffect(() => {
+    console.log('Updated TEI Array:', teiArray);
+  }, [teiArray]);
+
+  // Log the updated array
 
 
   return (
@@ -330,3 +381,4 @@ console.log(location.state)
 };
 
 export default Attendance;
+

@@ -197,7 +197,7 @@ const EnrollmentTable: React.FC<{
               "Nationality",
               "Gender",
               "Enroll Date",
-              "Actions"
+              //"Actions"
             ].map((header) => (
               <th key={header}>{header}</th>
             ))}
@@ -214,7 +214,7 @@ const EnrollmentTable: React.FC<{
               <td>{enrollment.nationality}</td>
               <td>{enrollment.gender}</td>
               <td>{enrollment.enrollDate}</td>
-              <td className="action-buttons">
+              {/* <td className="action-buttons">
                 <button
                   onClick={() => onEdit(enrollment, index)}
                   aria-label="Edit"
@@ -227,7 +227,7 @@ const EnrollmentTable: React.FC<{
                 >
                   <Trash2 size={16} />
                 </button>
-              </td>
+              </td> */}
             </tr>
           ))}
         </tbody>
@@ -246,7 +246,7 @@ const ActionBar: React.FC<{
 }> = ({ searchQuery, onSearchChange, onEnrollClick, onDownloadClick, hasEnrollments }) => (
   <div className="action-bar">
     <div className="search-wrapper">
-      <Search className="search-icon" />
+      {/* <Search className="search" /> */}
       <input
         type="text"
         placeholder="Search by name, program, or year..."
@@ -476,6 +476,7 @@ const EnrollmentPage: React.FC = () => {
               editingEnrollment={editingEnrollment}
               orgUnitId={orgUnitId}
               errors={formErrors}
+              onCancel={handleCloseForm}
             />
           </div>
         </div>

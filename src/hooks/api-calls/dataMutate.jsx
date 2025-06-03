@@ -33,7 +33,6 @@ const useFetchEvents = (programId) => {
 export default useFetchEvents;
 
 
-
 const useRegisterEvent = () => {
     const mutation = {
         type: 'create',
@@ -69,7 +68,7 @@ const useRegisterEvent = () => {
         }),
     }
 
-    const [mutate, { loading, error, data }] = useDataMutation(mutation)
+    const [mutate, { loading, errors, data }] = useDataMutation(mutation)
 
     const registerEvent = async (eventData) => {
         try {
@@ -84,9 +83,46 @@ const useRegisterEvent = () => {
     return {
         registerEvent,
         loading,
-        error,
+        errors,
         data,
     }
 }
 
 export { useRegisterEvent }
+
+// Example usage of the useRegisterEvent hook
+const useExampleFunction = () => {
+    const { registerEvent, loading, error } = useRegisterEvent();
+
+    const handleRegisterEvent = async () => {
+        const eventData = {
+            trackedEntityInstance: 'someTrackedEntityInstanceId',
+            program: 'someProgramId',
+            orgUnit: 'someOrgUnitId',
+            programStage: 'someProgramStageId',
+            attendance: 'Present',
+            startTime: '10:00',
+            endTime: '12:00',
+            date: '2023-10-01',
+            courseName: 'Mathematics',
+            examRoom: 'Room A',
+            supervisor: 'John Doe',
+        };
+
+        const result = await registerEvent(eventData);
+
+        if (result.success) {
+            console.log('Event registered successfully:', result.data);
+        } else {
+            console.error('Failed to register event:', result.error);
+        }
+    };
+
+    return {
+        handleRegisterEvent,
+        loading,
+        error,
+    };
+};
+
+export { useExampleFunction };

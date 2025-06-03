@@ -94,26 +94,45 @@ const NewExam = () => {
                 {filteredExams.length > 0 ? (
                     filteredExams.map((exam) => (
                         <div key={exam.id} className="exam-card">
-                            <h3 style={{alignItems:'center'}}>{exam.courseName}</h3>
-                            <Divider/>
-                            <p>
-                                <strong>Date:</strong>{' '}
+                            <h3 style={{alignItems:'center',color:'black'}}>{exam.courseName}</h3>
+                            <Divider />
+                            <section style={{color:'black'}}>
+                                <p className='p1'>
+                                    <strong style={{ color: 'black' }}>Date:</strong>{' '}
+                                    {new Date(exam.date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })}
+                                </p>
+                                <p className='p1'>
+                                    <strong style={{ color: 'black' }}>Room:</strong> {exam.room}
+                                </p>
+                                <p className='p1'>
+                                    <strong style={{ color: 'black' }}>Supervisor:</strong> {exam.supervisorName}
+                                </p>
+                                <p className='p'>
+                                    <strong style={{ color: 'black' }}>Time:</strong> {exam.startTime} - {exam.endTime}
+                                </p>
+                            </section>
+                            {/* <p className='p1'>
+                                <strong className='p1'>Date:</strong>{' '}
                                 {new Date(exam.date).toLocaleDateString('en-US', {
                                     year: 'numeric',
                                     month: 'long',
                                     day: 'numeric',
                                 })}
                             </p>
-                            <p>
-                                <strong>Room:</strong> {exam.room}
+                            <p className='p1'>
+                                <strong className='p1'>Room:</strong> {exam.room}
                             </p>
-                            <p>
-                                <strong>Supervisor:</strong> {exam.supervisorName}
+                            <p className='p1'>
+                                <strong className='p1'>Supervisor:</strong> {exam.supervisorName}
                             </p>
-                            <p>
-                                <strong>Time:</strong> {exam.startTime} - {exam.endTime}
-                            </p>
-                            <button
+                            <p className='p'>
+                                <strong className='p1'>Time:</strong> {exam.startTime} - {exam.endTime}
+                            </p> */}
+                            {/* <button
                                 style={{
                                     color: 'white'
                                 }}
@@ -123,7 +142,7 @@ const NewExam = () => {
                                 })}
                             >
                                 View
-                            </button>
+                            </button> */}
                         </div>
                     ))
                 ) : (
@@ -136,28 +155,16 @@ const NewExam = () => {
             {showPopup && (
                 <div className="popup">
                     <div className="popup-content">
-                        <h2>Create New Exam</h2>
+                        <h2 style={{color: 'black'}}>Create New Exam</h2>
                         <form
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 handleCreateExam();
                             }}
                         >
-                            <div className="form-group">
-                                <label>Exam Name</label>
-                                <input
-                                    type="text"
-                                    value={newExam.examName}
-                                    onChange={(e) =>
-                                        setNewExam({ ...newExam, examName: e.target.value })
-                                    }
-                                    required
-                                    placeholder="Enter exam name"
-                                />
-                            </div>
 
                             <div className="form-group">
-                                <label>Course Name</label>
+                                <label style={{ color: 'black' }} >Course Name</label>
                                 <input
                                     type="text"
                                     value={newExam.courseName}
@@ -171,7 +178,7 @@ const NewExam = () => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Date</label>
+                                    <label style={{ color: 'black' }} >Date</label>
                                     <input
                                         type="date"
                                         value={newExam.date}
@@ -182,7 +189,7 @@ const NewExam = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Room</label>
+                                    <label style={{ color: 'black' }} >Room</label>
                                     <input
                                         type="text"
                                         value={newExam.room}
@@ -196,7 +203,7 @@ const NewExam = () => {
                             </div>
 
                             <div className="form-group">
-                                <label>Supervisor Name</label>
+                                <label style={{ color: 'black' }} >Supervisor Name</label>
                                 <input
                                     type="text"
                                     value={newExam.supervisorName}
@@ -210,7 +217,7 @@ const NewExam = () => {
 
                             <div className="form-row">
                                 <div className="form-group">
-                                    <label>Start Time</label>
+                                    <label style={{ color: 'black' }} >Start Time</label>
                                     <input
                                         type="time"
                                         value={newExam.startTime}
@@ -221,7 +228,7 @@ const NewExam = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>End Time</label>
+                                    <label style={{ color: 'black' }} >End Time</label>
                                     <input
                                         type="time"
                                         value={newExam.endTime}
@@ -236,7 +243,7 @@ const NewExam = () => {
                             <div className="form-actions">
                                 <button
                                     type="button"
-                                    className="secondary-btn"
+                                    className="primary-btn"
                                     onClick={() => setShowPopup(false)}
                                 >
                                     Cancel

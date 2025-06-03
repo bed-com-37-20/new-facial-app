@@ -196,7 +196,7 @@ const SelectStudents = () => {
 
     useEffect(() => {
         if (selectedOrgUnit) {
-            console.log('Fetching students for orgUnit:', selectedOrgUnit);
+            // console.log('Fetching students for orgUnit:', selectedOrgUnit);
             refetchStudents({ orgUnitId: selectedOrgUnit });
         }
     }, [selectedOrgUnit, refetchStudents]);

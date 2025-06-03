@@ -17,11 +17,11 @@ export default function RouteList() {
             layout: SideBarLayout,
             component: () => <Home />
         },
-        {
-            path: "/api/reports/report",
-            layout: SideBarLayout,
-            component: () => <Report />
-        },
+        // {
+        //     path: "/api/reports/report",
+        //     layout: SideBarLayout,
+        //     component: () => <Report />
+        // },
         {
             path: "/api/enrollments",
             layout: SideBarLayout,
