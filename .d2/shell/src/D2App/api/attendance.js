@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import './attendance.css';
+import './enrollment/attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { useRegisterEvent } from '../hooks/api-calls/dataMutate';

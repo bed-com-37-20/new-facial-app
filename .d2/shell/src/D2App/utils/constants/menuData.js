@@ -43,7 +43,7 @@ function menuData(currentAcademicYear) {
       leftLabel: "Total",
       appName: "",
       formLink: "form-enrollment",
-      route: "api/enrollments",
+      route: "api/enrollment/enrollments",
       //"form-enrollment", //`enrollment?sectionType=student&academicYear=${currentAcademicYear}`,
       disabled: false
     }, {
@@ -71,20 +71,20 @@ function menuData(currentAcademicYear) {
       formLink: "form-performance",
       route: `api/examPage/newExam`,
       disabled: false
-    }
-    // {
-    //     dashBoardIcon: result,
-    //     displayInMenu: true,
-    //     sidebarIcon: gauge,
-    //     title: "Reports",
-    //     showBadge:false,
-    //     program: "programId",
-    //     leftLabel: "Pending",
-    //     appName: "",
-    //     formLink: "form-final-result",
-    //     route: "api/reports/report",//`final-result?sectionType=student&academicYear=${currentAcademicYear}`,
-    //     disabled: false
-    // },
+    },
+    {
+        dashBoardIcon: result,
+        displayInMenu: true,
+        sidebarIcon: gauge,
+        title: "Reports",
+        showBadge:false,
+        program: "programId",
+        leftLabel: "Pending",
+        appName: "",
+        formLink: "form-final-result",
+        route: "api/reports/report",//`final-result?sectionType=student&academicYear=${currentAcademicYear}`,
+        disabled: false
+    },
     // {
     //     dashBoardIcon: transfer,
     //     displayInMenu: true,
