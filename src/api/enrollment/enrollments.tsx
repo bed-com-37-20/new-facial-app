@@ -302,7 +302,8 @@ const EnrollmentPage: React.FC = () => {
           resource: 'trackedEntityInstances',
           params: {
             ou: ouId,
-            // program: 'N6eVEDUrpYU', // Using the trackedEntityType from your XML
+            //program: 'NIDbTzjU8J8', 
+           trackedEntityType:'W85ui9yO3vH',// Using the trackedEntityType from your XMLNIDbTzjU8J8
             fields: 'trackedEntityInstance,attributes[attribute,code,value]',
             paging: false
           }
@@ -313,29 +314,53 @@ const EnrollmentPage: React.FC = () => {
         throw new Error('Invalid response structure from API');
       }
 
-      const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
-        const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
-          // Map attributes by their codes from your XML
-          acc[attr.code] = attr.value;
-          return acc;
-        }, {} as Record<string, string>);
+     const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
+  const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
+    // Map attributes by their codes or attribute IDs from your system
+    if (attr.code === 'school') {
+      acc['school name'] = attr.value;
+    } else if (attr.attribute === 'AAhQa2QBdLb') { // First name
+      acc['fname'] = attr.value;
+    } else if (attr.attribute === 'jcNk3WUk6CF') { // Surname
+      acc['lname'] = attr.value;
+    } else if (attr.attribute === 'oU3liZI9qx6') { // Registration number
+      acc['regnumber'] = attr.value;
+    } else if (attr.attribute === 'ctwU8hvnyk9') { // Program of study
+      acc['program of study'] = attr.value;
+    } else if (attr.attribute === 'dA6No4FoYxI') { // Year of study
+      acc['year of study'] = attr.value;
+    } else if (attr.attribute === 'DicIdiy94P8') { // Nationality
+      acc['nationality'] = attr.value;
+    } else if (attr.attribute === 'N6NvXcYsRp8') { // Gender
+      acc['gender'] = attr.value;
+    } else if (attr.attribute === 'tzLYzIpqGiB') { // Date of birth
+      acc['dateOfBirth'] = attr.value;
+    } else if (attr.attribute === 'FtBP3ctaOfX') { // Enrollment date
+      acc['enroll_date'] = attr.value;
+    } else if (attr.attribute === 'sdV0Qc0puZX') { // Academic year
+      acc['academic year'] = attr.value;
+    } else if (attr.attribute === 'Es03r1AMOwQ') { // Guardian
+      acc['guardian'] = attr.value;
+    }
+    return acc;
+  }, {} as Record<string, string>);
 
-        return {
-          regNumber: attributes['regnumber'] || '',
-          firstName: attributes['fname'] || '',
-          surname: attributes['lname'] || '',
-          school: attributes['school name'] || selectedSchool,
-          programOfStudy: attributes['program of study'] || '',
-          yearOfStudy: attributes['year of study'] || '',
-          nationality: attributes['nationality'] || '',
-          gender: attributes['gender'] || '',
-          dateOfBirth: attributes['dateOfBirth'] || '',
-          enrollDate: attributes['enroll_date'] || '',
-          academicYear: attributes['academic year'] || '',
-          guardian: attributes['guardian'] || '',
-        };
-      });
-
+  return {
+    regNumber: attributes['regnumber'] || '',
+    firstName: attributes['fname'] || '',
+    surname: attributes['lname'] || '',
+    school: attributes['school name'] || selectedSchool,
+    programOfStudy: attributes['program of study'] || '',
+    yearOfStudy: attributes['year of study'] || '',
+    nationality: attributes['nationality'] || '',
+    gender: attributes['gender'] || '',
+    dateOfBirth: attributes['dateOfBirth'] || '',
+    enrollDate: attributes['enroll_date'] || '',
+    academicYear: attributes['academic year'] || '',
+    guardian: attributes['guardian'] || '',
+  };
+});
+console.log(trackedEntityInstances)
       setEnrollments(transformed);
     } catch (error) {
       console.error('Error fetching tracked entity instances:', error);
@@ -350,6 +375,7 @@ const EnrollmentPage: React.FC = () => {
     if (orgUnitId) {
       fetchTrackedEntityInstances(orgUnitId);
     }
+
   }, [orgUnitId, fetchTrackedEntityInstances]);
 
   const handleOrgUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -468,7 +494,7 @@ const EnrollmentPage: React.FC = () => {
 
       {showEnrollmentForm && (
         <div className="modal-backdrop">
-          <div style={{width:'100%'}} className="modal-content form-modal">
+          <div className="modal-content">
             <button className="modal-close" onClick={handleCloseForm}>
               &times;
             </button>

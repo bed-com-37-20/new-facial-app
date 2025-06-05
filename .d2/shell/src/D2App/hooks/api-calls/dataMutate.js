@@ -69,25 +69,25 @@ const useRegisterEvent = () => {
         eventDate: date,
         status: 'ACTIVE',
         dataValues: [{
-          dataElement: 'xIgmOIGKlkr',
+          dataElement: 'qBdgukop1PZ',
           value: attendance
         }, {
-          dataElement: 'Y8OffB2dTsL',
+          dataElement: 'mhqnDet3fWt',
           value: startTime
         }, {
-          dataElement: 'FnpXlAn2N2t',
+          dataElement: 'zntfl5UMciM',
           value: endTime
         }, {
-          dataElement: 'Tak38cNTsWA',
+          dataElement: 'UpWL174vwH2',
           value: courseName
         }, {
-          dataElement: 'WfnwfR1lUya',
+          dataElement: 'ElIwWBmR9f6',
           value: examRoom
         }, {
-          dataElement: 'MQkz7DRBsJ0',
+          dataElement: 'hNJqe05ItzH',
           value: supervisor
         }, {
-          dataElement: 'sV4hJkorxay',
+          dataElement: 'c7BLipnXpPM',
           value: date
         }]
       };

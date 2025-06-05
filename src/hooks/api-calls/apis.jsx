@@ -72,7 +72,7 @@ export const useEnrolledStudents = (programId, orgUnitId) => {
 
 export async function registerAndEnrollStudent(formData, programId, orgUnitId, trackedEntityTypeId) {
     const AUTH = 'Basic ' + btoa('admin:district');
-    const BASE_URL = 'http://localhost:8081/api';
+    const BASE_URL = 'http://localhost:8080/api';
 
     // 1. Prepare the student registration data
     
@@ -80,18 +80,18 @@ export async function registerAndEnrollStudent(formData, programId, orgUnitId, t
         trackedEntityType: trackedEntityTypeId,
         orgUnit: orgUnitId,
         attributes: [
-            { attribute: "ct4z0T1F36i", value: formData.school },
-            { attribute: "aqBmqM1onC7", value: formData.academicYear },
-            { attribute: "EHTfWCHTYCo", value: formData.yearOfStudy },
-            { attribute: "ADiCfoRxZI2", value: formData.programOfStudy },
-            { attribute: "ixauprApakv", value: formData.enrollmentDate },
-            { attribute: "nlAAn9uTTie", value: formData.firstName },
-            { attribute: "KHFDJkJgUvj", value: formData.surname },
-            { attribute: "Cg56JK84NAd", value: formData.gender },
-            { attribute: "EAPD9u4neIp", value: formData.dateOfBirth },
-            { attribute: "hhyS9WANpuz", value: formData.nationality },
-            { attribute: "pzZJIX2yMEZ", value: formData.guardianName },
-            { attribute: "ofiRHvsg4Mt", value: formData.regNumber },
+            { attribute: "jVcE7zcVq9i", value: formData.school },
+            { attribute: "sdV0Qc0puZX", value: formData.academicYear },
+            { attribute: "dA6No4FoYxI", value: formData.yearOfStudy },
+            { attribute: "ctwU8hvnyk9", value: formData.programOfStudy },
+            { attribute: "FtBP3ctaOfX", value: formData.enrollmentDate },
+            { attribute: "AAhQa2QBdLb", value: formData.firstName },
+            { attribute: "jcNk3WUk6CF", value: formData.surname },
+            { attribute: "N6NvXcYsRp8", value: formData.gender },
+            { attribute: "tzLYzIpqGiB", value: formData.dateOfBirth },
+            { attribute: "DicIdiy94P8", value: formData.nationality },
+            { attribute: "Es03r1AMOwQ", value: formData.guardianName },
+            { attribute: "oU3liZI9qx6", value: formData.regNumber },
         ]
     };
 
