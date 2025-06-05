@@ -1,38 +1,61 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import './attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
+import { useRegisterEvent } from '../hooks/api-calls/dataMutate';
+import { 
+  Button, 
+  Card, 
+  Table, 
+  TableHead, 
+  TableRow, 
+  TableCell, 
+  TableBody, 
+  CircularProgress,
+  Chip,
+  Divider,
+  Typography
+} from '@material-ui/core';
+import { 
+  PlayCircleFilled as StartIcon, 
+  Stop as StopIcon, 
+  History as HistoryIcon
+} from '@material-ui/icons';
+import { Alert } from '@material-ui/lab';
+
+const PROGRAM_ID = 'TLvAWiCKRgq';
+const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
 
 const Attendance = () => {
-  const [sessions, setSessions] = useState([]);
-  const [currentSessionId, setCurrentSessionId] = useState(null);
+  // Persist sessions and currentSessionId in localStorage
+  const [sessions, setSessions] = useState(() => {
+    const saved = localStorage.getItem('attendance_sessions');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [currentSessionId, setCurrentSessionId] = useState(() => {
+    const saved = localStorage.getItem('attendance_currentSessionId');
+    return saved ? JSON.parse(saved) : null;
+  });
   const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
-  const [refreshInterval, setRefreshInterval] = useState(5000);
+  const [refreshInterval] = useState(5000);
   const [matchedTeiIds, setMatchedTeiIds] = useState([]);
   const [teiArray, setTeiArray] = useState([]);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
   const location = useLocation();
+  const examData = location.state || {};
 
-  const {
-    courseName,
-    date,
-    room,
-    supervisorName,
-    startTime,
-    endTime,
-    students, orgUnit } = location.state || {};
+  // Save sessions and currentSessionId to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
+  }, [sessions]);
+  useEffect(() => {
+    localStorage.setItem('attendance_currentSessionId', JSON.stringify(currentSessionId));
+  }, [currentSessionId]);
 
-  console.log('Location state:', location.state);
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
-  console.log(location.state)
-  // Adjust these as needed
-  const PROGRAM_ID = 'TLvAWiCKRgq';
-  const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
-  const ORG_UNIT_UID = orgUnit
+  const ORG_UNIT_UID = examData.orgUnit;
 
   // DHIS2 query for tracked entity instances
   const teiQuery = {
@@ -45,26 +68,35 @@ const Attendance = () => {
   };
 
   const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
+  const { registerEvent, loading: eventLoading } = useRegisterEvent();
 
+  // Initialize a new session with exam data
+  const initNewSession = useCallback(() => {
+    if (!examData.courseName) {
+      setSnackbar({
+        open: true,
+        message: 'No exam data available to start session',
+        severity: 'warning'
+      });
+      return null;
+    }
 
-  const { registerEvent,
-    loading,
-    errors,
-    data, } = useRegisterEvent()
-// console.log(teiData)
-  // Initialize a new session
-  const initNewSession = useCallback((sessionData) => {
     const newSession = {
       id: `session_${Date.now()}`,
-      examId: sessionData.examId,
-      examName: sessionData.examName || `Exam ${sessionData.examId}`,
+      examId: examData.courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+      examName: examData.courseName,
       startTime: new Date().toISOString(),
       endTime: null,
       students: [],
       metadata: {
-        room: sessionData.room,
-        supervisor: sessionData.supervisor,
-        course: sessionData.course
+        room: examData.room,
+        supervisor: examData.supervisorName,
+        course: examData.courseName,
+        date: examData.date,
+        startTime: examData.startTime,
+        endTime: examData.endTime,
+        orgUnit: examData.orgUnit,
+        selectedStudents: examData.students || []
       }
     };
 
@@ -72,20 +104,44 @@ const Attendance = () => {
     setCurrentSessionId(newSession.id);
     setActiveTab('current');
 
+    // Start camera session
+    startCameraSession(newSession.id);
+
     return newSession;
-  }, []);
+  }, [examData]);
+
+  // Start camera session
+  const startCameraSession = async (sessionId) => {
+    try {
+      const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/start-camera', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to start camera session');
+      }
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: `Camera error: ${err.message}`,
+        severity: 'error'
+      });
+    }
+  };
 
   const findTei = (stNumber) => {
     return teiArray.find((ti) => stNumber === ti.regNumber);
-  }
+  };
 
   // Fetch attendance data
   const fetchAttendanceData = useCallback(async () => {
     try {
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
       if (!response.ok) {
-        alert('There is error from server..')
-      };
+        throw new Error('There is error from server..');
+      }
 
       const data = await response.json();
 
@@ -111,35 +167,44 @@ const Attendance = () => {
           return session;
         }));
       }
-      data.map((st) => {
-        if (st.status != "absent") {
-          const teiId = findTei(st.registrationNumber)
-          const Id = teiId.entityInstanceId
 
-        const eventData = {
+      // Register events for present students
+      await Promise.all(data.map(async (st) => {
+        if (st.status !== "absent") {
+          const teiId = findTei(st.registrationNumber);
+          if (teiId) {
+            const Id = teiId.entityInstanceId;
+            const session = sessions.find(s => s.id === currentSessionId);
+
+            const eventData = {
               trackedEntityInstance: Id,
-              program: 'TLvAWiCKRgq',
-              orgUnit: orgUnit,
-              programStage: 'TLvAWiCKRgq',
+              program: PROGRAM_ID,
+              orgUnit: session.metadata.orgUnit,
+              programStage: PROGRAM_ID,
               attendance: 'Present',
-              startTime: startTime,
-              endTime: endTime,
-              date: date,
-              courseName: courseName,
-              examRoom: room,
-              supervisor: supervisorName,
+              startTime: session.metadata.startTime,
+              endTime: session.metadata.endTime,
+              date: session.metadata.date,
+              courseName: session.metadata.course,
+              examRoom: session.metadata.room,
+              supervisor: session.metadata.supervisor,
             };
 
-          const result = registerEvent(eventData);
-          console.log(result)
-
+            try {
+              const result = await registerEvent(eventData);
+              console.log('Event registered:', result);
+            } catch (err) {
+              console.error('Error registering event:', err);
+            }
+          }
         }
-      })
+      }));
+
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
     }
-  }, [currentSessionId]);
+  }, [currentSessionId, sessions, registerEvent]);
 
   // Poll attendance data
   useEffect(() => {
@@ -155,11 +220,11 @@ const Attendance = () => {
 
   // Match TEIs
   useEffect(() => {
-    if (!teiData?.teis?.trackedEntityInstances || !currentSessionId) return;
+    if (!teiData?.students?.trackedEntityInstances || !currentSessionId) return;
 
     const students = sessions.find(s => s.id === currentSessionId)?.students || [];
 
-    const matches = teiData.teis.trackedEntityInstances.filter(tei =>
+    const matches = teiData.students.trackedEntityInstances.filter(tei =>
       tei.attributes.some(attr =>
         attr.attribute === REG_NUM_ATTR_UID &&
         students.some(s => s.registrationNumber === attr.value)
@@ -170,14 +235,36 @@ const Attendance = () => {
     setMatchedTeiIds(matchedIds);
   }, [teiData, sessions, currentSessionId]);
 
-  // Status badge
+  // Update teiArray whenever teiData changes
+  useEffect(() => {
+    if (teiData?.students?.trackedEntityInstances) {
+      const extractedData = teiData.students.trackedEntityInstances.map(tei => {
+        const regNumberAttr = tei.attributes.find(attr =>
+          attr.attribute === REG_NUM_ATTR_UID || attr.code === 'regnumber'
+        );
+
+        const firstNameAttr = tei.attributes.find(attr =>
+          attr.attribute === 'fname' || attr.code === 'fname'
+        );
+
+        const lastNameAttr = tei.attributes.find(attr =>
+          attr.attribute === 'lname' || attr.code === 'lname'
+        );
+
+        return {
+          entityInstanceId: tei.trackedEntityInstance,
+          regNumber: regNumberAttr?.value || null,
+          firstName: firstNameAttr?.value || null,
+          lastName: lastNameAttr?.value || null,
+        };
+      });
+
+      setTeiArray(extractedData);
+    }
+  }, [teiData]);
+
+  // Status badge component
   const StatusBadge = ({ status }) => {
-    const statusClasses = {
-      present: 'status-badge present',
-      absent: 'status-badge absent',
-      late: 'status-badge late',
-      default: 'status-badge default'
-    };
     const statusText = {
       present: 'Present',
       absent: 'Absent',
@@ -185,9 +272,11 @@ const Attendance = () => {
       default: 'Unknown'
     };
     return (
-      <span className={statusClasses[status] || statusClasses.default}>
-        {statusText[status] || statusText.default}
-      </span>
+      <Chip 
+        label={statusText[status] || statusText.default}
+        color={status === 'present' ? 'primary' : status === 'absent' ? 'secondary' : 'default'}
+        size="small"
+      />
     );
   };
 
@@ -196,189 +285,329 @@ const Attendance = () => {
     const date = new Date(isoString);
     return date.toLocaleString();
   };
-  // Update teiArray whenever teiData changes
-  // Update teiArray whenever teiData changes
-  useEffect(() => {
-    if (teiData?.students?.trackedEntityInstances) {
-      const extractedData = teiData.students.trackedEntityInstances.map(tei => {
-        // Find registration number (using both attribute and code for compatibility)
-        const regNumberAttr = tei.attributes.find(attr =>
-          attr.attribute === REG_NUM_ATTR_UID || attr.code === 'regnumber'
-        );
 
-        // Find first name (using both attribute and code for compatibility)
-        const firstNameAttr = tei.attributes.find(attr =>
-          attr.attribute === 'fname' || attr.code === 'fname'
-        );
+  const formatTime = (timeString) => {
+    if (!timeString) return 'N/A';
+    return timeString;
+  };
 
-        return {
-          entityInstanceId: tei.trackedEntityInstance,
-          regNumber: regNumberAttr?.value || null,
-          firstName: firstNameAttr?.value || null,
-        };
+  // End attendance session
+  const endAttendanceSession = async () => {
+    try {
+      setSessions(prev => prev.map(s =>
+        s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
+      ));
+      setCurrentSessionId(null);
+      setSnackbar({
+        open: true,
+        message: 'Attendance session ended successfully!',
+        severity: 'success'
       });
-
-      setTeiArray(extractedData);
-      console.log('Extracted TEI Data:', extractedData); // Log immediately after extraction
+    } catch (err) {
+      setSnackbar({
+        open: true,
+        message: 'Failed to end attendance session',
+        severity: 'error'
+      });
+      console.error('Error ending attendance session:', err);
     }
-  }, [teiData, REG_NUM_ATTR_UID]); // Add REG_NUM_ATTR_UID as dependency
-
-  // Add separate useEffect to log teiArray when it updates
-  useEffect(() => {
-    console.log('Updated TEI Array:', teiArray);
-  }, [teiArray]);
-
-  // Log the updated array
-
+  };
 
   return (
     <div className="container">
       <div className="header">
         <div>
-          <h1>Attendance Monitoring</h1>
-          <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+          <Typography variant="h4" component="h1">
+            Attendance Monitoring
+          </Typography>
+          <Typography variant="subtitle1">
+            {currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}
+          </Typography>
         </div>
         <div>
           {currentSession ? (
-            <button
-              onClick={() => {
-                setSessions(prev => prev.map(s =>
-                  s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
-                ));
-                setCurrentSessionId(null);
-              }}
-              className="end-session"
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<StopIcon />}
+              onClick={endAttendanceSession}
+              disabled={eventLoading}
             >
-              End Session
-            </button>
+              {eventLoading ? <CircularProgress size={24} /> : 'End Session'}
+            </Button>
           ) : (
-            <button
-              onClick={() => initNewSession({
-                examId: `exam_${Date.now()}`,
-                examName: 'New Session'
-              })}
-              className="start-session"
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<StartIcon />}
+              onClick={initNewSession}
             >
-              Start New Session
-            </button>
+              Start Session
+            </Button>
           )}
         </div>
       </div>
 
       {error && (
-        <div className="error-message">
-          <span>{error}</span>
-        </div>
+        <Alert severity="error" style={{ marginBottom: 20 }}>
+          {error}
+        </Alert>
       )}
 
       <div className="tab-navigation">
-        <button
+        <Button
           onClick={() => setActiveTab('current')}
-          className={activeTab === 'current' ? 'active' : ''}
-          style={{ color: 'black' }}
+          color={activeTab === 'current' ? 'primary' : 'default'}
+          startIcon={<StartIcon />}
         >
           Current Session
-        </button>
-        <button
+        </Button>
+        <Button
           onClick={() => setActiveTab('history')}
-          className={activeTab === 'history' ? 'active' : ''}
-          style={{ color: 'black' }}
+          color={activeTab === 'history' ? 'primary' : 'default'}
+          startIcon={<HistoryIcon />}
         >
           Session History
-        </button>
+        </Button>
       </div>
 
       {activeTab === 'current' && currentSession && (
-        <div className="matched-events">
-          <h3>Matched DHIS2 TEI IDs</h3>
-          <button onClick={() => refetchTeis()}>Refresh Matches</button>
-          <ul>
-            {matchedTeiIds.length > 0 ? (
-              matchedTeiIds.map(id => <li key={id}>{id}</li>)
-            ) : (
-              <li>No matches found</li>
-            )}
-          </ul>
-        </div>
+        <Card className="session-panel" style={{ padding: '20px', margin: '20px 0' }}>
+          <div className="session-header">
+            <Typography variant="h5" component="h2">
+              {currentSession.examName}
+            </Typography>
+            <Chip 
+              label="Active" 
+              color="primary" 
+              icon={<StartIcon />} 
+            />
+          </div>
+
+          <Divider style={{ margin: '15px 0' }} />
+
+          <div className="session-details">
+            <Typography variant="body1">
+              <strong>Course:</strong> {currentSession.metadata.course}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Date:</strong> {new Date(currentSession.metadata.date).toLocaleDateString()}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Room:</strong> {currentSession.metadata.room}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Supervisor:</strong> {currentSession.metadata.supervisor}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Time:</strong> {formatTime(currentSession.metadata.startTime)} - {formatTime(currentSession.metadata.endTime)}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Started at:</strong> {formatDateTime(currentSession.startTime)}
+            </Typography>
+            <Typography variant="body1">
+              <strong>Students detected:</strong> {currentSession.students.length}
+            </Typography>
+          </div>
+
+          <Divider style={{ margin: '15px 0' }} />
+
+          <div className="matched-events">
+            <Typography variant="h6" component="h3">
+              Matched DHIS2 TEI IDs
+            </Typography>
+            <Button 
+              variant="outlined" 
+              onClick={() => refetchTeis()}
+              style={{ margin: '10px 0' }}
+            >
+              Refresh Matches
+            </Button>
+            <ul>
+              {matchedTeiIds.length > 0 ? (
+                matchedTeiIds.map(id => <li key={id}>{id}</li>)
+              ) : (
+                <li>No matches found</li>
+              )}
+            </ul>
+          </div>
+
+          <Divider style={{ margin: '15px 0' }} />
+
+          <div className="student-attendance">
+            <Typography variant="h6" component="h3">
+              Attendance List
+            </Typography>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Student ID</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Status</TableCell>
+                  <TableCell>Time Recorded</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {currentSession.students.length > 0 ? (
+                  currentSession.students.map((student) => (
+                    <TableRow key={student.id}>
+                      <TableCell>{student.registrationNumber}</TableCell>
+                      <TableCell>
+                        {teiArray.find(t => t.regNumber === student.registrationNumber)?.firstName || 'N/A'} 
+                        {' '}
+                        {teiArray.find(t => t.regNumber === student.registrationNumber)?.lastName || ''}
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={student.status} />
+                      </TableCell>
+                      <TableCell>{formatDateTime(student.timestamp)}</TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">
+                      No students detected yet
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
       )}
 
       {activeTab === 'history' && (
         <div className="session-history">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Exam</th>
-                <th>Details</th>
-                <th>Duration</th>
-                <th>Students</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Exam</TableCell>
+                <TableCell>Course</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Duration</TableCell>
+                <TableCell>Students</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {sessions.length > 0 ? (
                 sessions.map((session) => (
                   <React.Fragment key={session.id}>
-                    <tr>
-                      <td>{session.examName}</td>
-                      <td>{session.metadata.course || 'N/A'}</td>
-                      <td>{formatDateTime(session.startTime)} to {formatDateTime(session.endTime)}</td>
-                      <td>{session.students.length}</td>
-                      <td>{session.endTime ? 'Completed' : 'Active'}</td>
-                      <td>
-                        <button onClick={() => setCurrentSessionId(session.id)}>View</button>
-                        <button onClick={() => console.log('Exporting session:', session)}>Export</button>
-                      </td>
-                    </tr>
-                    {currentSessionId === session.id && (
-                      <tr>
-                        <td colSpan="6">
-                          <div className="student-details">
-                            <h4>Students Attended</h4>
-                            <table className="table">
-                              <thead>
-                                <tr>
-                                  <th>Student ID</th>
-                                  <th>Name</th>
-                                  <th>Status</th>
-                                  <th>Time Recorded</th>
-                                </tr>
-                              </thead>
-                              <tbody>
+                    <TableRow>
+                      <TableCell>{session.examName}</TableCell>
+                      <TableCell>{session.metadata.course}</TableCell>
+                      <TableCell>{new Date(session.metadata.date).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        {formatDateTime(session.startTime)} to {session.endTime ? formatDateTime(session.endTime) : 'Ongoing'}
+                      </TableCell>
+                      <TableCell>{session.students.length}</TableCell>
+                      <TableCell>
+                        <Chip 
+                          label={session.endTime ? 'Completed' : 'Active'} 
+                          color={session.endTime ? 'default' : 'primary'} 
+                          size="small" 
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Button 
+                          variant="outlined"
+                          onClick={() => {
+                            setCurrentSessionId(session.id);
+                            setActiveTab('current');
+                          }}
+                        >
+                          View Details
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                    {activeTab === 'history' && currentSessionId === session.id && (
+                      <TableRow>
+                        <TableCell colSpan={7}>
+                          <Card style={{ padding: '20px', margin: '10px 0' }}>
+                            <Typography variant="h6" component="h4">
+                              Session Details: {session.examName}
+                            </Typography>
+                            <Divider style={{ margin: '10px 0' }} />
+                            <Typography variant="body1">
+                              <strong>Room:</strong> {session.metadata.room}
+                            </Typography>
+                            <Typography variant="body1">
+                              <strong>Supervisor:</strong> {session.metadata.supervisor}
+                            </Typography>
+                            <Typography variant="body1">
+                              <strong>Scheduled Time:</strong> {formatTime(session.metadata.startTime)} - {formatTime(session.metadata.endTime)}
+                            </Typography>
+                            
+                            <Divider style={{ margin: '15px 0' }} />
+                            
+                            <Typography variant="h6" component="h4">
+                              Attendance Records ({session.students.length} students)
+                            </Typography>
+                            <Table>
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Student ID</TableCell>
+                                  <TableCell>Name</TableCell>
+                                  <TableCell>Status</TableCell>
+                                  <TableCell>Time Recorded</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
                                 {session.students.length > 0 ? (
                                   session.students.map((student) => (
-                                    <tr key={student.id}>
-                                      <td>{student.registrationNumber}</td>
-                                      <td>{student.name || 'N/A'}</td>
-                                      <td><StatusBadge status={student.status} /></td>
-                                      <td>{formatDateTime(student.timestamp)}</td>
-                                    </tr>
+                                    <TableRow key={student.id}>
+                                      <TableCell>{student.registrationNumber}</TableCell>
+                                      <TableCell>
+                                        {teiArray.find(t => t.regNumber === student.registrationNumber)?.firstName || 'N/A'} 
+                                        {' '}
+                                        {teiArray.find(t => t.regNumber === student.registrationNumber)?.lastName || ''}
+                                      </TableCell>
+                                      <TableCell>
+                                        <StatusBadge status={student.status} />
+                                      </TableCell>
+                                      <TableCell>{formatDateTime(student.timestamp)}</TableCell>
+                                    </TableRow>
                                   ))
                                 ) : (
-                                  <tr>
-                                    <td colSpan="4">No students attended this session</td>
-                                  </tr>
+                                  <TableRow>
+                                    <TableCell colSpan={4} align="center">
+                                      No attendance records
+                                    </TableCell>
+                                  </TableRow>
                                 )}
-                              </tbody>
-                            </table>
-                          </div>
-                        </td>
-                      </tr>
+                              </TableBody>
+                            </Table>
+                          </Card>
+                        </TableCell>
+                      </TableRow>
                     )}
                   </React.Fragment>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="6">No sessions available</td>
-                </tr>
+                <TableRow>
+                  <TableCell colSpan={7} align="center">
+                    No sessions available
+                  </TableCell>
+                </TableRow>
               )}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
+      )}
+
+      {/* Snackbar for notifications */}
+      {snackbar.open && (
+        <Alert 
+          severity={snackbar.severity} 
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          style={{ position: 'fixed', bottom: 20, right: 20 }}
+        >
+          {snackbar.message}
+        </Alert>
       )}
     </div>
   );
 };
 
 export default Attendance;
-
