@@ -144,19 +144,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './report.css';
-// import useFetchEvents  from '../../hooks/api-calls/dataMutate'; // Adjust the import path as necessary
-// import { useEnrolledStudents } from '../../hooks/api-calls/apis'; // Adjust the import path as necessary
+import useRegisterEvent  from '../../hooks/api-calls/dataMutate'; // Adjust the import path as necessary
 
-import { handleRegisterEvent } from '../../hooks/api-calls/dataMutate'; // Adjust the import path as necessary
 
 const Report = () => {
     const location = useLocation();
     const { exam } = location.state || {};
     const [showStudents, setShowStudents] = useState(false);
-    // const { events } = useFetchEvents("jV19pSjiueH"); // Fetch events based on the exam's program ID
-    // const { students } = useEnrolledStudents("TLvAWiCKRgq", "T23eGPkA0nc"); // Fetch enrolled students based on the program ID and org unit ID
-   const  [loading, setLoading] = useState(false);
-    // const { handleRegisterEvent, loading, error } = useExampleFunction();
     const allStudents = [
         { Name: "Plaston Zanda", RegNumber: "bed-com-10-20" },
         { Name: "John Banda", RegNumber: "bed-com-11-20" },
@@ -185,17 +179,37 @@ const Report = () => {
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
-    // useEffect(() => {
-       
-    //     console.log(events) 
-    //     console.log(students);
-    // }, [events])
+
+ const { registerEvent, loading: registerLoading, error } = useRegisterEvent()
+
+    // const EventRegistrationComponent = () => {
     
-    const onClickRegister = () => {
-        setLoading(true);
-        handleRegisterEvent(); // Call when needed, e.g., on a button click
-        setLoading(false);
-    };
+        const handleSubmit = async () => {
+            const eventData = {
+                trackedEntityInstance: 'xSc9s8GIusT',
+                program: 'TLvAWiCKRgq',
+                orgUnit: 'T23eGPkA0nc',
+                programStage: 'NBb042XSt4E',
+                attendance: 'present',
+                startTime: '10:00 AM',
+                endTime: '12:00 PM',
+                date: '2023-10-01',
+                courseName: 'COM 211',
+                examRoom: 'Room A',
+                supervisor: 'Mark Johnson',
+            }
+
+            const result = await registerEvent(eventData)
+
+            if (result.success) {
+                console.log('Event registered successfully:', result.data)
+                // Show success notification
+            } else {
+                console.error('Failed to register event:', result.error)
+                // Show error notification
+            }
+        }
+    
     return (
         <div className="report-container">
             <div className="report-header">
@@ -208,14 +222,7 @@ const Report = () => {
             </div>
 
             <div className="exam-details-grid">
-                {/* <div className="detail-card">
-          <h3>Course</h3>
-          <p>{exam.courseName}</p>
-        </div>
-        <div className="detail-card">
-          <h3>Date</h3>
-          <p>{formatDate(exam.date)}</p>
-        </div> */}
+       
                 <div className="detail-card">
                     <h3>Supervisor</h3>
                     <p>{exam.supervisorName}</p>
@@ -277,8 +284,8 @@ const Report = () => {
             )}
 
             <h2>Register Event</h2>
-            <button onClick={onClickRegister} disabled={loading}>
-                {loading ? 'Registering...' : 'Register Event'}
+            <button onClick={handleSubmit} disabled={registerLoading}>
+                {registerLoading ? 'Registering...' : 'Register Event'}
             </button>
             {/* {error && <p style={{ color: 'red' }}>Error: {error.message}</p>} */}
         </div>
