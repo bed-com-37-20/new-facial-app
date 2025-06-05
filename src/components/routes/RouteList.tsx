@@ -1,13 +1,11 @@
-// import { Navigate } from "react-router-dom";
 import React from "react";
 import { SideBarLayout, SimpleLayout } from "../../layout"
 import { Home } from "../../pages";
-import EnrollmentPage from "../../api/enrollment/enrollments";
+import EnrollmentPage from "../../api/enrollments";
+import Attendances from "../../api/attendance/attendances";
+import ExamTracking from "../../api/attendance/ExamTracking";
 import Report from "../../api/reports/report";
-import NewExam from "../../api/examPage/newExam";
-import SelectStudents from "../../api/examPage/select-students";
-import ImageUploadForm from "../../api/filestore";
-import Attendance from "../../api/attendance";
+import AttendanceListener from "../../api/AttendanceListener";
 
 export default function RouteList() {
     return [
@@ -15,34 +13,29 @@ export default function RouteList() {
             path: "/",
             // layout: SimpleLayout,
             layout: SideBarLayout,
-            component: () => <Home />
-        },
-        // {
-        //     path: "/api/reports/report",
-        //     layout: SideBarLayout,
-        //     component: () => <Report />
-        // },
-        {
-            path: "/api/enrollment/enrollments",
-            layout: SideBarLayout,
-            component: () => <EnrollmentPage />
+            component: () => <Home/>
         },
         {
-            path: "/api/examPage/newExam",
+            path: "/api/attendance/attendances",
             layout: SideBarLayout,
-            component: () => <NewExam />
+            component: ()=> <Attendances/>
+        },
+        ,
+        {
+            path: "/api/attendance/ExamTracking",
+            layout: SideBarLayout,
+            component: ()=> <ExamTracking/>
+        },
+        ,
+        {
+            path: "/api/reports/report",
+            layout: SideBarLayout,
+            component: ()=> <Report/>
         },
         {
-            path: "/api/examPage/select-students",
+            path: "/api/enrollments",
             layout: SideBarLayout,
-            component: () => <SelectStudents />
-        }, {
-            path: "/api/attendance",
-            layout: SideBarLayout,
-            component: () => <Attendance />
-        }
-
-
-
+            component: ()=> <EnrollmentPage/>
+        },
     ]
 }

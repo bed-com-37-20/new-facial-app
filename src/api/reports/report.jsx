@@ -37,106 +37,99 @@ const Report = () => {
     };
 
     return (
-        <div className="report-container">
-            <div className="report-header">
-                <h1>Exam Report</h1>
-                <div className="exam-meta">
-                    <span className="exam-course">{exam.courseName}</span>
-                    <span className="exam-date">{formatDate(exam.date)}</span>
-                </div>
-            </div>
-
-            <div className="exam-details-grid">
-                <div className="detail-card">
-                    <div>
-                        <h3>Course</h3>
-                        <p>{exam.courseName}</p>
-                    </div>
-                </div>
-
-                <div className="detail-card">
-                    <div>
-                        <h3>Date</h3>
-                        <p>{formatDate(exam.date)}</p>
-                    </div>
-                </div>
-
-                <div className="detail-card">
-                    <div>
-                        <h3>Supervisor</h3>
-                        <p>{exam.supervisorName}</p>
-                    </div>
-                </div>
-
-                <div className="detail-card">
-                    <div>
-                        <h3>Time</h3>
-                        <p>{exam.startTime} - {exam.endTime}</p>
-                    </div>
-                </div>
-
-                <div className="detail-card">
-                    <div>
-                        <h3>Room</h3>
-                        <p>{exam.room}</p>
-                    </div>
-                </div>
-
-                <div className="detail-card students-card" onClick={handleViewAllClick}>
-                    <div>
-                        <h3>Students</h3>
-                        <p>{allStudents.length} enrolled</p>
-                        <button className="view-students-btn">
-                            {showStudents ? "Hide List" : "View All"}
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {showStudents && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h2>
-                                 Students for {exam.courseName}
-                            </h2>
-                            <button className="close-modal" onClick={handleViewAllClick}>
-                                
-                            </button>
-                        </div>
-
-                        <div className="students-table-container">
-                            <table className="students-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Registration Number</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {allStudents.map((student, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{student.Name}</td>
-                                            <td>{student.RegNumber}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="modal-footer">
-                            <p>Total students: {allStudents.length}</p>
-                            <button className="close-btn" onClick={handleViewAllClick}>
-                                Close
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+        <div style={styles.container}>
+            <FilterCard
+                organisationUnits={organisationUnits}
+                handleSchoolChange={handleSchoolChange}
+            />
+            <Instructions />
         </div>
     );
 };
 
-export default Report;
+// FilterCard Component
+const FilterCard = ({ organisationUnits, handleSchoolChange }) => (
+    <div className="filter-card">
+        <div className="filter-bar">
+            <label>
+                School
+                <select onChange={handleSchoolChange}>
+                    <option value="">Select a school</option>
+                    {organisationUnits.map((school) => (
+                        <option key={school.id} value={school.displayName}>
+                            {school.displayName}
+                        </option>
+                    ))}
+                </select>
+            </label>
+            <label>
+                Grade
+                <select>
+                    <option>Select a year</option>
+                    {[1, 2, 3, 4, 5].map((grade) => (
+                        <option key={grade}>{grade}</option>
+                    ))}
+                </select>
+            </label>
+            <label>
+                Program
+                <select>
+                    <option>Program of Study</option>
+                    {[
+                        'Computer Science',
+                        'Statistics',
+                        'Political Science',
+                        'Bachelor of Arts',
+                        'Information System',
+                    ].map((program) => (
+                        <option key={program}>{program}</option>
+                    ))}
+                </select>
+            </label>
+            <div className="academic-year">
+                <span>Academic Year</span>
+                <span className="year">2025</span>
+            </div>
+        </div>
+    </div>
+);
+
+// Instructions Component
+const Instructions = () => (
+    <div className="instructions-container" style={styles.instructionsContainer}>
+      <div className="instructions-box" style={styles.instructionsBox}>
+            <h3>SEMIS-Report</h3>
+            <p>Follow the instructions to proceed:</p>
+            <ul>
+                <li>Select the Organization unit you want to view the Report for</li>
+                <li>Use global filters (Class, Grade, and Academic Year)</li>
+            </ul>
+        </div>
+    </div>
+);
+
+// Styles
+const styles = {
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+    },
+
+    instructionsContainer: {
+        width: '100%', 
+        display: 'flex',
+        justifyContent: 'center', 
+        marginTop: '20px',
+    },
+    instructionsBox: {
+        width: '600px', 
+        backgroundColor: '#ffffff',
+        padding: '20px',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        textAlign: 'left',
+    },
+};
