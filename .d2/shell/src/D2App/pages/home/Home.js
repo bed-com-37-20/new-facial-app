@@ -8,7 +8,7 @@ import { DashboardCard, Title, WithPadding } from "../../components";
 import enrollmentIcon from "../../assets/images/home/enrollment.png";
 import examIcon from "../../assets/images/home/transfer.png";
 import attendancIcon from "../../assets/images/home/enrollment.png";
-import reportIcon from "../../assets/images/home/result.png" 
+import reportIcon from "../../assets/images/home/result.png";
 import { Divider } from "@material-ui/core";
 function Home() {
   // const { menuData } = useMenuData();
@@ -28,15 +28,12 @@ function Home() {
     formLink: "/api/attendance",
     icon: attendancIcon,
     appName: "attendance"
-  },
-  {
+  }, {
     title: "Reports",
     formLink: "/api/reports/report",
     icon: reportIcon,
-    appName: "reports",
-  },
-  ];
-
+    appName: "reports"
+  }];
   return /*#__PURE__*/React.createElement(WithPadding, {
     padding: "10px 30px"
   }, /*#__PURE__*/React.createElement("div", {

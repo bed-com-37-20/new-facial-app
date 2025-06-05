@@ -96,9 +96,6 @@ export async function fetchOrganisationUnits() {
     alert('Failed to fetch organisation units. Check the console for details.');
   }
 }
-// getTrackedEntityTypes(BASE_URL,AUTH)
-// fetchOrganisationUnits() 
-
 export async function registerStudent(form) {
   const formData = new FormData(form);
   const payload = {

@@ -1,5 +1,4 @@
-import { useDataQuery, useDataMutation } from '@dhis2/app-runtime';
-// import { useDataMutation } from '@dhis2/app-runtime';
+import { useDataQuery, useDataEngine } from '@dhis2/app-runtime';
 
 
 export const useFetchOrganisationUnits = () => {
@@ -42,92 +41,136 @@ export const useFetchPrograms = () => {
     };
 };
 
-export const useEnrollStudent = () => {
-     
-    const teiMutation = {
-        type: 'create',
-        resource: 'trackedEntityInstances',
-        data: ({ trackedEntityTypeId, orgUnitId, attributes }) => ({
-            trackedEntityType: trackedEntityTypeId,
-            orgUnit: orgUnitId,
-            attributes,
-        }),
+export const useEnrolledStudents = (programId, orgUnitId) => {
+    const engine = useDataEngine()
+
+    const fetchStudents = async () => {
+        try {
+            const { students } = await engine.query({
+                students: {
+                    resource: 'trackedEntityInstances',
+                    params: {
+                        ou: orgUnitId,
+                        program: programId,
+                        paging: false,
+                    },
+                },
+            });
+
+            return students.trackedEntityInstances || [];
+        } catch (error) {
+            console.error('Error fetching enrolled students:', error);
+            return [];
+        }
     };
 
-    const enrollmentMutation = {
-        type: 'create',
-        resource: 'enrollments',
-        data: ({ studentId, programId, orgUnitId, enrollmentDate, incidentDate }) => ({
-            trackedEntityInstance: studentId,
-            program: programId,
-            orgUnit: orgUnitId,
-            enrollmentDate: enrollmentDate || new Date().toISOString().split('T')[0],
-            incidentDate: incidentDate || new Date().toISOString().split('T')[0],
-        }),
+    return {
+        fetchStudents,
     };
+};
 
-    const [createTEI] = useDataMutation(teiMutation);
-    //const [enrollTEI, { loading, error }] = useDataMutation(enrollmentMutation);
-    const { enrollTEI, loadingEnrol, errorEnrol } = useDataMutation(enrollmentMutation);
 
-    /**
-     * Enroll a student by first creating the TEI, then enrolling into the program.
-     * 
-     * @param {string} trackedEntityTypeId - UID of the tracked entity type
-     * @param {string} programId - UID of the tracker program
-     * @param {string} orgUnitId - UID of the org unit
-     * @param {FormData} formData - FormData object with student values
-     */
-    const enrollStudent = (trackedEntityTypeId, programId, orgUnitId, formData) => {
-        
-        const attributes = [
+export async function registerAndEnrollStudent(formData, programId, orgUnitId, trackedEntityTypeId) {
+    const AUTH = 'Basic ' + btoa('admin:district');
+    const BASE_URL = 'http://localhost:8081/api';
+
+    // 1. Prepare the student registration data
+    
+    const registrationPayload = {
+        trackedEntityType: trackedEntityTypeId,
+        orgUnit: orgUnitId,
+        attributes: [
             { attribute: "ct4z0T1F36i", value: formData.school },
             { attribute: "aqBmqM1onC7", value: formData.academicYear },
             { attribute: "EHTfWCHTYCo", value: formData.yearOfStudy },
-            { attribute: "ADiCfoRxZI2", value: formData.programOfStudy},
+            { attribute: "ADiCfoRxZI2", value: formData.programOfStudy },
             { attribute: "ixauprApakv", value: formData.enrollmentDate },
-            // { attribute: "ED1V1bFMtb1", value: formData.profilePicture },
             { attribute: "nlAAn9uTTie", value: formData.firstName },
             { attribute: "KHFDJkJgUvj", value: formData.surname },
-            { attribute: "Cg56JK84NAd", value: formData.gender},
+            { attribute: "Cg56JK84NAd", value: formData.gender },
             { attribute: "EAPD9u4neIp", value: formData.dateOfBirth },
             { attribute: "hhyS9WANpuz", value: formData.nationality },
             { attribute: "pzZJIX2yMEZ", value: formData.guardianName },
-            { attribute: "ofiRHvsg4Mt", value: formData.regNumber},
-        ];
+            { attribute: "ofiRHvsg4Mt", value: formData.regNumber },
+        ]
+    };
 
-        createTEI({ trackedEntityTypeId, orgUnitId, attributes }, {
-            onComplete: ({ response }) => {
-                const studentId = response.reference;
-                enrollTEI({ studentId, programId, orgUnitId });
+    try {
+        // 2. Register the student (create Tracked Entity Instance)
+        const registrationResponse = await fetch(`${BASE_URL}/trackedEntityInstances`, {
+            method: 'POST',
+            headers: {
+                'Authorization': AUTH,
+                'Content-Type': 'application/json'
             },
+            body: JSON.stringify(registrationPayload)
         });
-    };
 
-    return {
-        enrollStudent,
-        loadingEnrol,
-        errorEnrol,
-    };
-};
+        if (!registrationResponse.ok) {
+            console.log(registrationResponse)
+            const errorData = await registrationResponse.json();
+            throw new Error(`Registration failed: ${JSON.stringify(errorData)}`);
+        }
 
-export const useEnrolledStudents = (programId, orgUnitId) => {
-    const query = {
-        students: {
-            resource: 'trackedEntityInstances',
-            params: {
-                ou: orgUnitId,
-                paging: false,
+        const registrationResult = await registrationResponse.json();
+        //console.log('Registration response:', registrationResult);
+        const trackedEntityInstanceId = registrationResult.response.importSummaries[0].reference;
+
+        if (!trackedEntityInstanceId) {
+            throw new Error('Could not get Tracked Entity Instance ID from registration response');
+        }
+
+        console.log('Registration successful. TEI ID:', trackedEntityInstanceId);
+
+       // 3. Prepare enrollment payload
+        const enrollmentPayload = {
+            trackedEntityInstance: trackedEntityInstanceId,
+            program: programId,
+            orgUnit: orgUnitId,
+            enrollmentDate: formData.enrollmentDate || new Date().toISOString().split('T')[0],
+            incidentDate: formData.enrollmentDate || new Date().toISOString().split('T')[0]
+        };
+
+        // 4. Enroll the student in the program
+        const enrollmentResponse = await fetch(`${BASE_URL}/enrollments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': AUTH
             },
-        },
-    };
+            body: JSON.stringify(enrollmentPayload)
+        });
 
-    const { data, loaddata, errordata, refetch } = useDataQuery(query);
+        if (!enrollmentResponse.ok) {
+            const errorData = await enrollmentResponse.json();
+            console.log('Enrollment failed:', errorData);
+            // throw new Error(`Enrollment failed: ${JSON.stringify(errorData)}`);
+        }
 
-    return {
-        students: data?.students?.trackedEntityInstances || [],
-        loaddata,
-        errordata,
-        refetch,
-    };
-};
+        const enrollmentResult = await enrollmentResponse.json();
+        console.log('Enrollment successful:', enrollmentResult);
+
+        return {
+            success: true,
+            // "rlYmuNFO06q"
+            trackedEntityInstanceId,
+            enrollmentId: enrollmentResult.response.imported || enrollmentResult.response.reference,
+            registrationResponse: registrationResult,
+            enrollmentResponse: enrollmentResult
+        };
+
+    } catch (error) {
+        console.error('Error in registerAndEnrollStudent:', error);
+        return {
+            success: false,
+            error: error.message
+        };
+    }
+}
+
+
+
+
+
+
+

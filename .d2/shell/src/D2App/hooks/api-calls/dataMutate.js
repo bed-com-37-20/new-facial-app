@@ -1,5 +1,10 @@
 import { useDataQuery } from '@dhis2/app-runtime';
 import { useDataMutation } from '@dhis2/app-runtime';
+const dhis2Auth = {
+  username: 'admin',
+  password: 'district'
+};
+const BASE_URL = 'http://localhost:8081/api';
 const useFetchEvents = programId => {
   var _data$events;
   const query = {
@@ -42,131 +47,107 @@ const useFetchEvents = programId => {
   };
 };
 export default useFetchEvents;
-const useRegisterEvent = () => {
-  const mutation = {
-    type: 'create',
-    resource: 'events',
-    data: _ref2 => {
-      let {
-        trackedEntityInstance,
-        program,
-        orgUnit,
-        programStage,
-        attendance,
-        startTime,
-        endTime,
-        date,
-        courseName,
-        examRoom,
-        supervisor
-      } = _ref2;
-      return {
-        trackedEntityInstance,
-        program,
-        orgUnit,
-        programStage,
-        eventDate: date,
-        status: 'ACTIVE',
-        dataValues: [{
-          dataElement: 'xIgmOIGKlkr',
-          value: attendance
-        },
-        // Attendance
-        {
-          dataElement: 'ZCvzGgOWhpD',
-          value: startTime
-        },
-        // Start Time
-        {
-          dataElement: 'wS32daZ8JYx',
-          value: endTime
-        },
-        // End Time
-        {
-          dataElement: 'Tak38cNTsWA',
-          value: courseName
-        },
-        // Course Name
-        {
-          dataElement: 'ABcXlR45qPt',
-          value: examRoom
-        },
-        // Exam Room
-        {
-          dataElement: 'uK7gdfDsLPx',
-          value: supervisor
-        },
-        // Supervisor
-        {
-          dataElement: 'sV4hJkorxay',
-          value: date
-        } // Exam Date
-        ]
-      };
-    }
-  };
 
-  const [mutate, {
-    loading,
-    errors,
-    data
-  }] = useDataMutation(mutation);
-  const registerEvent = async eventData => {
-    try {
-      await mutate(eventData);
-      return {
-        success: true,
-        data
-      };
-    } catch (err) {
-      console.error('Error registering event:', err);
-      return {
-        success: false,
-        error: err
-      };
+// registerEvent.js
+
+export const registerEvent = async (_ref2, dhis2BaseUrl, dhis2Auth) => {
+  let {
+    trackedEntityInstance,
+    program,
+    orgUnit,
+    programStage,
+    attendance,
+    startTime,
+    endTime,
+    date,
+    courseName,
+    examRoom,
+    supervisor
+  } = _ref2;
+  const payload = {
+    trackedEntityInstance,
+    program,
+    orgUnit,
+    programStage,
+    eventDate: date,
+    status: 'ACTIVE',
+    dataValues: [{
+      dataElement: 'xIgmOIGKlkr',
+      value: attendance
+    }, {
+      dataElement: 'ZCvzGgOWhpD',
+      value: startTime
+    }, {
+      dataElement: 'wS32daZ8JYx',
+      value: endTime
+    }, {
+      dataElement: 'Tak38cNTsWA',
+      value: courseName
+    }, {
+      dataElement: 'ABcXlR45qPt',
+      value: examRoom
+    }, {
+      dataElement: 'uK7gdfDsLPx',
+      value: supervisor
+    }, {
+      dataElement: 'sV4hJkorxay',
+      value: date
+    }]
+  };
+  try {
+    const response = await fetch(`${dhis2BaseUrl}/api/events`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Basic ${btoa(dhis2Auth.username + ':' + dhis2Auth.password)}` // or use your token
+      },
+
+      body: JSON.stringify(payload)
+    });
+    const contentType = response.headers.get('content-type');
+    let result;
+    if (contentType && contentType.includes('application/json')) {
+      result = await response.json();
+    } else {
+      const text = await response.text(); // fallback for HTML or plain text
+      throw new Error(`Non-JSON response: ${text}`);
     }
-  };
-  return {
-    registerEvent,
-    loading,
-    errors,
-    data
-  };
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to register event');
+    }
+    return {
+      success: true,
+      data: result
+    };
+  } catch (error) {
+    console.error('Event registration failed:', error);
+    return {
+      success: false,
+      error
+    };
+  }
 };
-export { useRegisterEvent };
 
 // Example usage of the useRegisterEvent hook
-const useExampleFunction = () => {
-  const {
-    registerEvent,
-    loading,
-    error
-  } = useRegisterEvent();
-  const handleRegisterEvent = async () => {
-    const eventData = {
-      trackedEntityInstance: 'someTrackedEntityInstanceId',
-      program: 'someProgramId',
-      orgUnit: 'someOrgUnitId',
-      programStage: 'someProgramStageId',
-      attendance: 'Present',
-      startTime: '10:00',
-      endTime: '12:00',
-      date: '2023-10-01',
-      courseName: 'Mathematics',
-      examRoom: 'Room A',
-      supervisor: 'John Doe'
-    };
-    const result = await registerEvent(eventData);
-    if (result.success) {
-      console.log('Event registered successfully:', result.data);
-    } else {
-      console.error('Failed to register event:', result.error);
-    }
+
+export const handleRegisterEvent = async () => {
+  const eventData = {
+    trackedEntityInstance: 'xSc9s8GIusT',
+    program: 'TLvAWiCKRgq',
+    orgUnit: 'T23eGPkA0nc',
+    programStage: 'NBb042XSt4E',
+    attendance: 'present',
+    startTime: '10:00 AM',
+    endTime: '12:00 PM',
+    date: '2023-10-01',
+    courseName: 'COM 211',
+    examRoom: 'Room A',
+    supervisor: 'Mark Johnson'
   };
-  return {
-    handleRegisterEvent,
-    loading,
-    error
-  };
+  const result = await registerEvent(eventData, BASE_URL, dhis2Auth);
+  if (result.success) {
+    console.log('Event registered successfully:', result.data);
+  } else {
+    console.error('Failed to register event:', result.error);
+  }
 };
-export { useExampleFunction };
