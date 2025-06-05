@@ -6,7 +6,7 @@ import { useEnrollStudent, useFetchOrganisationUnits, useEnrolledStudents } from
 import { generatePDF } from '../../utils/pdfGenerator';
 import { validateEnrollmentForm } from '../../utils/validation';
 import './Enrollment.css';
-import './reports/report.css';
+//import './reports/report.css';
 import { useDataEngine } from '@dhis2/app-runtime';
 
 interface Enrollment {

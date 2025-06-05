@@ -9,7 +9,7 @@ import { Badge, DashboardCard, Title, WithPadding } from "../../components";
 import enrollmentIcon from "../../assets/images/home/enrollment.png" 
 import examIcon from "../../assets/images/home/transfer.png" 
 import attendancIcon from "../../assets/images/home/enrollment.png" 
-//import reportIcon from "../../assets/images/home/result.png" 
+import reportIcon from "../../assets/images/home/result.png" 
 import { Divider } from "@material-ui/core";
 
 
@@ -35,12 +35,12 @@ function Home(): React.ReactElement {
       icon: attendancIcon,
       appName: "attendance",
     },
-    // {
-    //   title: "Reports",
-    //   formLink: "/api/reports/report",
-    //   icon: reportIcon,
-    //   appName: "reports",
-    // },
+    {
+      title: "Reports",
+      formLink: "/api/reports/report",
+      icon: reportIcon,
+      appName: "reports",
+    },
   ];
 
   return (

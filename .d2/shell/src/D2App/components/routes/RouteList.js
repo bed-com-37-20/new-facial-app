@@ -1,10 +1,10 @@
 import React from "react";
 import { SideBarLayout } from "../../layout";
 import { Home } from "../../pages";
-import EnrollmentPage from "../../api/enrollments";
 import Attendances from "../../api/attendance/attendances";
 import ExamTracking from "../../api/attendance/ExamTracking";
 import Report from "../../api/reports/report";
+import EnrollmentPage from "../../api/enrollment/enrollments";
 export default function RouteList() {
   return [{
     path: "/",
