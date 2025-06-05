@@ -2,12 +2,13 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import EnrollmentForm from './EnrollmentForm';
 import { UserPlus, Download, Pencil, Trash2, Search } from 'lucide-react';
-import { useEnrollStudent, useFetchOrganisationUnits, useEnrolledStudents } from '../../hooks/api-calls/apis';
+import { useFetchOrganisationUnits, useEnrolledStudents } from '../../hooks/api-calls/apis';
 import { generatePDF } from '../../utils/pdfGenerator';
 import { validateEnrollmentForm } from '../../utils/validation';
 import './Enrollment.css';
 // import './reports/report.css';
 import { useDataEngine } from '@dhis2/app-runtime';
+import { useLocation } from 'react-router-dom';
 
 interface Enrollment {
   regNumber: string;
@@ -283,6 +284,7 @@ const EnrollmentPage: React.FC = () => {
   const [apiError, setApiError] = useState<ApiError | null>(null);
   const [teiLoading, setTeiLoading] = useState(false);
   const [teiError, setTeiError] = useState<Error | null>(null);
+
 
   const engine = useDataEngine();
   const { loading: orgUnitsLoading, error: orgUnitsError, organisationUnits } = useFetchOrganisationUnits();

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
+// import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
 
 const Attendance = () => {
   const [sessions, setSessions] = useState([]);
@@ -47,10 +47,10 @@ const Attendance = () => {
   const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
 
 
-  const { registerEvent,
-    loading,
-    errors,
-    data, } = useRegisterEvent()
+  // const { registerEvent,
+  //   loading,
+  //   errors,
+  //   data, } = useRegisterEvent()
 // console.log(teiData)
   // Initialize a new session
   const initNewSession = useCallback((sessionData) => {
@@ -232,20 +232,20 @@ const Attendance = () => {
 
 
   return (
-    <div className="container">
-      <div className="header">
+     <div className="container">
+       <div className="header">
         <div>
-          <h1>Attendance Monitoring</h1>
-          <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+         <h1>Attendance Monitoring</h1>
+           <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
         </div>
         <div>
           {currentSession ? (
-            <button
+             <button
               onClick={() => {
                 setSessions(prev => prev.map(s =>
-                  s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
+                   s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
                 ));
-                setCurrentSessionId(null);
+              setCurrentSessionId(null);
               }}
               className="end-session"
             >

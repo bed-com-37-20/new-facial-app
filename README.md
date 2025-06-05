@@ -1,6 +1,21 @@
-<<<<<<< HEAD
-# dhis2-emis-core
-=======
+
+# new-facial-app
+This is new created app for fecail recognition which is the final year project
+members
+1. Enerst Banda
+2. Plastol zanda
+3. Rodgers chisale
+4. Bheki Thandani Mwase
+5. Liwonde
+
+This project uses SEMIS app which is dhise form education platform. we intragrate with this app by adding the tracking of students attendance by using facial technology instead of recording them manualary.
+
+If you clone the app run the following command to successfully run the app
+1. yarn install
+2. yarn start.
+
+the app will run at localhost:3000
+
 This project was bootstrapped with [DHIS2 Application Platform](https://github.com/dhis2/app-platform).
 
 ## Available Scripts
@@ -45,5 +60,4 @@ You can learn more about the platform in the [DHIS2 Application Platform Documen
 
 You can learn more about the runtime in the [DHIS2 Application Runtime Documentation](https://runtime.dhis2.nu/).
    
-To learn React, check out the [React documentation](https://reactjs.org/).
->>>>>>> 28c73824b8127fd925d32aee78e06f0a7f925945
+To learn React, check out the [React documentation](https://reactjs.org/) new-facial-app

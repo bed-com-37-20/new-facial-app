@@ -1,5 +1,7 @@
 import { useDataQuery } from '@dhis2/app-runtime';
 import { useDataMutation } from '@dhis2/app-runtime';
+import { useEffect, useState } from 'react';
+
 
 const useFetchEvents = (programId) => {
     const query = {
@@ -30,13 +32,12 @@ const useFetchEvents = (programId) => {
 };
 
 
-export default useFetchEvents;
-
+export { useFetchEvents };
 
 const useRegisterEvent = () => {
-    const mutation = {
-        type: 'create',
+    const eventMutation = {
         resource: 'events',
+        type: 'create',
         data: ({
             trackedEntityInstance,
             program,
@@ -48,7 +49,7 @@ const useRegisterEvent = () => {
             date,
             courseName,
             examRoom,
-            supervisor,
+            supervisor
         }) => ({
             trackedEntityInstance,
             program,
@@ -57,72 +58,89 @@ const useRegisterEvent = () => {
             eventDate: date,
             status: 'ACTIVE',
             dataValues: [
-                { dataElement: 'xIgmOIGKlkr', value: attendance },   // Attendance
-                { dataElement: 'ZCvzGgOWhpD', value: startTime },    // Start Time
-                { dataElement: 'wS32daZ8JYx', value: endTime },      // End Time
-                { dataElement: 'Tak38cNTsWA', value: courseName },   // Course Name
-                { dataElement: 'ABcXlR45qPt', value: examRoom },     // Exam Room
-                { dataElement: 'uK7gdfDsLPx', value: supervisor },   // Supervisor
-                { dataElement: 'sV4hJkorxay', value: date },         // Exam Date
+                { dataElement: 'xIgmOIGKlkr', value: attendance },
+                { dataElement: 'Y8OffB2dTsL', value: startTime },
+                { dataElement: 'FnpXlAn2N2t', value: endTime },
+                { dataElement: 'Tak38cNTsWA', value: courseName },
+                { dataElement: 'WfnwfR1lUya', value: examRoom },
+                { dataElement: 'MQkz7DRBsJ0', value: supervisor },
+                { dataElement: 'sV4hJkorxay', value: date },
             ],
-        }),
+        })
     }
 
-    const [mutate, { loading, errors, data }] = useDataMutation(mutation)
+    const [mutate, { loading, error, data }] = useDataMutation(eventMutation)
 
     const registerEvent = async (eventData) => {
         try {
-            await mutate(eventData)
-            return { success: true, data }
-        } catch (err) {
-            console.error('Error registering event:', err)
-            return { success: false, error: err }
+            const result = await mutate(eventData)
+            return { success: true, data: result }
+        } catch (error) {
+            console.error('Event registration failed:', error)
+            return { success: false, error }
         }
     }
 
     return {
         registerEvent,
         loading,
-        errors,
-        data,
+        error,
+        data
     }
 }
+export { useRegisterEvent };
+// Example usage in a component
 
-export { useRegisterEvent }
+export const useProgramsEvents = (programId, ou, dhis2BaseUrl, dhis2Auth, trackedEntityInstance) => {
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-// Example usage of the useRegisterEvent hook
-const useExampleFunction = () => {
-    const { registerEvent, loading, error } = useRegisterEvent();
+    useEffect(() => {
+        if (!programId) return;
 
-    const handleRegisterEvent = async () => {
-        const eventData = {
-            trackedEntityInstance: 'someTrackedEntityInstanceId',
-            program: 'someProgramId',
-            orgUnit: 'someOrgUnitId',
-            programStage: 'someProgramStageId',
-            attendance: 'Present',
-            startTime: '10:00',
-            endTime: '12:00',
-            date: '2023-10-01',
-            courseName: 'Mathematics',
-            examRoom: 'Room A',
-            supervisor: 'John Doe',
+        const fetchEvents = async () => {
+            setLoading(true);
+            try {
+                // Build base URL
+                let url = `${dhis2BaseUrl}/api/events?ou=${ou}&program=${programId}`;
+
+                // Add trackedEntityInstance parameter if provided
+                if (trackedEntityInstance) {
+                    url += `&trackedEntityInstance=${trackedEntityInstance}`;
+                }
+
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': 'Basic ' + btoa(`${dhis2Auth.username}:${dhis2Auth.password}`),
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(`Failed to fetch events: ${text}`);
+                }
+
+                const data = await response.json();
+                setEvents(data.events || []);
+            } catch (err) {
+                setError(err);
+                console.error('Error fetching program events:', err);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        const result = await registerEvent(eventData);
+        fetchEvents();
+    }, [programId, ou, trackedEntityInstance]); // Include trackedEntityInstance in dependencies
 
-        if (result.success) {
-            console.log('Event registered successfully:', result.data);
-        } else {
-            console.error('Failed to register event:', result.error);
-        }
-    };
-
-    return {
-        handleRegisterEvent,
-        loading,
-        error,
-    };
+    return { events, loading, error };
 };
 
-export { useExampleFunction };
+// Example usage:
+// 1. With trackedEntityInstance
+// const { events, loading, error } = useProgramsEvents('program123', 'orgUnit456', baseUrl, auth, 'tei789');
+
+// 2. Without trackedEntityInstance
+// const { events, loading, error } = useProgramsEvents('program123', 'orgUnit456', baseUrl, auth);
