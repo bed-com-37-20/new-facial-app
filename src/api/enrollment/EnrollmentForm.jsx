@@ -10,10 +10,6 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import styles from './EnrollmentForm.css';
-<<<<<<< HEAD
-import { useEnrollStudent } from '../../hooks/api-calls/apis';
-=======
->>>>>>> origin/master
 import { useNavigate } from 'react-router-dom';
 import { registerAndEnrollStudent } from '../../hooks/api-calls/apis';
 
