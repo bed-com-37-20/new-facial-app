@@ -1,0 +1,10 @@
+{
+  "type": "app",
+  "name": "SEMIS",
+  "description": "SEMIS",
+  "version": "1.0.0",
+  "title": "SEMIS",
+  "entryPoints": {
+    "app": "index.html"
+  }
+}

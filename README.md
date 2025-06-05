@@ -1,5 +1,27 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # dhis2-emis-core
+=======
+This project was bootstrapped with [DHIS2 Application Platform](https://github.com/dhis2/app-platform).
+=======
+
+# new-facial-app
+This is new created app for fecail recognition which is the final year project
+members
+1. Enerst Banda
+2. Plastol zanda
+3. Rodgers chisale
+4. Bheki Thandani Mwase
+5. Liwonde
+>>>>>>> origin/master
+
+## Available Scripts
+
+In the project directory, you can run:
+
+### `yarn start`
+
+<<<<<<< HEAD
 =======
 This project was bootstrapped with [DHIS2 Application Platform](https://github.com/dhis2/app-platform).
 
@@ -9,6 +31,7 @@ In the project directory, you can run:
 
 ### `yarn start`
 
+>>>>>>> origin/master
 Runs the app in the development mode.<br />
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
@@ -45,5 +68,9 @@ You can learn more about the platform in the [DHIS2 Application Platform Documen
 
 You can learn more about the runtime in the [DHIS2 Application Runtime Documentation](https://runtime.dhis2.nu/).
    
+<<<<<<< HEAD
 To learn React, check out the [React documentation](https://reactjs.org/).
 >>>>>>> 28c73824b8127fd925d32aee78e06f0a7f925945
+=======
+To learn React, check out the [React documentation](https://reactjs.org/) new-facial-app
+>>>>>>> origin/master
