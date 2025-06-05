@@ -10,7 +10,7 @@ import {
     NoticeBox,
 } from '@dhis2/ui';
 import styles from './EnrollmentForm.css';
-import { useEnrollStudent } from '../hooks/api-calls/apis';
+import { useEnrollStudent } from '../../hooks/api-calls/apis';
 import { useNavigate } from 'react-router-dom';
 
 const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCancel }) => {
