@@ -3,9 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './report.css';
-import {useRegisterEvent}  from '../../hooks/api-calls/dataMutate'; // Adjust the import path as necessary
-import MyProgramEvents  from './renderReport'
-
 const Report = () => {
     const location = useLocation();
     const { exam } = location.state || {};
@@ -39,35 +36,7 @@ const Report = () => {
     };
 
 
- const { registerEvent, loading: registerLoading, error } = useRegisterEvent()
-
-    // const EventRegistrationComponent = () => {
-    
-        const handleSubmit = async () => {
-            const eventData = {
-                trackedEntityInstance: 'xSc9s8GIusT',
-                program: 'TLvAWiCKRgq',
-                orgUnit: 'T23eGPkA0nc',
-                programStage: 'NBb042XSt4E',
-                attendance: 'present',
-                startTime: '10:00 AM',
-                endTime: '12:00 PM',
-                date: '2023-10-01',
-                courseName: 'COM 211',
-                examRoom: 'Room A',
-                supervisor: 'Mark Johnson',
-            }
-
-            const result = await registerEvent(eventData)
-
-            if (result.success) {
-                console.log('Event registered successfully:', result.data)
-                // Show success notification
-            } else {
-                console.error('Failed to register event:', result.error)
-                // Show error notification
-            }
-        }
+ 
     
     return (
         <div className="report-container">
@@ -142,13 +111,6 @@ const Report = () => {
                 </div>
             )}
 
-            <h2>Register Event</h2>
-            <button onClick={handleSubmit} disabled={registerLoading}>
-                {registerLoading ? 'Registering...' : 'Register Event'}
-            </button>
-            {/* {error && <p style={{ color: 'red' }}>Error: {error.message}</p>} */}
-
-            <MyProgramEvents ou={ 'T23eGPkA0nc'}  />
         </div>
     );
 };

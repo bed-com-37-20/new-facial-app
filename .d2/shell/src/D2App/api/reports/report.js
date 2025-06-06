@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './report.css';
-import { useRegisterEvent } from '../../hooks/api-calls/dataMutate'; // Adjust the import path as necessary
-import MyProgramEvents from './renderReport';
 const Report = () => {
   const location = useLocation();
   const {
@@ -47,38 +45,6 @@ const Report = () => {
     };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
-  const {
-    registerEvent,
-    loading: registerLoading,
-    error
-  } = useRegisterEvent();
-
-  // const EventRegistrationComponent = () => {
-
-  const handleSubmit = async () => {
-    const eventData = {
-      trackedEntityInstance: 'xSc9s8GIusT',
-      program: 'TLvAWiCKRgq',
-      orgUnit: 'T23eGPkA0nc',
-      programStage: 'NBb042XSt4E',
-      attendance: 'present',
-      startTime: '10:00 AM',
-      endTime: '12:00 PM',
-      date: '2023-10-01',
-      courseName: 'COM 211',
-      examRoom: 'Room A',
-      supervisor: 'Mark Johnson'
-    };
-    const result = await registerEvent(eventData);
-    if (result.success) {
-      console.log('Event registered successfully:', result.data);
-      // Show success notification
-    } else {
-      console.error('Failed to register event:', result.error);
-      // Show error notification
-    }
-  };
-
   return /*#__PURE__*/React.createElement("div", {
     className: "report-container"
   }, /*#__PURE__*/React.createElement("div", {
@@ -133,11 +99,6 @@ const Report = () => {
   }, /*#__PURE__*/React.createElement("p", null, "Total students: ", allStudents.length), /*#__PURE__*/React.createElement("button", {
     className: "close-btn",
     onClick: handleViewAllClick
-  }, "Close")))), /*#__PURE__*/React.createElement("h2", null, "Register Event"), /*#__PURE__*/React.createElement("button", {
-    onClick: handleSubmit,
-    disabled: registerLoading
-  }, registerLoading ? 'Registering...' : 'Register Event'), /*#__PURE__*/React.createElement(MyProgramEvents, {
-    ou: 'T23eGPkA0nc'
-  }));
+  }, "Close")))));
 };
 export default Report;

@@ -11,8 +11,6 @@ import {
 } from '@dhis2/ui';
 import styles from './EnrollmentForm.css';
 import { useNavigate } from 'react-router-dom';
-import { registerAndEnrollStudent } from '../../hooks/api-calls/apis';
-
 const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCancel }) => {
     // Form state
     const [formData, setFormData] = useState({
@@ -38,7 +36,8 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
 
     // Hooks
     const navigate = useNavigate();
-  
+    const { enrollStudent, loadingEnrol, errorEnrol } = useEnrollStudent();
+
     // Initialize form if editing
     useEffect(() => {
         if (editingEnrollment) {
@@ -78,45 +77,40 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
 
         try {
             // Validate required fields
-            // if (!formData.regNumber || !formData.profilePicture) {
-            //     throw new Error('Registration number and profile picture are required');
-            // }
+            if (!formData.regNumber || !formData.profilePicture) {
+                throw new Error('Registration number and profile picture are required');
+            }
 
             // Send face data to facial recognition system
-            // const faceResponse = await fetch('https://facial-attendance-system-6vy8.onrender.com/face/detect',
-            //     {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({
-            //             file: formData.profilePicture,
-            //             registrationNumber: formData.regNumber
-            //         }),
-            //     }
-            // );
+            const faceResponse = await fetch('https://facial-attendance-system-6vy8.onrender.com/face/detect',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        file: formData.profilePicture,
+                        registrationNumber: formData.regNumber
+                    }),
+                }
+            );
 
-            // if (!faceResponse.status ) {
-            //     alert('Failed to register face data with recognition system');
-            //     onCancel()
-            // }
+            if (!faceResponse.status ) {
+                alert('Failed to register face data with recognition system');
+                onCancel()
+            }
 
             // Enroll student in DHIS2
-        
+            await enrollStudent(
+                'N6eVEDUrpYU',  // trackedEntityType
+                'TLvAWiCKRgq',  // programId
+                orgUnitId,
+                formData
+            );
 
-            registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU')
-                .then(result => {
-                    if (result.success) {
-                        console.log('Student registered and enrolled successfully!', result);
-                        alert('Student registration and enrollment completed!');
-                    } else {
-                        console.error('Failed:', result.error);
-                        alert('Error: ' + result.error);
-                    }
-                });
             // Success - notify parent and navigate
             onSubmit?.(formData);
-            navigate('/api/enrollment/enrollments');
+            navigate('/api/enrollments');
         } catch (error) {
             setSubmitError(error.message);
             alert('Enrollment error:', error);
@@ -131,10 +125,30 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
         } 
         onCancel()
             // Default cancel behavior
-     navigate('/api/enroolment/enrollments');
+     navigate('/api/enrollments');
         
     };
 
+    // Loading and error states
+    if (loadingEnrol) {
+        return (
+            <div className="loader-container">
+                <CircularLoader />
+                <p>Loading enrollment data...</p>
+            </div>
+        );
+    }
+
+    if (errorEnrol) {
+        return (
+            <div className="error-container">
+                <NoticeBox error title="Loading Error">
+                    {errorEnrol.message}
+                </NoticeBox>
+                <Button onClick={handleCancel}>Back to Enrollments</Button>
+            </div>
+        );
+    }
 
     return (
         <div className='main'>
