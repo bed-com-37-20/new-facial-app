@@ -9,7 +9,7 @@ import {
     CircularLoader,
     NoticeBox,
 } from '@dhis2/ui';
-import styles from './EnrollmentForm.css';
+import'./EnrollmentForm.css';
 import { useNavigate } from 'react-router-dom';
 const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCancel }) => {
     // Form state
@@ -101,13 +101,18 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
             }
 
             // Enroll student in DHIS2
-            await enrollStudent(
-                'N6eVEDUrpYU',  // trackedEntityType
-                'TLvAWiCKRgq',  // programId
-                orgUnitId,
-                formData
-            );
+        
 
+            registerAndEnrollStudent(formData, 'NIDbTzjU8J8', orgUnitId, 'W85ui9yO3vH')
+                .then(result => {
+                    if (result.success) {
+                        console.log('Student registered and enrolled successfully!', result);
+                        alert('Student registration and enrollment completed!');
+                    } else {
+                        console.error('Failed:', result.error);
+                        alert('Error: ' + result.error);
+                    }
+                });
             // Success - notify parent and navigate
             onSubmit?.(formData);
             navigate('/api/enrollments');
@@ -125,33 +130,13 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
         } 
         onCancel()
             // Default cancel behavior
-     navigate('/api/enrollments');
+     navigate('/api/enrollment/enrollments');
         
     };
 
-    // Loading and error states
-    if (loadingEnrol) {
-        return (
-            <div className="loader-container">
-                <CircularLoader />
-                <p>Loading enrollment data...</p>
-            </div>
-        );
-    }
 
-    if (errorEnrol) {
-        return (
-            <div className="error-container">
-                <NoticeBox error title="Loading Error">
-                    {errorEnrol.message}
-                </NoticeBox>
-                <Button onClick={handleCancel}>Back to Enrollments</Button>
-            </div>
-        );
-    }
-
-    return (
-        <div className='main'>
+      return (
+        <div className='main1'>
             <h2 className='formTitle'>
                 {editingEnrollment ? 'Edit Student Enrollment' : 'New Student Enrollment'}
             </h2>
@@ -163,232 +148,271 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
             )}
 
             <form onSubmit={handleSubmit} className='enrollmentForm'>
-                <Divider className='divider' />
-                <h3 className={styles.formSection}>Enrollment Details</h3>
+                <div className="formContent">
+                    <Divider className='divider' />
+                    <h3 className='formSection'>Enrollment Details</h3>
 
-                <label className={styles.label}>School Name</label>
-                <InputField
-                    className='inputField'
-                    name="school"
-                    value={formData.school}
-                    disabled
-                    required
-                />
-
-                <label className={styles.label}>Registration Number*</label>
-                <InputField
-                    className='inputField'
-                    name="regNumber"
-                    value={formData.regNumber}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
-
-                <label className={styles.label}>Academic Year*</label>
-                <SingleSelect
-                    className='selectField'
-                    name="academicYear"
-                    selected={formData.academicYear}
-                    onChange={({ selected }) =>
-                        handleChange({ name: 'academicYear', value: selected })
-                    }
-                    label="Academic Year"
-                    required
-                    disabled={isSubmitting}
-                >
-                    <SingleSelectOption value="2024-2025" label="2024-2025" />
-                    <SingleSelectOption value="2025-2026" label="2025-2026" />
-                </SingleSelect>
-
-                <label className={styles.label}>Year Of Study*</label>
-                <SingleSelect
-                    className='selectField'
-                    name="yearOfStudy"
-                    selected={formData.yearOfStudy}
-                    onChange={({ selected }) =>
-                        handleChange({ name: 'yearOfStudy', value: selected })
-                    }
-                    label="Year of Study"
-                    required
-                    disabled={isSubmitting}
-                >
-                    {['1', '2', '3', '4', '5'].map(year => (
-                        <SingleSelectOption key={year} value={year} label={year} />
-                    ))}
-                </SingleSelect>
-
-                <label className={styles.label}>Program Of Study*</label>
-                <SingleSelect
-                    className='selectField'
-                    name="programOfStudy"
-                    selected={formData.programOfStudy}
-                    onChange={({ selected }) =>
-                        handleChange({ name: 'programOfStudy', value: selected })
-                    }
-                    label="Program of Study"
-                    required
-                    disabled={isSubmitting}
-                >
-                    <SingleSelectOption value="ComputerScience" label="Computer Science" />
-                    <SingleSelectOption value="Statistics" label="Statistics" />
-                    <SingleSelectOption value="PoliticalScience" label="Political Science" />
-                    <SingleSelectOption value="Arts" label="Bachelor of Arts" />
-                    <SingleSelectOption value="InformationSystem" label="Information System" />
-                </SingleSelect>
-
-                <label className={styles.label}>Enrollment Date*</label>
-                <InputField
-                    className='inputField'
-                    type="date"
-                    name="enrollmentDate"
-                    value={formData.enrollmentDate}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
-
-                <Divider className='divider' />
-                <h3 className="formSection">Student Profile</h3>
-
-                <div className="imageWrapper">
-                    {formData.profilePicture ? (
-                        <>
-                            <img
-                                src={formData.profilePicture}
-                                alt="Profile"
-                                className="profileImage"
+                    <div className="formRow">
+                        <div className="formGroup">
+                            <label className='label'>School Name</label>
+                            <InputField
+                                className='inputField'
+                                name="school"
+                                value={formData.school}
+                                disabled
+                                required
                             />
-                            <Button
-                                small
-                                className='changeButton'
-                                onClick={() => document.getElementById('profileInput').click()}
+                        </div>
+                        
+                        <div className="formGroup">
+                            <label className='label'>Registration Number*</label>
+                            <InputField
+                                className='inputField'
+                                name="regNumber"
+                                value={formData.regNumber}
+                                onChange={handleChange}
+                                required
                                 disabled={isSubmitting}
-                            >
-                                Change
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Button
-                                className='uploadButton'
-                                onClick={() => document.getElementById('profileInput').click()}
-                                disabled={isSubmitting}
-                            >
-                                Upload Profile Picture
-                            </Button>
-                            <Button
-                                className='cameraButton'
-                                onClick={() => setIsCameraOpen(true)}
-                                disabled={isSubmitting}
-                            >
-                                Capture with Camera
-                            </Button>
-                        </>
-                    )}
-                    <input
-                        type="file"
-                        id="profileInput"
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                        onChange={handleFileChange}
-                        disabled={isSubmitting}
-                    />
-                </div>
-
-                {isCameraOpen && (
-                    <div className="cameraWrapper">
-                        <Webcam
-                            audio={false}
-                            screenshotFormat="image/jpeg"
-                            className="webcam"
-                        >
-                            {({ getScreenshot }) => (
-                                <>
-                                    <Button
-                                        className="captureButton"
-                                        onClick={() => handleCapture(getScreenshot())}
-                                    >
-                                        Capture
-                                    </Button>
-                                    <Button
-                                        className="closeCameraButton"
-                                        onClick={() => setIsCameraOpen(false)}
-                                    >
-                                        Close Camera
-                                    </Button>
-                                </>
-                            )}
-                        </Webcam>
+                            />
+                        </div>
                     </div>
-                )}
 
-                <label className={styles.label}>First Name*</label>
-                <InputField
-                    className='inputField'
-                    name="firstName"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
+                    <div className="formRow">
+                        <div className="formGroup">
+                            <label className='label'>Academic Year*</label>
+                            <SingleSelect
+                                className='selectField'
+                                name="academicYear"
+                                selected={formData.academicYear}
+                                onChange={({ selected }) =>
+                                    handleChange({ name: 'academicYear', value: selected })
+                                }
+                                required
+                                disabled={isSubmitting}
+                            >
+                                <SingleSelectOption value="2024-2025" label="2024-2025" />
+                                <SingleSelectOption value="2025-2026" label="2025-2026" />
+                            </SingleSelect>
+                        </div>
+                        
+                        <div className="formGroup">
+                            <label className='label'>Year Of Study*</label>
+                            <SingleSelect
+                                className='selectField'
+                                name="yearOfStudy"
+                                selected={formData.yearOfStudy}
+                                onChange={({ selected }) =>
+                                    handleChange({ name: 'yearOfStudy', value: selected })
+                                }
+                                required
+                                disabled={isSubmitting}
+                            >
+                                {['1', '2', '3', '4', '5'].map(year => (
+                                    <SingleSelectOption key={year} value={year} label={`Year ${year}`} />
+                                ))}
+                            </SingleSelect>
+                        </div>
+                    </div>
 
-                <label className={styles.label}>Last Name*</label>
-                <InputField
-                    className='inputField'
-                    name="surname"
-                    value={formData.surname}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
+                    <div className="formRow">
+                        <div className="formGroup">
+                            <label className='label'>Program Of Study*</label>
+                            <SingleSelect
+                                className='selectField'
+                                name="programOfStudy"
+                                selected={formData.programOfStudy}
+                                onChange={({ selected }) =>
+                                    handleChange({ name: 'programOfStudy', value: selected })
+                                }
+                                required
+                                disabled={isSubmitting}
+                            >
+                                <SingleSelectOption value="ComputerScience" label="Computer Science" />
+                                <SingleSelectOption value="Statistics" label="Statistics" />
+                                <SingleSelectOption value="PoliticalScience" label="Political Science" />
+                                <SingleSelectOption value="Arts" label="Bachelor of Arts" />
+                                <SingleSelectOption value="InformationSystem" label="Information System" />
+                            </SingleSelect>
+                        </div>
+                        
+                        <div className="formGroup">
+                            <label className='label'>Enrollment Date*</label>
+                            <InputField
+                                className='inputField'
+                                type="date"
+                                name="enrollmentDate"
+                                value={formData.enrollmentDate}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                            />
+                        </div>
+                    </div>
 
-                <label className={styles.label}>Gender*</label>
-                <SingleSelect
-                    className='selectField'
-                    name="gender"
-                    selected={formData.gender}
-                    onChange={({ selected }) => handleChange({ name: 'gender', value: selected })}
-                    label="Gender"
-                    required
-                    disabled={isSubmitting}
-                >
-                    <SingleSelectOption value="male" label="Male" />
-                    <SingleSelectOption value="female" label="Female" />
-                    <SingleSelectOption value="other" label="Other" />
-                </SingleSelect>
+                    <Divider className='divider' />
+                    <h3 className="formSection">Student Profile</h3>
 
-                <label className={styles.label}>Date Of Birth*</label>
-                <InputField
-                    className='inputField'
-                    type="date"
-                    name="dateOfBirth"
-                    value={formData.dateOfBirth}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
+                    <div className="imageSection">
+                        <div className="imageWrapper">
+                            {formData.profilePicture ? (
+                                <img
+                                    src={formData.profilePicture}
+                                    alt="Profile"
+                                    className="profileImage"
+                                />
+                            ) : (
+                                <div className="profileImage" style={{
+                                    width: '150px',
+                                    height: '150px',
+                                    backgroundColor: '#f0f0f0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#999',
+                                    borderRadius: '8px'
+                                }}>
+                                    No Image
+                                </div>
+                            )}
+                            
+                            <div className="imageButtons">
+                                <Button
+                                    className={formData.profilePicture ? 'changeButton' : 'uploadButton'}
+                                    onClick={() => document.getElementById('profileInput').click()}
+                                    disabled={isSubmitting}
+                                >
+                                    {formData.profilePicture ? 'Change Photo' : 'Upload Photo'}
+                                </Button>
+                                <Button
+                                    className='cameraButton'
+                                    onClick={() => setIsCameraOpen(true)}
+                                    disabled={isSubmitting}
+                                >
+                                    Take Photo
+                                </Button>
+                            </div>
+                            
+                            <input
+                                type="file"
+                                id="profileInput"
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                                onChange={handleFileChange}
+                                disabled={isSubmitting}
+                            />
+                        </div>
 
-                <label className={styles.label}>Nationality*</label>
-                <InputField
-                    className='inputField'
-                    name="nationality"
-                    value={formData.nationality}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                />
+                        <div style={{ flex: 1 }}>
+                            <div className="formRow">
+                                <div className="formGroup">
+                                    <label className='label'>First Name*</label>
+                                    <InputField
+                                        className='inputField'
+                                        name="firstName"
+                                        value={formData.firstName}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                                
+                                <div className="formGroup">
+                                    <label className='label'>Last Name*</label>
+                                    <InputField
+                                        className='inputField'
+                                        name="surname"
+                                        value={formData.surname}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                            </div>
 
-                <label className={styles.label}>Guardian's Name</label>
-                <InputField
-                    className='inputField'
-                    name="guardianName"
-                    value={formData.guardianName}
-                    onChange={handleChange}
-                    disabled={isSubmitting}
-                />
+                            <div className="formRow">
+                                <div className="formGroup">
+                                    <label className='label'>Gender*</label>
+                                    <SingleSelect
+                                        className='selectField'
+                                        name="gender"
+                                        selected={formData.gender}
+                                        onChange={({ selected }) => handleChange({ name: 'gender', value: selected })}
+                                        required
+                                        disabled={isSubmitting}
+                                    >
+                                        <SingleSelectOption value="male" label="Male" />
+                                        <SingleSelectOption value="female" label="Female" />
+                                        <SingleSelectOption value="other" label="Other" />
+                                    </SingleSelect>
+                                </div>
+                                
+                                <div className="formGroup">
+                                    <label className='label'>Date Of Birth*</label>
+                                    <InputField
+                                        className='inputField'
+                                        type="date"
+                                        name="dateOfBirth"
+                                        value={formData.dateOfBirth}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                            </div>
 
-                <Divider className='divider' />
+                            <div className="formRow">
+                                <div className="formGroup">
+                                    <label className='label'>Nationality*</label>
+                                    <InputField
+                                        className='inputField'
+                                        name="nationality"
+                                        value={formData.nationality}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                                
+                                <div className="formGroup">
+                                    <label className='label'>Guardian's Name</label>
+                                    <InputField
+                                        className='inputField'
+                                        name="guardianName"
+                                        value={formData.guardianName}
+                                        onChange={handleChange}
+                                        disabled={isSubmitting}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {isCameraOpen && (
+                        <div className="cameraWrapper">
+                            <Webcam
+                                audio={false}
+                                screenshotFormat="image/jpeg"
+                                className="webcam"
+                            />
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <Button
+                                    className="captureButton"
+                                    onClick={() => handleCapture(getScreenshot())}
+                                >
+                                    Capture
+                                </Button>
+                                <Button
+                                    className="closeCameraButton"
+                                    onClick={() => setIsCameraOpen(false)}
+                                >
+                                    Close Camera
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+
+                    <Divider className='divider' />
+                </div>
 
                 <div className="buttonGroup">
                     <Button

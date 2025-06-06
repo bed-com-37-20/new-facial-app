@@ -1,105 +1,101 @@
-.main {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  width: 100%;
-  box-sizing: border-box;
+/* EnrollmentForm.css */
+
+.main1 {
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: "Segoe UI", sans-serif;
 
 }
 
 .formTitle {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  overflow: hidden;
-
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #333;
+    text-align: center;
 }
 
 .enrollmentForm {
-  /* max-width: 700px; */
-  margin: 0 auto;
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.divider {
-  margin: 20px 0;
-}
-
-.formSection {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    gap: 16px;
 }
 
 .label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
+    font-weight: 600;
+    margin-bottom: 4px;
+    width: full;
 }
 
-.inputField,
-.selectField {
-  width: 100%;
-  margin-bottom: 15px;
+.divider {
+    margin: 20px 0;
+}
+.formRow{
+  
+  width: 20rem;
+}
+/*.inputWraper{
+  background-color: blue;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}*/
+.formSection {
+    font-size: 18px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 10px;
 }
 
 .imageWrapper {
-  text-align: center;
-  margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
 }
 
 .profileImage {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ccc;
 }
 
+.changeButton,
 .uploadButton,
-.changeButton {
-  margin-top: 10px;
+.cameraButton,
+.captureButton,
+.closeCameraButton {
+    margin-top: 8px;
+    width: fit-content;
+}
+
+.cameraWrapper {
+    margin: 10px 0;
+}
+
+.webcam {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
 }
 
 .buttonGroup {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.clearButton {
-  background-color: #f44336;
-  color: white;
-}
-
-.submitButton {
-  background-color: #4caf50;
-  color: white;
-}
-  
-  .imageWrapper {
-    text-align: center;
-    position: relative;
-  }
-  
-  .profileImage {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #ccc;
-  }
-  
-  .uploadBtn {
-    margin-top: 10px;
-  }
-  
-  .buttonGroup {
     display: flex;
     justify-content: space-between;
-    margin: 20px 0;
-  }
-  
+    background-color: red;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.clearButton,
+.submitButton {
+    min-width: 120px;
+}

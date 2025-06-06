@@ -1,12 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import './attendance.css';
+import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-// import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
 
 const Attendance = () => {
-  const [sessions, setSessions] = useState([]);
+  // Load sessions from localStorage on initial render
+  const [sessions, setSessions] = useState(() => {
+    const saved = localStorage.getItem('attendance_sessions');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [viewingSessionId, setViewingSessionId] = useState(null); // Track which session is being viewed
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
@@ -15,7 +20,6 @@ const Attendance = () => {
   const [teiArray, setTeiArray] = useState([]);
 
   const location = useLocation();
-
   const {
     courseName,
     date,
@@ -23,16 +27,23 @@ const Attendance = () => {
     supervisorName,
     startTime,
     endTime,
-    students, orgUnit } = location.state || {};
+    students,
+    orgUnit
+  } = location.state || {};
 
-  console.log('Location state:', location.state);
+  // Save sessions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
+  }, [sessions]);
+
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
-  console.log(location.state)
-  // Adjust these as needed
+  // Get the session being viewed
+  const viewingSession = sessions.find(session => session.id === viewingSessionId);
+
   const PROGRAM_ID = 'TLvAWiCKRgq';
   const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
-  const ORG_UNIT_UID = orgUnit
+  const ORG_UNIT_UID = orgUnit;
 
   // DHIS2 query for tracked entity instances
   const teiQuery = {
@@ -46,12 +57,6 @@ const Attendance = () => {
 
   const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
 
-
-  // const { registerEvent,
-  //   loading,
-  //   errors,
-  //   data, } = useRegisterEvent()
-// console.log(teiData)
   // Initialize a new session
   const initNewSession = useCallback((sessionData) => {
     const newSession = {
@@ -64,16 +69,22 @@ const Attendance = () => {
       metadata: {
         room: sessionData.room,
         supervisor: sessionData.supervisor,
-        course: sessionData.course
+        course: sessionData.course,
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+        orgUnit: orgUnit,
+        selectedStudents: students || []
       }
     };
 
     setSessions(prev => [newSession, ...prev]);
     setCurrentSessionId(newSession.id);
     setActiveTab('current');
+    setViewingSessionId(null); // Clear any viewing session when starting new
 
     return newSession;
-  }, []);
+  }, [date, endTime, orgUnit, startTime, students]);
 
   const findTei = (stNumber) => {
     return teiArray.find((ti) => stNumber === ti.regNumber);
@@ -111,30 +122,6 @@ const Attendance = () => {
           return session;
         }));
       }
-      data.map((st) => {
-        if (st.status != "absent") {
-          const teiId = findTei(st.registrationNumber)
-          const Id = teiId.entityInstanceId
-
-        const eventData = {
-              trackedEntityInstance: Id,
-              program: 'TLvAWiCKRgq',
-              orgUnit: orgUnit,
-              programStage: 'TLvAWiCKRgq',
-              attendance: 'Present',
-              startTime: startTime,
-              endTime: endTime,
-              date: date,
-              courseName: courseName,
-              examRoom: room,
-              supervisor: supervisorName,
-            };
-
-          const result = registerEvent(eventData);
-          console.log(result)
-
-        }
-      })
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
@@ -152,23 +139,6 @@ const Attendance = () => {
       if (intervalId) clearInterval(intervalId);
     };
   }, [currentSessionId, fetchAttendanceData, refreshInterval]);
-
-  // Match TEIs
-  useEffect(() => {
-    if (!teiData?.teis?.trackedEntityInstances || !currentSessionId) return;
-
-    const students = sessions.find(s => s.id === currentSessionId)?.students || [];
-
-    const matches = teiData.teis.trackedEntityInstances.filter(tei =>
-      tei.attributes.some(attr =>
-        attr.attribute === REG_NUM_ATTR_UID &&
-        students.some(s => s.registrationNumber === attr.value)
-      )
-    );
-
-    const matchedIds = matches.map(tei => tei.trackedEntityInstance);
-    setMatchedTeiIds(matchedIds);
-  }, [teiData, sessions, currentSessionId]);
 
   // Status badge
   const StatusBadge = ({ status }) => {
@@ -196,56 +166,22 @@ const Attendance = () => {
     const date = new Date(isoString);
     return date.toLocaleString();
   };
-  // Update teiArray whenever teiData changes
-  // Update teiArray whenever teiData changes
-  useEffect(() => {
-    if (teiData?.students?.trackedEntityInstances) {
-      const extractedData = teiData.students.trackedEntityInstances.map(tei => {
-        // Find registration number (using both attribute and code for compatibility)
-        const regNumberAttr = tei.attributes.find(attr =>
-          attr.attribute === REG_NUM_ATTR_UID || attr.code === 'regnumber'
-        );
-
-        // Find first name (using both attribute and code for compatibility)
-        const firstNameAttr = tei.attributes.find(attr =>
-          attr.attribute === 'fname' || attr.code === 'fname'
-        );
-
-        return {
-          entityInstanceId: tei.trackedEntityInstance,
-          regNumber: regNumberAttr?.value || null,
-          firstName: firstNameAttr?.value || null,
-        };
-      });
-
-      setTeiArray(extractedData);
-      console.log('Extracted TEI Data:', extractedData); // Log immediately after extraction
-    }
-  }, [teiData, REG_NUM_ATTR_UID]); // Add REG_NUM_ATTR_UID as dependency
-
-  // Add separate useEffect to log teiArray when it updates
-  useEffect(() => {
-    console.log('Updated TEI Array:', teiArray);
-  }, [teiArray]);
-
-  // Log the updated array
-
 
   return (
-     <div className="container">
-       <div className="header">
+    <div className="container">
+      <div className="header">
         <div>
-         <h1>Attendance Monitoring</h1>
-           <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+          <h1>Attendance Monitoring</h1>
+          <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
         </div>
         <div>
           {currentSession ? (
-             <button
+            <button
               onClick={() => {
                 setSessions(prev => prev.map(s =>
-                   s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
+                  s.id === currentSessionId ? { ...s, endTime: new Date().toISOString() } : s
                 ));
-              setCurrentSessionId(null);
+                setCurrentSessionId(null);
               }}
               className="end-session"
             >
@@ -254,12 +190,15 @@ const Attendance = () => {
           ) : (
             <button
               onClick={() => initNewSession({
-                examId: `exam_${Date.now()}`,
-                examName: 'New Session'
+                examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+                examName: courseName,
+                room: room,
+                supervisor: supervisorName,
+                course: courseName
               })}
               className="start-session"
             >
-              Start New Session
+              Start Session
             </button>
           )}
         </div>
@@ -273,7 +212,10 @@ const Attendance = () => {
 
       <div className="tab-navigation">
         <button
-          onClick={() => setActiveTab('current')}
+          onClick={() => {
+            setActiveTab('current');
+            setViewingSessionId(null); // Clear viewing when switching tabs
+          }}
           className={activeTab === 'current' ? 'active' : ''}
           style={{ color: 'black' }}
         >
@@ -308,7 +250,8 @@ const Attendance = () => {
             <thead>
               <tr>
                 <th>Exam</th>
-                <th>Details</th>
+                <th>Course</th>
+                <th>Date</th>
                 <th>Duration</th>
                 <th>Students</th>
                 <th>Status</th>
@@ -322,20 +265,26 @@ const Attendance = () => {
                     <tr>
                       <td>{session.examName}</td>
                       <td>{session.metadata.course || 'N/A'}</td>
-                      <td>{formatDateTime(session.startTime)} to {formatDateTime(session.endTime)}</td>
+                      <td>{session.metadata.date || 'N/A'}</td>
+                      <td>
+                        {session.startTime && session.endTime ?
+                          `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` :
+                          'N/A'}
+                      </td>
                       <td>{session.students.length}</td>
                       <td>{session.endTime ? 'Completed' : 'Active'}</td>
                       <td>
-                        <button onClick={() => setCurrentSessionId(session.id)}>View</button>
-                        <button onClick={() => console.log('Exporting session:', session)}>Export</button>
+                        <button onClick={() => setViewingSessionId(session.id)}>
+                          View
+                        </button>
                       </td>
                     </tr>
-                    {currentSessionId === session.id && (
+                    {viewingSessionId === session.id && (
                       <tr>
-                        <td colSpan="6">
-                          <div className="student-details">
-                            <h4>Students Attended</h4>
-                            <table className="table">
+                        <td colSpan="7">
+                          <div className="session-details">
+                            <h4>Attendance Details for {session.examName}</h4>
+                            <table className="student-table">
                               <thead>
                                 <tr>
                                   <th>Student ID</th>
@@ -356,11 +305,17 @@ const Attendance = () => {
                                   ))
                                 ) : (
                                   <tr>
-                                    <td colSpan="4">No students attended this session</td>
+                                    <td colSpan="4">No attendance records</td>
                                   </tr>
                                 )}
                               </tbody>
                             </table>
+                            <button
+                              onClick={() => setViewingSessionId(null)}
+                              className="close-details"
+                            >
+                              Close Details
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -369,7 +324,7 @@ const Attendance = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6">No sessions available</td>
+                  <td colSpan="7">No sessions available</td>
                 </tr>
               )}
             </tbody>
@@ -381,4 +336,3 @@ const Attendance = () => {
 };
 
 export default Attendance;
-
