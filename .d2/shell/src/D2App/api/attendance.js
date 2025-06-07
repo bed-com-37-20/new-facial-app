@@ -2,14 +2,9 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-import { markAllAbsent, camera } from './Attendance/hooks'; // Assuming this function is defined in attendanceUtils.js
-
+import { markAllAbsent, camera } from './Attendance/hooks';
 const Attendance = () => {
-  // Load sessions from localStorage on initial render
-  const [sessions, setSessions] = useState(() => {
-    const saved = localStorage.getItem('attendance_sessions');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [viewingSessionId, setViewingSessionId] = useState(null);
   const [error, setError] = useState(null);
@@ -28,36 +23,30 @@ const Attendance = () => {
     endTime,
     students,
     orgUnit
-  } = location.state || {};
+  } = location.state;
   const AB_END_POINT = 'https://facial-attendance-system-6vy8.onrender.com/attendance/mark-all-absent';
   const CAMERA_START = 'https://facial-attendance-system-6vy8.onrender.com/face/recognize';
-  // Save sessions to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
-  }, [sessions]);
 
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
   // Get the session being viewed
   const viewingSession = sessions.find(session => session.id === viewingSessionId);
-  const PROGRAM_ID = 'TLvAWiCKRgq';
-  const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
-  const ORG_UNIT_UID = orgUnit;
 
-  // DHIS2 query for tracked entity instances
-  const teiQuery = {
-    students: {
-      resource: 'trackedEntityInstances',
-      params: {
-        ou: ORG_UNIT_UID
-      }
-    }
-  };
-  const {
-    data: teiData,
-    error: teiError,
-    refetch: refetchTeis
-  } = useDataQuery(teiQuery);
+  // const PROGRAM_ID = 'TLvAWiCKRgq';
+  // const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
+  // const ORG_UNIT_UID = orgUnit;
+
+  // // DHIS2 query for tracked entity instances
+  // const teiQuery = {
+  //   students: {
+  //     resource: 'trackedEntityInstances',
+  //     params: {
+  //       ou: ORG_UNIT_UID,
+  //     }
+  //   }
+  // };
+
+  // const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
 
   // Initialize a new session
   const initNewSession = useCallback(sessionData => {
@@ -162,11 +151,18 @@ const Attendance = () => {
     const date = new Date(isoString);
     return date.toLocaleString();
   };
+  useEffect(() => {
+    console.log('Current Session:', courseName);
+  }, [courseName]);
   return /*#__PURE__*/React.createElement("div", {
     className: "container"
   }, /*#__PURE__*/React.createElement("div", {
     className: "header"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Attendance Monitoring"), /*#__PURE__*/React.createElement("p", null, currentSession ? `Tracking: ${currentSession.examName}` : 'No active session')), /*#__PURE__*/React.createElement("div", null, currentSession ? /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
+    className: "h1"
+  }, "Attendance Monitoring"), /*#__PURE__*/React.createElement("p", {
+    className: "p"
+  }, currentSession ? `Tracking: ${currentSession.examName}` : 'No active session')), /*#__PURE__*/React.createElement("div", null, currentSession ? /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       setSessions(prev => prev.map(s => s.id === currentSessionId ? {
         ...s,
@@ -189,14 +185,15 @@ const Attendance = () => {
     className: "start-session"
   }, "Start Session"))), error && /*#__PURE__*/React.createElement("div", {
     className: "error-message"
-  }, /*#__PURE__*/React.createElement("span", null, error)), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "span"
+  }, error)), /*#__PURE__*/React.createElement("div", {
     className: "tab-navigation"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       setActiveTab('current');
-      setViewingSessionId(null); // Clear viewing when switching tabs
+      setViewingSessionId(null);
     },
-
     className: activeTab === 'current' ? 'active' : '',
     style: {
       color: 'black'
@@ -208,35 +205,148 @@ const Attendance = () => {
       color: 'black'
     }
   }, "Session History")), activeTab === 'current' && currentSession && /*#__PURE__*/React.createElement("div", {
-    className: "matched-events"
-  }, /*#__PURE__*/React.createElement("h3", null, "Matched DHIS2 TEI IDs"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => refetchTeis()
-  }, "Refresh Matches"), /*#__PURE__*/React.createElement("ul", null, matchedTeiIds.length > 0 ? matchedTeiIds.map(id => /*#__PURE__*/React.createElement("li", {
-    key: id
-  }, id)) : /*#__PURE__*/React.createElement("li", null, "No matches found"))), activeTab === 'history' && /*#__PURE__*/React.createElement("div", {
-    className: "session-history"
+    className: "current-session"
+  }, /*#__PURE__*/React.createElement("h2", {
+    className: "h2"
+  }, currentSession.examName), /*#__PURE__*/React.createElement("div", {
+    className: "session-meta"
+  }, /*#__PURE__*/React.createElement("p", {
+    className: "p"
+  }, "Room: ", currentSession.metadata.room), /*#__PURE__*/React.createElement("p", {
+    className: "p"
+  }, "Supervisor: ", currentSession.metadata.supervisor), /*#__PURE__*/React.createElement("p", {
+    className: "p"
+  }, "Started: ", formatDateTime(currentSession.startTime))), /*#__PURE__*/React.createElement("div", {
+    className: "attendance-table"
   }, /*#__PURE__*/React.createElement("table", {
     className: "table"
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Exam"), /*#__PURE__*/React.createElement("th", null, "Course"), /*#__PURE__*/React.createElement("th", null, "Date"), /*#__PURE__*/React.createElement("th", null, "Duration"), /*#__PURE__*/React.createElement("th", null, "Students"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Actions"))), /*#__PURE__*/React.createElement("tbody", null, sessions.length > 0 ? sessions.map(session => /*#__PURE__*/React.createElement(React.Fragment, {
+  }, /*#__PURE__*/React.createElement("thead", {
+    className: "thead"
+  }, /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Student ID"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Name"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Status"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", {
+    className: "tbody"
+  }, currentSession.students.length > 0 ? currentSession.students.map(student => /*#__PURE__*/React.createElement("tr", {
+    className: "tr",
+    key: student.id
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, student.registrationNumber), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, /*#__PURE__*/React.createElement(StatusBadge, {
+    status: student.status
+  })), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "tr",
+    colSpan: "4"
+  }, "No attendance records yet")))))), activeTab === 'history' && /*#__PURE__*/React.createElement("div", {
+    className: "session-history"
+  }, /*#__PURE__*/React.createElement("table", {
+    className: "sessions-table"
+  }, /*#__PURE__*/React.createElement("thead", {
+    className: "thead"
+  }, /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Exam"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Course"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Date"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Duration"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Students"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Status"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Actions"))), /*#__PURE__*/React.createElement("tbody", {
+    className: "tbody"
+  }, sessions.length > 0 ? sessions.map(session => /*#__PURE__*/React.createElement(React.Fragment, {
     key: session.id
-  }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, session.examName), /*#__PURE__*/React.createElement("td", null, session.metadata.course || 'N/A'), /*#__PURE__*/React.createElement("td", null, session.metadata.date || 'N/A'), /*#__PURE__*/React.createElement("td", null, session.startTime && session.endTime ? `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` : 'N/A'), /*#__PURE__*/React.createElement("td", null, session.students.length), /*#__PURE__*/React.createElement("td", null, session.endTime ? 'Completed' : 'Active'), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.examName), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.metadata.course || 'N/A'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.metadata.date || 'N/A'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.startTime && session.endTime ? `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` : 'N/A'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.students.length), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, session.endTime ? 'Completed' : 'Active'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "button",
     onClick: () => setViewingSessionId(session.id)
-  }, "View"))), viewingSessionId === session.id && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, "View"))), viewingSessionId === session.id && /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "td",
     colSpan: "7"
   }, /*#__PURE__*/React.createElement("div", {
     className: "session-details"
-  }, /*#__PURE__*/React.createElement("h4", null, "Attendance Details for ", session.examName), /*#__PURE__*/React.createElement("table", {
-    className: "student-table"
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Student ID"), /*#__PURE__*/React.createElement("th", null, "Name"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", null, session.students.length > 0 ? session.students.map(student => /*#__PURE__*/React.createElement("tr", {
+  }, /*#__PURE__*/React.createElement("h4", {
+    className: "h4"
+  }, "Attendance Details for ", session.examName), /*#__PURE__*/React.createElement("table", {
+    className: "student-details-table"
+  }, /*#__PURE__*/React.createElement("thead", {
+    className: "thead"
+  }, /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Student ID"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Name"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Status"), /*#__PURE__*/React.createElement("th", {
+    className: "th"
+  }, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", {
+    className: "tbody"
+  }, session.students.length > 0 ? session.students.map(student => /*#__PURE__*/React.createElement("tr", {
+    className: "tr",
     key: student.id
-  }, /*#__PURE__*/React.createElement("td", null, student.registrationNumber), /*#__PURE__*/React.createElement("td", null, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement(StatusBadge, {
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, student.registrationNumber), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, /*#__PURE__*/React.createElement(StatusBadge, {
     status: student.status
-  })), /*#__PURE__*/React.createElement("td", null, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  })), /*#__PURE__*/React.createElement("td", {
+    className: "td"
+  }, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "td",
     colSpan: "4"
   }, "No attendance records")))), /*#__PURE__*/React.createElement("button", {
     onClick: () => setViewingSessionId(null),
     className: "close-details"
-  }, "Close Details")))))) : /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, "Close Details")))))) : /*#__PURE__*/React.createElement("tr", {
+    className: "tr"
+  }, /*#__PURE__*/React.createElement("td", {
+    className: "tr",
     colSpan: "7"
   }, "No sessions available"))))));
 };

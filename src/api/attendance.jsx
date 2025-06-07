@@ -2,15 +2,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-import {markAllAbsent, camera}  from './Attendance/hooks'; // Assuming this function is defined in attendanceUtils.js
+import { markAllAbsent, camera } from './Attendance/hooks';
 
 const Attendance = () => {
-  // Load sessions from localStorage on initial render
-  const [sessions, setSessions] = useState(() => {
-    const saved = localStorage.getItem('attendance_sessions');
-    return saved ? JSON.parse(saved) : [];
-  });
-
+  const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(null);
   const [viewingSessionId, setViewingSessionId] = useState(null);
   const [error, setError] = useState(null);
@@ -30,35 +25,31 @@ const Attendance = () => {
     endTime,
     students,
     orgUnit
-  } = location.state || {};
+  } = location.state
 
   const AB_END_POINT = 'https://facial-attendance-system-6vy8.onrender.com/attendance/mark-all-absent';
   const CAMERA_START = 'https://facial-attendance-system-6vy8.onrender.com/face/recognize';
-  // Save sessions to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
-  }, [sessions]);
 
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
   // Get the session being viewed
   const viewingSession = sessions.find(session => session.id === viewingSessionId);
 
-  const PROGRAM_ID = 'TLvAWiCKRgq';
-  const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
-  const ORG_UNIT_UID = orgUnit;
+  // const PROGRAM_ID = 'TLvAWiCKRgq';
+  // const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
+  // const ORG_UNIT_UID = orgUnit;
 
-  // DHIS2 query for tracked entity instances
-  const teiQuery = {
-    students: {
-      resource: 'trackedEntityInstances',
-      params: {
-        ou: ORG_UNIT_UID,
-      }
-    }
-  };
+  // // DHIS2 query for tracked entity instances
+  // const teiQuery = {
+  //   students: {
+  //     resource: 'trackedEntityInstances',
+  //     params: {
+  //       ou: ORG_UNIT_UID,
+  //     }
+  //   }
+  // };
 
-  const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
+  // const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
 
   // Initialize a new session
   const initNewSession = useCallback((sessionData) => {
@@ -172,12 +163,15 @@ const Attendance = () => {
     return date.toLocaleString();
   };
 
+  useEffect(() => {
+   console.log('Current Session:', courseName);  
+  }, [courseName]);
   return (
     <div className="container">
       <div className="header">
         <div>
-          <h1>Attendance Monitoring</h1>
-          <p>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+          <h1 className='h1'>Attendance Monitoring</h1>
+          <p className='p'>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
         </div>
         <div>
           {currentSession ? (
@@ -194,19 +188,16 @@ const Attendance = () => {
             </button>
           ) : (
             <button
-                onClick={async() => {
-
-                  const data = await markAllAbsent(AB_END_POINT);
-                  initNewSession({
-                    examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
-                    examName: courseName,
-                    room: room,
-                    supervisor: supervisorName,
-                    course: courseName
-                  })
-                
-                }
-                }
+              onClick={async () => {
+                const data = await markAllAbsent(AB_END_POINT);
+                initNewSession({
+                  examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+                  examName: courseName,
+                  room: room,
+                  supervisor: supervisorName,
+                  course: courseName
+                })
+              }}
               className="start-session"
             >
               Start Session
@@ -217,7 +208,7 @@ const Attendance = () => {
 
       {error && (
         <div className="error-message">
-          <span>{error}</span>
+          <span className='span'>{error}</span>
         </div>
       )}
 
@@ -225,7 +216,7 @@ const Attendance = () => {
         <button
           onClick={() => {
             setActiveTab('current');
-            setViewingSessionId(null); // Clear viewing when switching tabs
+            setViewingSessionId(null);
           }}
           className={activeTab === 'current' ? 'active' : ''}
           style={{ color: 'black' }}
@@ -242,81 +233,107 @@ const Attendance = () => {
       </div>
 
       {activeTab === 'current' && currentSession && (
-        <div className="matched-events">
-          <h3>Matched DHIS2 TEI IDs</h3>
-          <button onClick={() => refetchTeis()}>Refresh Matches</button>
-          <ul>
-            {matchedTeiIds.length > 0 ? (
-              matchedTeiIds.map(id => <li key={id}>{id}</li>)
-            ) : (
-              <li>No matches found</li>
-            )}
-          </ul>
+        <div className="current-session">
+          <h2 className='h2'>{currentSession.examName}</h2>
+          <div className="session-meta">
+            <p className='p'>Room: {currentSession.metadata.room}</p>
+            <p className='p'>Supervisor: {currentSession.metadata.supervisor}</p>
+            <p className='p'>Started: {formatDateTime(currentSession.startTime)}</p>
+          </div>
+
+          <div className="attendance-table">
+            <table className="table">
+              <thead className='thead'>
+                <tr className='tr'>
+                  <th className='th'>Student ID</th>
+                  <th className='th'>Name</th>
+                  <th className='th'>Status</th>
+                  <th className='th'>Time Recorded</th>
+                </tr>
+              </thead>
+              <tbody className='tbody'>
+                {currentSession.students.length > 0 ? (
+                  currentSession.students.map(student => (
+                    <tr className='tr' key={student.id}>
+                      <td className='td'>{student.registrationNumber}</td>
+                      <td className='td'>{student.name || 'N/A'}</td>
+                      <td className='td'><StatusBadge status={student.status} /></td>
+                      <td className='td'>{formatDateTime(student.timestamp)}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className='tr'>
+                    <td className='tr' colSpan="4">No attendance records yet</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {activeTab === 'history' && (
         <div className="session-history">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Exam</th>
-                <th>Course</th>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Students</th>
-                <th>Status</th>
-                <th>Actions</th>
+          <table className="sessions-table">
+            <thead className='thead'>
+              <tr className='tr'>
+                <th className='th'>Exam</th>
+                <th className='th'>Course</th>
+                <th className='th'>Date</th>
+                <th className='th'>Duration</th>
+                <th className='th'>Students</th>
+                <th className='th'>Status</th>
+                <th className='th'>Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className='tbody'>
               {sessions.length > 0 ? (
                 sessions.map((session) => (
                   <React.Fragment key={session.id}>
-                    <tr>
-                      <td>{session.examName}</td>
-                      <td>{session.metadata.course || 'N/A'}</td>
-                      <td>{session.metadata.date || 'N/A'}</td>
-                      <td>
+                    <tr className='tr'>
+                      <td className='td'>{session.examName}</td>
+                      <td className='td'>{session.metadata.course || 'N/A'}</td>
+                      <td className='td'>{session.metadata.date || 'N/A'}</td>
+                      <td className='td'>
                         {session.startTime && session.endTime ?
                           `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` :
                           'N/A'}
                       </td>
-                      <td>{session.students.length}</td>
-                      <td>{session.endTime ? 'Completed' : 'Active'}</td>
-                      <td>
-                        <button onClick={() => setViewingSessionId(session.id)}>
+                      <td className='td'>{session.students.length}</td>
+                      <td className='td'>{session.endTime ? 'Completed' : 'Active'}</td>
+                      <td className='td'>
+                        <button className='button' onClick={() => setViewingSessionId(session.id)}>
                           View
                         </button>
                       </td>
                     </tr>
                     {viewingSessionId === session.id && (
-                      <tr>
-                        <td colSpan="7">
+                      <tr className='tr'>
+                        <td className='td' colSpan="7">
                           <div className="session-details">
-                            <h4>Attendance Details for {session.examName}</h4>
-                            <table className="student-table">
-                              <thead>
-                                <tr>
-                                  <th>Student ID</th>
-                                  <th>Name</th>
-                                  <th>Status</th>
-                                  <th>Time Recorded</th>
+                            <h4 className='h4'>Attendance Details for {session.examName}</h4>
+                            <table className="student-details-table">
+                              <thead className='thead'>
+                                <tr className='tr'>
+                                  <th className='th'>Student ID</th>
+                                  <th className='th'>Name</th>
+                                  <th className='th'>Status</th>
+                                  <th className='th'>Time Recorded</th>
                                 </tr>
                               </thead>
-                              <tbody>
+                              <tbody className='tbody'>
                                 {session.students.length > 0 ? (
                                   session.students.map((student) => (
-                                    <tr key={student.id}>
-                                      <td>{student.registrationNumber}</td>
-                                      <td>{student.name || 'N/A'}</td>
-                                      <td><StatusBadge status={student.status} /></td>
-                                      <td>{formatDateTime(student.timestamp)}</td>
+                                    <tr className='tr' key={student.id}>
+                                      <td className='td'>{student.registrationNumber}</td>
+                                      <td className='td'>{student.name || 'N/A'}</td>
+                                      <td className='td'><StatusBadge status={student.status} /></td>
+                                      <td className='td'>{formatDateTime(student.timestamp)}</td>
                                     </tr>
                                   ))
                                 ) : (
-                                  <tr>
-                                    <td colSpan="4">No attendance records</td>
+                                  <tr className='tr'>
+                                    <td className='td' colSpan="4">No attendance records</td>
                                   </tr>
                                 )}
                               </tbody>
@@ -334,8 +351,8 @@ const Attendance = () => {
                   </React.Fragment>
                 ))
               ) : (
-                <tr>
-                  <td colSpan="7">No sessions available</td>
+                <tr className='tr'>
+                  <td className='tr' colSpan="7">No sessions available</td>
                 </tr>
               )}
             </tbody>

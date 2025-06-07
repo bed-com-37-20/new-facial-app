@@ -622,16 +622,16 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
             const faceData = await faceResponse.json();
             console.log('Face data registered successfully:', faceData);
 
-            // Proceed with enrollment
-            const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
+            // // Proceed with enrollment
+            // const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
 
-            if (enrollmentResult.success) {
-                console.log('Student registered and enrolled successfully!', enrollmentResult);
-                alert('Student registration and enrollment completed!');
+            // if (enrollmentResult.success) {
+            //     console.log('Student registered and enrolled successfully!', enrollmentResult);
+            //     alert('Student registration and enrollment completed!');
                 
-            } else {
-                throw new Error(enrollmentResult.error || 'Failed to enroll student');
-            }
+            // } else {
+            //     throw new Error(enrollmentResult.error || 'Failed to enroll student');
+            // }
             onSubmit?.(formData);
             navigate('/api/enrollment/enrollments');
         } catch (error) {
