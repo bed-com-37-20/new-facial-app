@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
+import markAllAbsent from './Attendance/hooks'; // Assuming this function is defined in attendanceUtils.js
+
 const Attendance = () => {
   // Load sessions from localStorage on initial render
   const [sessions, setSessions] = useState(() => {
@@ -9,7 +11,7 @@ const Attendance = () => {
     return saved ? JSON.parse(saved) : [];
   });
   const [currentSessionId, setCurrentSessionId] = useState(null);
-  const [viewingSessionId, setViewingSessionId] = useState(null); // Track which session is being viewed
+  const [viewingSessionId, setViewingSessionId] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
@@ -171,13 +173,17 @@ const Attendance = () => {
     },
     className: "end-session"
   }, "End Session") : /*#__PURE__*/React.createElement("button", {
-    onClick: () => initNewSession({
-      examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
-      examName: courseName,
-      room: room,
-      supervisor: supervisorName,
-      course: courseName
-    }),
+    onClick: async () => {
+      const data = await markAllAbsent();
+      // initNewSession({
+      //   examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+      //   examName: courseName,
+      //   room: room,
+      //   supervisor: supervisorName,
+      //   course: courseName
+      // })
+      console.log('data', data);
+    },
     className: "start-session"
   }, "Start Session"))), error && /*#__PURE__*/React.createElement("div", {
     className: "error-message"
