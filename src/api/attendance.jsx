@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-import markAllAbsent  from './Attendance/hooks'; // Assuming this function is defined in attendanceUtils.js
+import {markAllAbsent, camera}  from './Attendance/hooks'; // Assuming this function is defined in attendanceUtils.js
 
 const Attendance = () => {
   // Load sessions from localStorage on initial render
@@ -16,7 +16,7 @@ const Attendance = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
-  const [refreshInterval, setRefreshInterval] = useState(5000);
+  const [refreshInterval, setRefreshInterval] = useState(20000);
   const [matchedTeiIds, setMatchedTeiIds] = useState([]);
   const [teiArray, setTeiArray] = useState([]);
 
@@ -32,6 +32,8 @@ const Attendance = () => {
     orgUnit
   } = location.state || {};
 
+  const AB_END_POINT = 'https://facial-attendance-system-6vy8.onrender.com/attendance/mark-all-absent';
+  const CAMERA_START = 'https://facial-attendance-system-6vy8.onrender.com/face/recognize';
   // Save sessions to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
@@ -93,6 +95,7 @@ const Attendance = () => {
 
   // Fetch attendance data
   const fetchAttendanceData = useCallback(async () => {
+    const data = camera(CAMERA_START);
     try {
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
       if (!response.ok) {
@@ -123,6 +126,7 @@ const Attendance = () => {
           return session;
         }));
       }
+      console.log('Attendance data fetched successfully:', data);
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
@@ -192,15 +196,15 @@ const Attendance = () => {
             <button
                 onClick={async() => {
 
-                  const data = await markAllAbsent()
-                  // initNewSession({
-                  //   examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
-                  //   examName: courseName,
-                  //   room: room,
-                  //   supervisor: supervisorName,
-                  //   course: courseName
-                  // })
-                  console.log('data', data)
+                  const data = await markAllAbsent(AB_END_POINT);
+                  initNewSession({
+                    examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+                    examName: courseName,
+                    room: room,
+                    supervisor: supervisorName,
+                    course: courseName
+                  })
+                
                 }
                 }
               className="start-session"

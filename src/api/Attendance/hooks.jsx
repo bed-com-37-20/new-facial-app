@@ -1,13 +1,7 @@
-const markAllAbsent = async () => {
-    const endpoint = 'https://facial-attendance-system-6vy8.onrender.com/mark-all-absent';
+const markAllAbsent = async (url) => {
 
     try {
-        const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -22,4 +16,30 @@ const markAllAbsent = async () => {
     }
 };
 
-export default markAllAbsent;
+
+
+const camera =  (url) => {
+
+    try {
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+            
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        }).then(data => {
+            console.log('Response:', data);
+            return data;
+        });
+    } catch (error) {
+        console.error('Error posting data:', error);
+        throw error;
+    }
+};
+
+export { markAllAbsent, camera };
