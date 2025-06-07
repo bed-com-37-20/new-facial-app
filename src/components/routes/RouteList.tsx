@@ -39,7 +39,7 @@ export default function RouteList() {
         }, {
             path: "/api/attendance",
             layout: SideBarLayout,
-            component: () => <Attendance />
+            component: () => <NewExam />
         }
         , {
             path: "/api/examPage/ExamForm",

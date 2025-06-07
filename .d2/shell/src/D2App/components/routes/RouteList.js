@@ -6,7 +6,6 @@ import EnrollmentPage from "../../api/enrollment/enrollments";
 import Report from "../../api/reports/report";
 import NewExam from "../../api/examPage/newExam";
 import SelectStudents from "../../api/examPage/ExamForm";
-import Attendance from "../../api/attendance";
 import ExamForm from "../../api/examPage/ExamForm";
 export default function RouteList() {
   return [{
@@ -33,7 +32,7 @@ export default function RouteList() {
   }, {
     path: "/api/attendance",
     layout: SideBarLayout,
-    component: () => /*#__PURE__*/React.createElement(Attendance, null)
+    component: () => /*#__PURE__*/React.createElement(NewExam, null)
   }, {
     path: "/api/examPage/ExamForm",
     layout: SideBarLayout,

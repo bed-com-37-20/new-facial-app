@@ -24,8 +24,8 @@ function Home() {
     icon: examIcon,
     appName: "new-exam"
   }, {
-    title: "Attendance",
-    formLink: "/api/attendance",
+    title: "Exam Check",
+    formLink: "/api/examPage/newExam",
     icon: attendancIcon,
     appName: "attendance"
   }, {

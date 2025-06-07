@@ -50,7 +50,7 @@ function menuData(currentAcademicYear) {
       dashBoardIcon: attendance,
       displayInMenu: true,
       sidebarIcon: glyph,
-      title: "Attendance",
+      title: "Exam Check",
       program: "programId",
       showBadge: false,
       leftLabel: "Total",
