@@ -290,6 +290,87 @@ const EnrollmentPage: React.FC = () => {
   const { loading: orgUnitsLoading, error: orgUnitsError, organisationUnits } = useFetchOrganisationUnits();
   // const { enrollStudent, loadingEnrol, errorEnrol } = useEnrollStudent();
 
+//   const fetchTrackedEntityInstances = useCallback(async (ouId: string) => {
+//     if (!ouId) return;
+
+//     setTeiLoading(true);
+//     setTeiError(null);
+
+//     try {
+//       const { trackedEntityInstances } = await engine.query({
+//         trackedEntityInstances: {
+//           resource: 'trackedEntityInstances',
+//           params: {
+//             ou: ouId,
+//             //program: 'NIDbTzjU8J8', 
+//            //trackedEntityType:'W85ui9yO3vH',// Using the trackedEntityType from your XMLNIDbTzjU8J8
+//             fields: 'trackedEntityInstance,attributes[attribute,code,value]',
+//             paging: false
+//           }
+//         }
+//       });
+
+//       if (!trackedEntityInstances || !Array.isArray(trackedEntityInstances.trackedEntityInstances)) {
+//         throw new Error('Invalid response structure from API');
+//       }
+
+//      const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
+//   const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
+//     // Map attributes by their codes or attribute IDs from your system
+//     if (attr.code === 'school') {
+//       acc['school name'] = attr.value;
+//     } else if (attr.attribute === 'AAhQa2QBdLb') { // First name
+//       acc['fname'] = attr.value;
+//     } else if (attr.attribute === 'jcNk3WUk6CF') { // Surname
+//       acc['lname'] = attr.value;
+//     } else if (attr.attribute === 'oU3liZI9qx6') { // Registration number
+//       acc['regnumber'] = attr.value;
+//     } else if (attr.attribute === 'ctwU8hvnyk9') { // Program of study
+//       acc['program of study'] = attr.value;
+//     } else if (attr.attribute === 'dA6No4FoYxI') { // Year of study
+//       acc['year of study'] = attr.value;
+//     } else if (attr.attribute === 'DicIdiy94P8') { // Nationality
+//       acc['nationality'] = attr.value;
+//     } else if (attr.attribute === 'N6NvXcYsRp8') { // Gender
+//       acc['gender'] = attr.value;
+//     } else if (attr.attribute === 'tzLYzIpqGiB') { // Date of birth
+//       acc['dateOfBirth'] = attr.value;
+//     } else if (attr.attribute === 'FtBP3ctaOfX') { // Enrollment date
+//       acc['enroll_date'] = attr.value;
+//     } else if (attr.attribute === 'sdV0Qc0puZX') { // Academic year
+//       acc['academic year'] = attr.value;
+//     } else if (attr.attribute === 'Es03r1AMOwQ') { // Guardian
+//       acc['guardian'] = attr.value;
+//     }
+//     return acc;
+//   }, {} as Record<string, string>);
+
+//   return {
+//     regNumber: attributes['regnumber'] || '',
+//     firstName: attributes['fname'] || '',
+//     surname: attributes['lname'] || '',
+//     school: attributes['school name'] || selectedSchool,
+//     programOfStudy: attributes['program of study'] || '',
+//     yearOfStudy: attributes['year of study'] || '',
+//     nationality: attributes['nationality'] || '',
+//     gender: attributes['gender'] || '',
+//     dateOfBirth: attributes['dateOfBirth'] || '',
+//     enrollDate: attributes['enroll_date'] || '',
+//     academicYear: attributes['academic year'] || '',
+//     guardian: attributes['guardian'] || '',
+//   };
+// });
+// console.log(trackedEntityInstances)
+//       setEnrollments(transformed);
+//     } catch (error) {
+//       console.error('Error fetching tracked entity instances:', error);
+//       setTeiError(error instanceof Error ? error : new Error('Failed to fetch student data'));
+//       setEnrollments([]);
+//     } finally {
+//       setTeiLoading(false);
+//     }
+  //   }, [engine, selectedSchool]);
+  
   const fetchTrackedEntityInstances = useCallback(async (ouId: string) => {
     if (!ouId) return;
 
@@ -302,8 +383,7 @@ const EnrollmentPage: React.FC = () => {
           resource: 'trackedEntityInstances',
           params: {
             ou: ouId,
-            //program: 'NIDbTzjU8J8', 
-           trackedEntityType:'W85ui9yO3vH',// Using the trackedEntityType from your XMLNIDbTzjU8J8
+            // program: 'N6eVEDUrpYU', // Using the trackedEntityType from your XML
             fields: 'trackedEntityInstance,attributes[attribute,code,value]',
             paging: false
           }
@@ -314,53 +394,29 @@ const EnrollmentPage: React.FC = () => {
         throw new Error('Invalid response structure from API');
       }
 
-     const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
-  const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
-    // Map attributes by their codes or attribute IDs from your system
-    if (attr.code === 'school') {
-      acc['school name'] = attr.value;
-    } else if (attr.attribute === 'AAhQa2QBdLb') { // First name
-      acc['fname'] = attr.value;
-    } else if (attr.attribute === 'jcNk3WUk6CF') { // Surname
-      acc['lname'] = attr.value;
-    } else if (attr.attribute === 'oU3liZI9qx6') { // Registration number
-      acc['regnumber'] = attr.value;
-    } else if (attr.attribute === 'ctwU8hvnyk9') { // Program of study
-      acc['program of study'] = attr.value;
-    } else if (attr.attribute === 'dA6No4FoYxI') { // Year of study
-      acc['year of study'] = attr.value;
-    } else if (attr.attribute === 'DicIdiy94P8') { // Nationality
-      acc['nationality'] = attr.value;
-    } else if (attr.attribute === 'N6NvXcYsRp8') { // Gender
-      acc['gender'] = attr.value;
-    } else if (attr.attribute === 'tzLYzIpqGiB') { // Date of birth
-      acc['dateOfBirth'] = attr.value;
-    } else if (attr.attribute === 'FtBP3ctaOfX') { // Enrollment date
-      acc['enroll_date'] = attr.value;
-    } else if (attr.attribute === 'sdV0Qc0puZX') { // Academic year
-      acc['academic year'] = attr.value;
-    } else if (attr.attribute === 'Es03r1AMOwQ') { // Guardian
-      acc['guardian'] = attr.value;
-    }
-    return acc;
-  }, {} as Record<string, string>);
+      const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
+        const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
+          // Map attributes by their codes from your XML
+          acc[attr.code] = attr.value;
+          return acc;
+        }, {} as Record<string, string>);
 
-  return {
-    regNumber: attributes['regnumber'] || '',
-    firstName: attributes['fname'] || '',
-    surname: attributes['lname'] || '',
-    school: attributes['school name'] || selectedSchool,
-    programOfStudy: attributes['program of study'] || '',
-    yearOfStudy: attributes['year of study'] || '',
-    nationality: attributes['nationality'] || '',
-    gender: attributes['gender'] || '',
-    dateOfBirth: attributes['dateOfBirth'] || '',
-    enrollDate: attributes['enroll_date'] || '',
-    academicYear: attributes['academic year'] || '',
-    guardian: attributes['guardian'] || '',
-  };
-});
-console.log(trackedEntityInstances)
+        return {
+          regNumber: attributes['regnumber'] || '',
+          firstName: attributes['fname'] || '',
+          surname: attributes['lname'] || '',
+          school: attributes['school name'] || selectedSchool,
+          programOfStudy: attributes['program of study'] || '',
+          yearOfStudy: attributes['year of study'] || '',
+          nationality: attributes['nationality'] || '',
+          gender: attributes['gender'] || '',
+          dateOfBirth: attributes['dateOfBirth'] || '',
+          enrollDate: attributes['enroll_date'] || '',
+          academicYear: attributes['academic year'] || '',
+          guardian: attributes['guardian'] || '',
+        };
+      });
+
       setEnrollments(transformed);
     } catch (error) {
       console.error('Error fetching tracked entity instances:', error);
@@ -370,6 +426,7 @@ console.log(trackedEntityInstances)
       setTeiLoading(false);
     }
   }, [engine, selectedSchool]);
+
 
   useEffect(() => {
     if (orgUnitId) {

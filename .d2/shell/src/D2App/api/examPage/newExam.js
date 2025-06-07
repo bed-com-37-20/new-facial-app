@@ -308,7 +308,7 @@ const NewExam = () => {
   const navigate = useNavigate();
   const filteredExams = exams.filter(exam => exam.courseName.toLowerCase().includes(filter.toLowerCase()) || exam.date.includes(filter));
   const handleCreateExam = () => {
-    // console.log(newExam)
+    console.log("Form Data Submitted:", newExam); // Added console.log here
     setShowPopup(false);
     navigate('/api/examPage/select-students', {
       state: newExam
@@ -341,7 +341,6 @@ const NewExam = () => {
     },
     className: "primary-btn",
     onClick: () => setShowPopup(true)
-    // style={{ color: '#101345', backgroundColor: 'white', border: '1px solid #101345' }}
   }, /*#__PURE__*/React.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     width: "16",

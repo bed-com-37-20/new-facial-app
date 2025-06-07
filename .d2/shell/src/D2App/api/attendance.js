@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import './attendance.css';
+import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
-// import { useRegisterEvent } from '../hooks/api-calls/dataMutate'
-
 const Attendance = () => {
-  const [sessions, setSessions] = useState([]);
+  // Load sessions from localStorage on initial render
+  const [sessions, setSessions] = useState(() => {
+    const saved = localStorage.getItem('attendance_sessions');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [viewingSessionId, setViewingSessionId] = useState(null); // Track which session is being viewed
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
@@ -24,11 +27,16 @@ const Attendance = () => {
     students,
     orgUnit
   } = location.state || {};
-  console.log('Location state:', location.state);
+
+  // Save sessions to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('attendance_sessions', JSON.stringify(sessions));
+  }, [sessions]);
+
   // Get current session
   const currentSession = sessions.find(session => session.id === currentSessionId);
-  console.log(location.state);
-  // Adjust these as needed
+  // Get the session being viewed
+  const viewingSession = sessions.find(session => session.id === viewingSessionId);
   const PROGRAM_ID = 'TLvAWiCKRgq';
   const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
   const ORG_UNIT_UID = orgUnit;
@@ -48,11 +56,6 @@ const Attendance = () => {
     refetch: refetchTeis
   } = useDataQuery(teiQuery);
 
-  // const { registerEvent,
-  //   loading,
-  //   errors,
-  //   data, } = useRegisterEvent()
-  // console.log(teiData)
   // Initialize a new session
   const initNewSession = useCallback(sessionData => {
     const newSession = {
@@ -65,14 +68,21 @@ const Attendance = () => {
       metadata: {
         room: sessionData.room,
         supervisor: sessionData.supervisor,
-        course: sessionData.course
+        course: sessionData.course,
+        date: date,
+        startTime: startTime,
+        endTime: endTime,
+        orgUnit: orgUnit,
+        selectedStudents: students || []
       }
     };
     setSessions(prev => [newSession, ...prev]);
     setCurrentSessionId(newSession.id);
     setActiveTab('current');
+    setViewingSessionId(null); // Clear any viewing session when starting new
+
     return newSession;
-  }, []);
+  }, [date, endTime, orgUnit, startTime, students]);
   const findTei = stNumber => {
     return teiArray.find(ti => stNumber === ti.regNumber);
   };
@@ -103,27 +113,6 @@ const Attendance = () => {
           return session;
         }));
       }
-      data.map(st => {
-        if (st.status != "absent") {
-          const teiId = findTei(st.registrationNumber);
-          const Id = teiId.entityInstanceId;
-          const eventData = {
-            trackedEntityInstance: Id,
-            program: 'TLvAWiCKRgq',
-            orgUnit: orgUnit,
-            programStage: 'TLvAWiCKRgq',
-            attendance: 'Present',
-            startTime: startTime,
-            endTime: endTime,
-            date: date,
-            courseName: courseName,
-            examRoom: room,
-            supervisor: supervisorName
-          };
-          const result = registerEvent(eventData);
-          console.log(result);
-        }
-      });
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
@@ -141,16 +130,6 @@ const Attendance = () => {
       if (intervalId) clearInterval(intervalId);
     };
   }, [currentSessionId, fetchAttendanceData, refreshInterval]);
-
-  // Match TEIs
-  useEffect(() => {
-    var _teiData$teis, _sessions$find;
-    if (!(teiData !== null && teiData !== void 0 && (_teiData$teis = teiData.teis) !== null && _teiData$teis !== void 0 && _teiData$teis.trackedEntityInstances) || !currentSessionId) return;
-    const students = ((_sessions$find = sessions.find(s => s.id === currentSessionId)) === null || _sessions$find === void 0 ? void 0 : _sessions$find.students) || [];
-    const matches = teiData.teis.trackedEntityInstances.filter(tei => tei.attributes.some(attr => attr.attribute === REG_NUM_ATTR_UID && students.some(s => s.registrationNumber === attr.value)));
-    const matchedIds = matches.map(tei => tei.trackedEntityInstance);
-    setMatchedTeiIds(matchedIds);
-  }, [teiData, sessions, currentSessionId]);
 
   // Status badge
   const StatusBadge = _ref => {
@@ -178,35 +157,6 @@ const Attendance = () => {
     const date = new Date(isoString);
     return date.toLocaleString();
   };
-  // Update teiArray whenever teiData changes
-  // Update teiArray whenever teiData changes
-  useEffect(() => {
-    var _teiData$students;
-    if (teiData !== null && teiData !== void 0 && (_teiData$students = teiData.students) !== null && _teiData$students !== void 0 && _teiData$students.trackedEntityInstances) {
-      const extractedData = teiData.students.trackedEntityInstances.map(tei => {
-        // Find registration number (using both attribute and code for compatibility)
-        const regNumberAttr = tei.attributes.find(attr => attr.attribute === REG_NUM_ATTR_UID || attr.code === 'regnumber');
-
-        // Find first name (using both attribute and code for compatibility)
-        const firstNameAttr = tei.attributes.find(attr => attr.attribute === 'fname' || attr.code === 'fname');
-        return {
-          entityInstanceId: tei.trackedEntityInstance,
-          regNumber: (regNumberAttr === null || regNumberAttr === void 0 ? void 0 : regNumberAttr.value) || null,
-          firstName: (firstNameAttr === null || firstNameAttr === void 0 ? void 0 : firstNameAttr.value) || null
-        };
-      });
-      setTeiArray(extractedData);
-      console.log('Extracted TEI Data:', extractedData); // Log immediately after extraction
-    }
-  }, [teiData, REG_NUM_ATTR_UID]); // Add REG_NUM_ATTR_UID as dependency
-
-  // Add separate useEffect to log teiArray when it updates
-  useEffect(() => {
-    console.log('Updated TEI Array:', teiArray);
-  }, [teiArray]);
-
-  // Log the updated array
-
   return /*#__PURE__*/React.createElement("div", {
     className: "container"
   }, /*#__PURE__*/React.createElement("div", {
@@ -222,16 +172,23 @@ const Attendance = () => {
     className: "end-session"
   }, "End Session") : /*#__PURE__*/React.createElement("button", {
     onClick: () => initNewSession({
-      examId: `exam_${Date.now()}`,
-      examName: 'New Session'
+      examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
+      examName: courseName,
+      room: room,
+      supervisor: supervisorName,
+      course: courseName
     }),
     className: "start-session"
-  }, "Start New Session"))), error && /*#__PURE__*/React.createElement("div", {
+  }, "Start Session"))), error && /*#__PURE__*/React.createElement("div", {
     className: "error-message"
   }, /*#__PURE__*/React.createElement("span", null, error)), /*#__PURE__*/React.createElement("div", {
     className: "tab-navigation"
   }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setActiveTab('current'),
+    onClick: () => {
+      setActiveTab('current');
+      setViewingSessionId(null); // Clear viewing when switching tabs
+    },
+
     className: activeTab === 'current' ? 'active' : '',
     style: {
       color: 'black'
@@ -252,26 +209,27 @@ const Attendance = () => {
     className: "session-history"
   }, /*#__PURE__*/React.createElement("table", {
     className: "table"
-  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Exam"), /*#__PURE__*/React.createElement("th", null, "Details"), /*#__PURE__*/React.createElement("th", null, "Duration"), /*#__PURE__*/React.createElement("th", null, "Students"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Actions"))), /*#__PURE__*/React.createElement("tbody", null, sessions.length > 0 ? sessions.map(session => /*#__PURE__*/React.createElement(React.Fragment, {
+  }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Exam"), /*#__PURE__*/React.createElement("th", null, "Course"), /*#__PURE__*/React.createElement("th", null, "Date"), /*#__PURE__*/React.createElement("th", null, "Duration"), /*#__PURE__*/React.createElement("th", null, "Students"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Actions"))), /*#__PURE__*/React.createElement("tbody", null, sessions.length > 0 ? sessions.map(session => /*#__PURE__*/React.createElement(React.Fragment, {
     key: session.id
-  }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, session.examName), /*#__PURE__*/React.createElement("td", null, session.metadata.course || 'N/A'), /*#__PURE__*/React.createElement("td", null, formatDateTime(session.startTime), " to ", formatDateTime(session.endTime)), /*#__PURE__*/React.createElement("td", null, session.students.length), /*#__PURE__*/React.createElement("td", null, session.endTime ? 'Completed' : 'Active'), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setCurrentSessionId(session.id)
-  }, "View"), /*#__PURE__*/React.createElement("button", {
-    onClick: () => console.log('Exporting session:', session)
-  }, "Export"))), currentSessionId === session.id && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-    colSpan: "6"
+  }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", null, session.examName), /*#__PURE__*/React.createElement("td", null, session.metadata.course || 'N/A'), /*#__PURE__*/React.createElement("td", null, session.metadata.date || 'N/A'), /*#__PURE__*/React.createElement("td", null, session.startTime && session.endTime ? `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` : 'N/A'), /*#__PURE__*/React.createElement("td", null, session.students.length), /*#__PURE__*/React.createElement("td", null, session.endTime ? 'Completed' : 'Active'), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement("button", {
+    onClick: () => setViewingSessionId(session.id)
+  }, "View"))), viewingSessionId === session.id && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+    colSpan: "7"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "student-details"
-  }, /*#__PURE__*/React.createElement("h4", null, "Students Attended"), /*#__PURE__*/React.createElement("table", {
-    className: "table"
+    className: "session-details"
+  }, /*#__PURE__*/React.createElement("h4", null, "Attendance Details for ", session.examName), /*#__PURE__*/React.createElement("table", {
+    className: "student-table"
   }, /*#__PURE__*/React.createElement("thead", null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", null, "Student ID"), /*#__PURE__*/React.createElement("th", null, "Name"), /*#__PURE__*/React.createElement("th", null, "Status"), /*#__PURE__*/React.createElement("th", null, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", null, session.students.length > 0 ? session.students.map(student => /*#__PURE__*/React.createElement("tr", {
     key: student.id
   }, /*#__PURE__*/React.createElement("td", null, student.registrationNumber), /*#__PURE__*/React.createElement("td", null, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", null, /*#__PURE__*/React.createElement(StatusBadge, {
     status: student.status
   })), /*#__PURE__*/React.createElement("td", null, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     colSpan: "4"
-  }, "No students attended this session"))))))))) : /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
-    colSpan: "6"
+  }, "No attendance records")))), /*#__PURE__*/React.createElement("button", {
+    onClick: () => setViewingSessionId(null),
+    className: "close-details"
+  }, "Close Details")))))) : /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+    colSpan: "7"
   }, "No sessions available"))))));
 };
 export default Attendance;

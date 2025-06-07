@@ -14,11 +14,7 @@
   "icons": {
     "48": "dhis2-app-icon.png"
   },
-<<<<<<< HEAD
-  "manifest_generated_at": "Fri Jun 06 2025 10:10:52 GMT+0200 (Central Africa Time)",
-=======
-  "manifest_generated_at": "Fri Jun 06 2025 00:02:37 GMT+0300 (East Africa Time)",
->>>>>>> new-facial-app
+  "manifest_generated_at": "Sat Jun 07 2025 09:05:23 GMT+0200 (Central Africa Time)",
   "display": "standalone",
   "theme_color": "#ffffff",
   "background_color": "#ffffff"

@@ -216,6 +216,7 @@ const SelectStudents = () => {
   const handleCreateExam = async () => {
     setShowSuccessAlert(true);
     setTimeout(() => setShowSuccessAlert(false), 3000);
+    console.log('Creating exam with selected students:', markedData);
     navigate('/api/attendance', {
       state: markedData
     });

@@ -266,7 +266,6 @@
 // export default NewExam;
 
 
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './exam.css';
@@ -321,7 +320,7 @@ const NewExam = () => {
     );
 
     const handleCreateExam = () => {
-        // console.log(newExam)
+        console.log("Form Data Submitted:", newExam); // Added console.log here
         setShowPopup(false);
         navigate('/api/examPage/select-students', {
             state: newExam
@@ -347,7 +346,6 @@ const NewExam = () => {
                         }}
                         className="primary-btn"
                         onClick={() => setShowPopup(true)}
-                    // style={{ color: '#101345', backgroundColor: 'white', border: '1px solid #101345' }}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -359,7 +357,6 @@ const NewExam = () => {
             <Divider />
             <p style={{ marginTop: '2rem' }}>Below is a summary of past exams. You can view details or create a new exam using the options provided.</p>
             <div className="card-container">
-
                 {filteredExams.length > 0 ? (
                     filteredExams.map((exam) => (
                         <div key={exam.id} className="exam-card">
@@ -384,23 +381,6 @@ const NewExam = () => {
                                     <strong style={{ color: 'black' }}>Time:</strong> {exam.startTime} - {exam.endTime}
                                 </p>
                             </section>
-                            {/* <p className='p1'>
-                                <strong className='p1'>Date:</strong>{' '}
-                                {new Date(exam.date).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                })}
-                            </p>
-                            <p className='p1'>
-                                <strong className='p1'>Room:</strong> {exam.room}
-                            </p>
-                            <p className='p1'>
-                                <strong className='p1'>Supervisor:</strong> {exam.supervisorName}
-                            </p>
-                            <p className='p'>
-                                <strong className='p1'>Time:</strong> {exam.startTime} - {exam.endTime}
-                            </p> */}
                             <button
                                 style={{
                                     color: 'white'
@@ -431,7 +411,6 @@ const NewExam = () => {
                                 handleCreateExam();
                             }}
                         >
-
                             <div className="form-group">
                                 <label style={{ color: 'black' }} >Course Name</label>
                                 <input
