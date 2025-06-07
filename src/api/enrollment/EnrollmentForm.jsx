@@ -600,6 +600,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
             // Prepare form data for backend
             const formDataToSend = new FormData();
             formDataToSend.append('registrationNumber', formData.regNumber);
+            formDataToSend.append('name', formData.firstName + ' ' + formData.surname);
 
             // Convert base64 image to blob if it exists
             if (formData.profilePicture) {
@@ -623,15 +624,15 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
             console.log('Face data registered successfully:', faceData);
 
             // // Proceed with enrollment
-            // const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
+            const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
 
-            // if (enrollmentResult.success) {
-            //     console.log('Student registered and enrolled successfully!', enrollmentResult);
-            //     alert('Student registration and enrollment completed!');
+            if (enrollmentResult.success) {
+                console.log('Student registered and enrolled successfully!', enrollmentResult);
+                alert('Student registration and enrollment completed!');
                 
-            // } else {
-            //     throw new Error(enrollmentResult.error || 'Failed to enroll student');
-            // }
+            } else {
+                throw new Error(enrollmentResult.error || 'Failed to enroll student');
+            }
             onSubmit?.(formData);
             navigate('/api/enrollment/enrollments');
         } catch (error) {

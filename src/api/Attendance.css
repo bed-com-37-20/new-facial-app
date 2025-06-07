@@ -300,7 +300,7 @@ tr.expanded-row {
   align-items: center;
 }
 
-.error-message .span {
+.error-message span {
   margin-left: 10px;
 }
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import EnrollmentForm from './EnrollmentForm';
 import { UserPlus, Download, Pencil, Trash2, Search } from 'lucide-react';
@@ -6,7 +5,6 @@ import { useFetchOrganisationUnits, useEnrolledStudents } from '../../hooks/api-
 import { generatePDF } from '../../utils/pdfGenerator';
 import { validateEnrollmentForm } from '../../utils/validation';
 import './Enrollment.css';
-// import './reports/report.css';
 import { useDataEngine } from '@dhis2/app-runtime';
 import { useLocation } from 'react-router-dom';
 
@@ -23,6 +21,7 @@ interface Enrollment {
   enrollDate: string;
   academicYear: string;
   guardian: string;
+  trackedEntityInstance?: string;
 }
 
 interface ApiError {
@@ -53,6 +52,22 @@ const ErrorModal: React.FC<{ error: ApiError | null; onClose: () => void }> = ({
     </div>
   );
 };
+
+const DeleteConfirmationModal: React.FC<{
+  onConfirm: () => void;
+  onCancel: () => void
+}> = ({ onConfirm, onCancel }) => (
+  <div className="modal-backdrop">
+    <div className="modal-content">
+      <h3>Confirm Deletion</h3>
+      <p>Are you sure you want to delete this student? This action cannot be undone.</p>
+      <div className="modal-actions">
+        <button onClick={onCancel} className="btn-secondary">Cancel</button>
+        <button onClick={onConfirm} className="btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+);
 
 const LoadingIndicator: React.FC<{ message: string }> = ({ message }) => (
   <div className="loading-container">
@@ -85,82 +100,89 @@ const EmptyState: React.FC<{ message: string; instructions?: string[] }> = ({ me
 const FilterBar: React.FC<{
   organisationUnits: { id: string; displayName: string }[];
   selectedSchool: string;
-
+  selectedYear: string;
+  selectedProgram: string;
   onSchoolChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}> = ({ organisationUnits, selectedSchool, onSchoolChange }) => (
-  <div className="filter-card">
-    <h2>Student Enrollment</h2>
-    <div className="filter-bar">
-      <div className="filter-group">
-        <label htmlFor="school-select">School</label>
-        <select
-          id="school-select"
-          onChange={onSchoolChange}
-          value={selectedSchool}
-        >
-          <option value="">Select a school</option>
-          {organisationUnits.map((school) => (
-            <option key={school.id} value={school.displayName}>
-              {school.displayName}
-            </option>
-          ))}
-        </select>
-      </div>
+  onYearChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onProgramChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}> = ({
+  organisationUnits,
+  selectedSchool,
+  selectedYear,
+  selectedProgram,
+  onSchoolChange,
+  onYearChange,
+  onProgramChange
+}) => (
+    <div className="filter-card">
+      <h2>Student Enrollment</h2>
+      <div className="filter-bar">
+        <div className="filter-group">
+          <label htmlFor="school-select">School</label>
+          <select
+            id="school-select"
+            onChange={onSchoolChange}
+            value={selectedSchool}
+          >
+            <option value="">Select a school</option>
+            {organisationUnits.map((school) => (
+              <option key={school.id} value={school.displayName}>
+                {school.displayName}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="filter-group">
-        <label htmlFor="grade-select">Year of Study</label>
-        <select id="grade-select"
-          onChange={onSchoolChange}
-          
-        >
-          <option value="">Select a year</option>
-          {[1, 2, 3, 4, 5].map((grade) => (
-            <option key={grade} value={grade}>
-              {grade}
-            </option>
-          ))}
-          
-        </select>
-      </div>
+        <div className="filter-group">
+          <label htmlFor="grade-select">Year of Study</label>
+          <select
+            id="grade-select"
+            onChange={onYearChange}
+            value={selectedYear}
+          >
+            <option value="">All Years</option>
+            {[1, 2, 3, 4, 5].map((grade) => (
+              <option key={grade} value={grade}>
+                {grade}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <div className="filter-group">
-        <label htmlFor="program-select">Program</label>
-        <select id="program-select"
-          onChange={onSchoolChange}
-        
-        >
-          <option value="">Program of Study</option>
-          {[
-            "Computer Science",
-            "Statistics",
-            "Political Science",
-            "Bachelor of Arts",
-            "Information System"
-          ].map((program) => (
-            <option key={program} value={program}>
-              {program}
-            </option>
-          ))}
-        </select>
-      </div>
-      
-      <div className="academic-year">
-        <span>Academic Year</span>
-        <span className="year">2025</span>
-      </div>
-      {/* <div style={{border:'solid 1px blue',borderRadius:'10px'}} className="academic-year">
-        <span>Academic Year</span>
-        <span style={{color:'red'}} className="year">2025</span>
-      </div> */}
+        <div className="filter-group">
+          <label htmlFor="program-select">Program</label>
+          <select
+            id="program-select"
+            onChange={onProgramChange}
+            value={selectedProgram}
+          >
+            <option value="">All Programs</option>
+            {[
+              "Computer Science",
+              "Statistics",
+              "Political Science",
+              "Bachelor of Arts",
+              "Information System"
+            ].map((program) => (
+              <option key={program} value={program}>
+                {program}
+              </option>
+            ))}
+          </select>
+        </div>
 
+        <div className="academic-year">
+          <span>Academic Year</span>
+          <span className="year">2025</span>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
 
 const EnrollmentTable: React.FC<{
   enrollments: Enrollment[];
   onEdit: (enrollment: Enrollment, index: number) => void;
-  onDelete: (index: number) => void;
+  onDelete: (enrollment: Enrollment) => void;
   searchQuery: string;
 }> = ({ enrollments, onEdit, onDelete, searchQuery }) => {
   const filteredEnrollments = useMemo(() =>
@@ -178,7 +200,7 @@ const EnrollmentTable: React.FC<{
         {searchQuery ? (
           <p>No students match your search criteria.</p>
         ) : (
-          <p>No enrollments found for the selected school.</p>
+          <p>No enrollments found for the selected filters.</p>
         )}
       </div>
     );
@@ -198,7 +220,7 @@ const EnrollmentTable: React.FC<{
               "Nationality",
               "Gender",
               "Enroll Date",
-              //"Actions"
+              "Actions"
             ].map((header) => (
               <th key={header}>{header}</th>
             ))}
@@ -215,20 +237,22 @@ const EnrollmentTable: React.FC<{
               <td>{enrollment.nationality}</td>
               <td>{enrollment.gender}</td>
               <td>{enrollment.enrollDate}</td>
-              {/* <td className="action-buttons">
+              <td className="action-buttons">
                 <button
                   onClick={() => onEdit(enrollment, index)}
                   aria-label="Edit"
+                  className="edit-btn"
                 >
                   <Pencil size={16} />
                 </button>
                 <button
-                  onClick={() => onDelete(index)}
+                  onClick={() => onDelete(enrollment)}
                   aria-label="Delete"
+                  className="delete-btn"
                 >
                   <Trash2 size={16} />
                 </button>
-              </td> */}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -236,7 +260,6 @@ const EnrollmentTable: React.FC<{
     </div>
   );
 };
-
 
 const ActionBar: React.FC<{
   searchQuery: string;
@@ -247,7 +270,6 @@ const ActionBar: React.FC<{
 }> = ({ searchQuery, onSearchChange, onEnrollClick, onDownloadClick, hasEnrollments }) => (
   <div className="action-bar">
     <div className="search-wrapper">
-      {/* <Search className="search" /> */}
       <input
         type="text"
         placeholder="Search by name, program, or year..."
@@ -275,8 +297,11 @@ const ActionBar: React.FC<{
 
 const EnrollmentPage: React.FC = () => {
   const [selectedSchool, setSelectedSchool] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedProgram, setSelectedProgram] = useState('');
   const [showEnrollmentForm, setShowEnrollmentForm] = useState(false);
   const [enrollments, setEnrollments] = useState<Enrollment[]>([]);
+  const [allEnrollments, setAllEnrollments] = useState<Enrollment[]>([]);
   const [editingEnrollment, setEditingEnrollment] = useState<{ enrollment: Enrollment; index: number } | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [orgUnitId, setOrgUnitId] = useState('');
@@ -284,93 +309,21 @@ const EnrollmentPage: React.FC = () => {
   const [apiError, setApiError] = useState<ApiError | null>(null);
   const [teiLoading, setTeiLoading] = useState(false);
   const [teiError, setTeiError] = useState<Error | null>(null);
-
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState<Enrollment | null>(null);
 
   const engine = useDataEngine();
   const { loading: orgUnitsLoading, error: orgUnitsError, organisationUnits } = useFetchOrganisationUnits();
-  // const { enrollStudent, loadingEnrol, errorEnrol } = useEnrollStudent();
 
-//   const fetchTrackedEntityInstances = useCallback(async (ouId: string) => {
-//     if (!ouId) return;
+  // Load default school on initial render
+  useEffect(() => {
+    if (organisationUnits && organisationUnits.length > 0) {
+      const defaultSchool = organisationUnits[0];
+      setSelectedSchool(defaultSchool.displayName);
+      setOrgUnitId(defaultSchool.id);
+    }
+  }, [organisationUnits]);
 
-//     setTeiLoading(true);
-//     setTeiError(null);
-
-//     try {
-//       const { trackedEntityInstances } = await engine.query({
-//         trackedEntityInstances: {
-//           resource: 'trackedEntityInstances',
-//           params: {
-//             ou: ouId,
-//             //program: 'NIDbTzjU8J8', 
-//            //trackedEntityType:'W85ui9yO3vH',// Using the trackedEntityType from your XMLNIDbTzjU8J8
-//             fields: 'trackedEntityInstance,attributes[attribute,code,value]',
-//             paging: false
-//           }
-//         }
-//       });
-
-//       if (!trackedEntityInstances || !Array.isArray(trackedEntityInstances.trackedEntityInstances)) {
-//         throw new Error('Invalid response structure from API');
-//       }
-
-//      const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
-//   const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
-//     // Map attributes by their codes or attribute IDs from your system
-//     if (attr.code === 'school') {
-//       acc['school name'] = attr.value;
-//     } else if (attr.attribute === 'AAhQa2QBdLb') { // First name
-//       acc['fname'] = attr.value;
-//     } else if (attr.attribute === 'jcNk3WUk6CF') { // Surname
-//       acc['lname'] = attr.value;
-//     } else if (attr.attribute === 'oU3liZI9qx6') { // Registration number
-//       acc['regnumber'] = attr.value;
-//     } else if (attr.attribute === 'ctwU8hvnyk9') { // Program of study
-//       acc['program of study'] = attr.value;
-//     } else if (attr.attribute === 'dA6No4FoYxI') { // Year of study
-//       acc['year of study'] = attr.value;
-//     } else if (attr.attribute === 'DicIdiy94P8') { // Nationality
-//       acc['nationality'] = attr.value;
-//     } else if (attr.attribute === 'N6NvXcYsRp8') { // Gender
-//       acc['gender'] = attr.value;
-//     } else if (attr.attribute === 'tzLYzIpqGiB') { // Date of birth
-//       acc['dateOfBirth'] = attr.value;
-//     } else if (attr.attribute === 'FtBP3ctaOfX') { // Enrollment date
-//       acc['enroll_date'] = attr.value;
-//     } else if (attr.attribute === 'sdV0Qc0puZX') { // Academic year
-//       acc['academic year'] = attr.value;
-//     } else if (attr.attribute === 'Es03r1AMOwQ') { // Guardian
-//       acc['guardian'] = attr.value;
-//     }
-//     return acc;
-//   }, {} as Record<string, string>);
-
-//   return {
-//     regNumber: attributes['regnumber'] || '',
-//     firstName: attributes['fname'] || '',
-//     surname: attributes['lname'] || '',
-//     school: attributes['school name'] || selectedSchool,
-//     programOfStudy: attributes['program of study'] || '',
-//     yearOfStudy: attributes['year of study'] || '',
-//     nationality: attributes['nationality'] || '',
-//     gender: attributes['gender'] || '',
-//     dateOfBirth: attributes['dateOfBirth'] || '',
-//     enrollDate: attributes['enroll_date'] || '',
-//     academicYear: attributes['academic year'] || '',
-//     guardian: attributes['guardian'] || '',
-//   };
-// });
-// console.log(trackedEntityInstances)
-//       setEnrollments(transformed);
-//     } catch (error) {
-//       console.error('Error fetching tracked entity instances:', error);
-//       setTeiError(error instanceof Error ? error : new Error('Failed to fetch student data'));
-//       setEnrollments([]);
-//     } finally {
-//       setTeiLoading(false);
-//     }
-  //   }, [engine, selectedSchool]);
-  
   const fetchTrackedEntityInstances = useCallback(async (ouId: string) => {
     if (!ouId) return;
 
@@ -383,7 +336,6 @@ const EnrollmentPage: React.FC = () => {
           resource: 'trackedEntityInstances',
           params: {
             ou: ouId,
-            // program: 'N6eVEDUrpYU', // Using the trackedEntityType from your XML
             fields: 'trackedEntityInstance,attributes[attribute,code,value]',
             paging: false
           }
@@ -396,7 +348,6 @@ const EnrollmentPage: React.FC = () => {
 
       const transformed = trackedEntityInstances.trackedEntityInstances.map((tei: TrackedEntityInstance) => {
         const attributes = tei.attributes.reduce((acc: Record<string, string>, attr: TrackedEntityAttribute) => {
-          // Map attributes by their codes from your XML
           acc[attr.code] = attr.value;
           return acc;
         }, {} as Record<string, string>);
@@ -414,25 +365,43 @@ const EnrollmentPage: React.FC = () => {
           enrollDate: attributes['enroll_date'] || '',
           academicYear: attributes['academic year'] || '',
           guardian: attributes['guardian'] || '',
+          trackedEntityInstance: tei.trackedEntityInstance
         };
       });
 
+      setAllEnrollments(transformed);
       setEnrollments(transformed);
     } catch (error) {
       console.error('Error fetching tracked entity instances:', error);
       setTeiError(error instanceof Error ? error : new Error('Failed to fetch student data'));
+      setAllEnrollments([]);
       setEnrollments([]);
     } finally {
       setTeiLoading(false);
     }
   }, [engine, selectedSchool]);
 
+  // Filter enrollments based on selected filters
+  useEffect(() => {
+    if (allEnrollments.length === 0) return;
+
+    let filtered = [...allEnrollments];
+
+    if (selectedYear) {
+      filtered = filtered.filter(e => e.yearOfStudy === selectedYear);
+    }
+
+    if (selectedProgram) {
+      filtered = filtered.filter(e => e.programOfStudy === selectedProgram);
+    }
+
+    setEnrollments(filtered);
+  }, [allEnrollments, selectedYear, selectedProgram]);
 
   useEffect(() => {
     if (orgUnitId) {
       fetchTrackedEntityInstances(orgUnitId);
     }
-
   }, [orgUnitId, fetchTrackedEntityInstances]);
 
   const handleOrgUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -443,8 +412,20 @@ const EnrollmentPage: React.FC = () => {
     if (selected?.id) {
       setOrgUnitId(selected.id);
     } else {
+      setAllEnrollments([]);
       setEnrollments([]);
     }
+    // Reset other filters when school changes
+    setSelectedYear('');
+    setSelectedProgram('');
+  };
+
+  const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedYear(e.target.value);
+  };
+
+  const handleProgramChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedProgram(e.target.value);
   };
 
   const handleEnrollStudentClick = () => {
@@ -472,9 +453,11 @@ const EnrollmentPage: React.FC = () => {
           i === editingEnrollment.index ? formData : e
         );
         setEnrollments(updated);
+        setAllEnrollments(updated);
       } else {
         // Add new enrollment
         setEnrollments([...enrollments, formData]);
+        setAllEnrollments([...allEnrollments, formData]);
       }
       setShowEnrollmentForm(false);
     } catch (error) {
@@ -491,18 +474,44 @@ const EnrollmentPage: React.FC = () => {
     setFormErrors({});
   };
 
-  const handleDeleteClick = async (index: number) => {
-    if (window.confirm('Are you sure you want to delete this enrollment?')) {
-      try {
-        const updated = enrollments.filter((_, i) => i !== index);
-        setEnrollments(updated);
-      } catch (error) {
-        setApiError({
-          message: 'Failed to delete enrollment',
-          details: error instanceof Error ? error.message : 'Unknown error'
+  const handleDeleteClick = (enrollment: Enrollment) => {
+    setStudentToDelete(enrollment);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!studentToDelete) return;
+
+    try {
+      // Delete from DHIS2
+      if (studentToDelete.trackedEntityInstance) {
+        await engine.mutate({
+          resource: `trackedEntityInstances/${studentToDelete.trackedEntityInstance}`,
+          type: 'delete',
         });
       }
+
+      // Update local state
+      const updated = enrollments.filter(e =>
+        e.trackedEntityInstance !== studentToDelete.trackedEntityInstance
+      );
+      setEnrollments(updated);
+      setAllEnrollments(updated);
+
+      setShowDeleteModal(false);
+      setStudentToDelete(null);
+    } catch (error) {
+      setApiError({
+        message: 'Failed to delete student',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
+      setShowDeleteModal(false);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setStudentToDelete(null);
   };
 
   const handleDownloadPDF = () => {
@@ -520,13 +529,11 @@ const EnrollmentPage: React.FC = () => {
     setSearchQuery(e.target.value);
   };
 
-
   if (orgUnitsLoading) return <LoadingIndicator message="Loading organization units..." />;
   if (orgUnitsError) return <ErrorDisplay error={orgUnitsError} onRetry={() => window.location.reload()} />;
   if (!organisationUnits || organisationUnits.length === 0) {
     return <EmptyState message="No organization units found" />;
   }
-
 
   const formatDate = (dateString: string) => {
     if (!dateString) return '';
@@ -537,7 +544,6 @@ const EnrollmentPage: React.FC = () => {
     }
   };
 
-  // Format program of study (remove camel case)
   const formatProgram = (program: string) => {
     return program
       .replace(/([A-Z])/g, ' $1')
@@ -548,6 +554,7 @@ const EnrollmentPage: React.FC = () => {
   return (
     <div className="enrollment-container">
       <ErrorModal error={apiError} onClose={() => setApiError(null)} />
+      {showDeleteModal && <DeleteConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />}
 
       {showEnrollmentForm && (
         <div className="modal-backdrop">
@@ -572,62 +579,45 @@ const EnrollmentPage: React.FC = () => {
           <FilterBar
             organisationUnits={organisationUnits}
             selectedSchool={selectedSchool}
+            selectedYear={selectedYear}
+            selectedProgram={selectedProgram}
             onSchoolChange={handleOrgUnitChange}
+            onYearChange={handleYearChange}
+            onProgramChange={handleProgramChange}
           />
         )}
 
-        {selectedSchool ? (
-          <div className="enrollments-section">
-            <ActionBar
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              onEnrollClick={handleEnrollStudentClick}
-              onDownloadClick={handleDownloadPDF}
-              hasEnrollments={enrollments.length > 0}
-            />
+        <div className="enrollments-section">
+          <ActionBar
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            onEnrollClick={handleEnrollStudentClick}
+            onDownloadClick={handleDownloadPDF}
+            hasEnrollments={enrollments.length > 0}
+          />
 
-            {teiLoading ? (
-              <LoadingIndicator message="Loading enrollments..." />
-            ) : teiError ? (
-              <ErrorDisplay
-                error={teiError}
-                onRetry={() => fetchTrackedEntityInstances(orgUnitId)}
-              />
-            ) : (
-                  <EnrollmentTable
-                    enrollments={enrollments.map(enrollment => ({
-                      ...enrollment,
-                      programOfStudy: formatProgram(enrollment.programOfStudy),
-                      enrollDate: formatDate(enrollment.enrollDate),
-                      dateOfBirth: formatDate(enrollment.dateOfBirth),
-                      yearOfStudy: enrollment.yearOfStudy ? `${enrollment.yearOfStudy}` : '',
-                    }))}
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteClick}
-                    searchQuery={searchQuery}
-                  />
-            )}
-          </div>
-        ) : (
-            <div className="instructions-container">
-              <div className="instructions-box">
-                <h3>SEMIS-Enrollment</h3>
-                <p>Follow the instructions to proceed:</p>
-                <ul>
-                  <li>Select the Organization unit you want to view the Registered Student</li>
-                  <li>Use global filters (Class, Grade, and Academic Year)</li>
-                </ul>
-              </div>
-            </div>
-          // <EmptyState
-          //   message="SEMIS Enrollment System"
-          //   instructions={[
-          //     "Select a school from the dropdown menu",
-          //     "Use the filters to narrow down results",
-          //     "Click 'Enroll Student' to add new students"
-          //   ]}
-          // />
-        )}
+          {teiLoading ? (
+            <LoadingIndicator message="Loading enrollments..." />
+          ) : teiError ? (
+            <ErrorDisplay
+              error={teiError}
+              onRetry={() => fetchTrackedEntityInstances(orgUnitId)}
+            />
+          ) : (
+            <EnrollmentTable
+              enrollments={enrollments.map(enrollment => ({
+                ...enrollment,
+                programOfStudy: formatProgram(enrollment.programOfStudy),
+                enrollDate: formatDate(enrollment.enrollDate),
+                dateOfBirth: formatDate(enrollment.dateOfBirth),
+                yearOfStudy: enrollment.yearOfStudy ? `${enrollment.yearOfStudy}` : '',
+              }))}
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+              searchQuery={searchQuery}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
