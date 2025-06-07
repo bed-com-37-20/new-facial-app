@@ -152,16 +152,37 @@ const Attendance = () => {
     return date.toLocaleString();
   };
   useEffect(() => {
-    console.log('Current Session:', courseName);
-  }, [courseName]);
+    console.log('Current Session:', students);
+  }, [students]);
   return /*#__PURE__*/React.createElement("div", {
-    className: "container"
+    className: "container",
+    style: {
+      fontFamily: 'Arial, sans-serif',
+      padding: '20px',
+      backgroundColor: '#f9f9f9',
+      borderRadius: '8px'
+    }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "header"
+    className: "header",
+    style: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px'
+    }
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", {
-    className: "h1"
+    className: "h1",
+    style: {
+      fontSize: '24px',
+      fontWeight: 'bold',
+      color: '#333'
+    }
   }, "Attendance Monitoring"), /*#__PURE__*/React.createElement("p", {
-    className: "p"
+    className: "p",
+    style: {
+      fontSize: '16px',
+      color: '#666'
+    }
   }, currentSession ? `Tracking: ${currentSession.examName}` : 'No active session')), /*#__PURE__*/React.createElement("div", null, currentSession ? /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       setSessions(prev => prev.map(s => s.id === currentSessionId ? {
@@ -170,7 +191,15 @@ const Attendance = () => {
       } : s));
       setCurrentSessionId(null);
     },
-    className: "end-session"
+    className: "end-session",
+    style: {
+      padding: '10px 20px',
+      backgroundColor: '#e74c3c',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    }
   }, "End Session") : /*#__PURE__*/React.createElement("button", {
     onClick: async () => {
       const data = await markAllAbsent(AB_END_POINT);
@@ -182,13 +211,32 @@ const Attendance = () => {
         course: courseName
       });
     },
-    className: "start-session"
+    className: "start-session",
+    style: {
+      padding: '10px 20px',
+      backgroundColor: '#2ecc71',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    }
   }, "Start Session"))), error && /*#__PURE__*/React.createElement("div", {
-    className: "error-message"
+    className: "error-message",
+    style: {
+      marginBottom: '20px',
+      padding: '10px',
+      backgroundColor: '#f8d7da',
+      color: '#721c24',
+      borderRadius: '4px'
+    }
   }, /*#__PURE__*/React.createElement("span", {
     className: "span"
   }, error)), /*#__PURE__*/React.createElement("div", {
-    className: "tab-navigation"
+    className: "tab-navigation",
+    style: {
+      display: 'flex',
+      marginBottom: '20px'
+    }
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => {
       setActiveTab('current');
@@ -196,158 +244,392 @@ const Attendance = () => {
     },
     className: activeTab === 'current' ? 'active' : '',
     style: {
-      color: 'black'
+      flex: 1,
+      padding: '10px',
+      backgroundColor: activeTab === 'current' ? '#3498db' : '#ecf0f1',
+      color: activeTab === 'current' ? '#fff' : '#333',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      marginRight: '10px'
     }
   }, "Current Session"), /*#__PURE__*/React.createElement("button", {
     onClick: () => setActiveTab('history'),
     className: activeTab === 'history' ? 'active' : '',
     style: {
-      color: 'black'
+      flex: 1,
+      padding: '10px',
+      backgroundColor: activeTab === 'history' ? '#3498db' : '#ecf0f1',
+      color: activeTab === 'history' ? '#fff' : '#333',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer'
     }
   }, "Session History")), activeTab === 'current' && currentSession && /*#__PURE__*/React.createElement("div", {
-    className: "current-session"
+    className: "current-session",
+    style: {
+      marginBottom: '20px',
+      padding: '20px',
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+    }
   }, /*#__PURE__*/React.createElement("h2", {
-    className: "h2"
+    className: "h2",
+    style: {
+      fontSize: '20px',
+      fontWeight: 'bold',
+      color: '#333',
+      marginBottom: '10px'
+    }
   }, currentSession.examName), /*#__PURE__*/React.createElement("div", {
-    className: "session-meta"
+    className: "session-meta",
+    style: {
+      marginBottom: '20px'
+    }
   }, /*#__PURE__*/React.createElement("p", {
-    className: "p"
+    className: "p",
+    style: {
+      fontSize: '16px',
+      color: '#666'
+    }
   }, "Room: ", currentSession.metadata.room), /*#__PURE__*/React.createElement("p", {
-    className: "p"
+    className: "p",
+    style: {
+      fontSize: '16px',
+      color: '#666'
+    }
   }, "Supervisor: ", currentSession.metadata.supervisor), /*#__PURE__*/React.createElement("p", {
-    className: "p"
+    className: "p",
+    style: {
+      fontSize: '16px',
+      color: '#666'
+    }
   }, "Started: ", formatDateTime(currentSession.startTime))), /*#__PURE__*/React.createElement("div", {
-    className: "attendance-table"
+    className: "attendance-table",
+    style: {
+      overflowX: 'auto'
+    }
   }, /*#__PURE__*/React.createElement("table", {
-    className: "table"
+    className: "table",
+    style: {
+      width: '100%',
+      borderCollapse: 'collapse'
+    }
   }, /*#__PURE__*/React.createElement("thead", {
-    className: "thead"
+    className: "thead",
+    style: {
+      backgroundColor: '#3498db',
+      color: '#fff'
+    }
   }, /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Student ID"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Name"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Status"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", {
     className: "tbody"
   }, currentSession.students.length > 0 ? currentSession.students.map(student => /*#__PURE__*/React.createElement("tr", {
     className: "tr",
-    key: student.id
+    key: student.id,
+    style: {
+      borderBottom: '1px solid #ddd'
+    }
   }, /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, student.registrationNumber), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, /*#__PURE__*/React.createElement(StatusBadge, {
     status: student.status
   })), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("td", {
-    className: "tr",
-    colSpan: "4"
+    className: "td",
+    colSpan: "4",
+    style: {
+      padding: '10px',
+      textAlign: 'center',
+      color: '#666'
+    }
   }, "No attendance records yet")))))), activeTab === 'history' && /*#__PURE__*/React.createElement("div", {
-    className: "session-history"
+    className: "session-history",
+    style: {
+      padding: '20px',
+      backgroundColor: '#fff',
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+    }
   }, /*#__PURE__*/React.createElement("table", {
-    className: "sessions-table"
+    className: "sessions-table",
+    style: {
+      width: '100%',
+      borderCollapse: 'collapse'
+    }
   }, /*#__PURE__*/React.createElement("thead", {
-    className: "thead"
+    className: "thead",
+    style: {
+      backgroundColor: '#3498db',
+      color: '#fff'
+    }
   }, /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Exam"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Course"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Date"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Duration"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Students"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Status"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Actions"))), /*#__PURE__*/React.createElement("tbody", {
     className: "tbody"
   }, sessions.length > 0 ? sessions.map(session => /*#__PURE__*/React.createElement(React.Fragment, {
     key: session.id
   }, /*#__PURE__*/React.createElement("tr", {
-    className: "tr"
+    className: "tr",
+    style: {
+      borderBottom: '1px solid #ddd'
+    }
   }, /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.examName), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.metadata.course || 'N/A'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.metadata.date || 'N/A'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.startTime && session.endTime ? `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` : 'N/A'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.students.length), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, session.endTime ? 'Completed' : 'Active'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, /*#__PURE__*/React.createElement("button", {
     className: "button",
-    onClick: () => setViewingSessionId(session.id)
+    onClick: () => setViewingSessionId(session.id),
+    style: {
+      padding: '5px 10px',
+      backgroundColor: '#3498db',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer'
+    }
   }, "View"))), viewingSessionId === session.id && /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("td", {
     className: "td",
-    colSpan: "7"
+    colSpan: "7",
+    style: {
+      padding: '10px'
+    }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "session-details"
+    className: "session-details",
+    style: {
+      padding: '20px',
+      backgroundColor: '#ecf0f1',
+      borderRadius: '8px'
+    }
   }, /*#__PURE__*/React.createElement("h4", {
-    className: "h4"
+    className: "h4",
+    style: {
+      fontSize: '18px',
+      fontWeight: 'bold',
+      color: '#333',
+      marginBottom: '10px'
+    }
   }, "Attendance Details for ", session.examName), /*#__PURE__*/React.createElement("table", {
-    className: "student-details-table"
+    className: "student-details-table",
+    style: {
+      width: '100%',
+      borderCollapse: 'collapse'
+    }
   }, /*#__PURE__*/React.createElement("thead", {
-    className: "thead"
+    className: "thead",
+    style: {
+      backgroundColor: '#3498db',
+      color: '#fff'
+    }
   }, /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Student ID"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Name"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Status"), /*#__PURE__*/React.createElement("th", {
-    className: "th"
+    className: "th",
+    style: {
+      padding: '10px',
+      textAlign: 'left'
+    }
   }, "Time Recorded"))), /*#__PURE__*/React.createElement("tbody", {
     className: "tbody"
   }, session.students.length > 0 ? session.students.map(student => /*#__PURE__*/React.createElement("tr", {
     className: "tr",
-    key: student.id
+    key: student.id,
+    style: {
+      borderBottom: '1px solid #ddd'
+    }
   }, /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, student.registrationNumber), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, student.name || 'N/A'), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, /*#__PURE__*/React.createElement(StatusBadge, {
     status: student.status
   })), /*#__PURE__*/React.createElement("td", {
-    className: "td"
+    className: "td",
+    style: {
+      padding: '10px'
+    }
   }, formatDateTime(student.timestamp)))) : /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("td", {
     className: "td",
-    colSpan: "4"
+    colSpan: "4",
+    style: {
+      padding: '10px',
+      textAlign: 'center',
+      color: '#666'
+    }
   }, "No attendance records")))), /*#__PURE__*/React.createElement("button", {
     onClick: () => setViewingSessionId(null),
-    className: "close-details"
+    className: "close-details",
+    style: {
+      padding: '10px 20px',
+      backgroundColor: '#e74c3c',
+      color: '#fff',
+      border: 'none',
+      borderRadius: '4px',
+      cursor: 'pointer',
+      marginTop: '10px'
+    }
   }, "Close Details")))))) : /*#__PURE__*/React.createElement("tr", {
     className: "tr"
   }, /*#__PURE__*/React.createElement("td", {
-    className: "tr",
-    colSpan: "7"
+    className: "td",
+    colSpan: "7",
+    style: {
+      padding: '10px',
+      textAlign: 'center',
+      color: '#666'
+    }
   }, "No sessions available"))))));
 };
 export default Attendance;

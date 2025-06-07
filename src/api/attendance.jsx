@@ -164,14 +164,14 @@ const Attendance = () => {
   };
 
   useEffect(() => {
-   console.log('Current Session:', courseName);  
-  }, [courseName]);
+    console.log('Current Session:', students);  
+  }, [students]);
   return (
-    <div className="container">
-      <div className="header">
+    <div className="container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+      <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
-          <h1 className='h1'>Attendance Monitoring</h1>
-          <p className='p'>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
+          <h1 className='h1' style={{ fontSize: '24px', fontWeight: 'bold', color: '#333' }}>Attendance Monitoring</h1>
+          <p className='p' style={{ fontSize: '16px', color: '#666' }}>{currentSession ? `Tracking: ${currentSession.examName}` : 'No active session'}</p>
         </div>
         <div>
           {currentSession ? (
@@ -183,6 +183,7 @@ const Attendance = () => {
                 setCurrentSessionId(null);
               }}
               className="end-session"
+              style={{ padding: '10px 20px', backgroundColor: '#e74c3c', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
             >
               End Session
             </button>
@@ -199,6 +200,7 @@ const Attendance = () => {
                 })
               }}
               className="start-session"
+              style={{ padding: '10px 20px', backgroundColor: '#2ecc71', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
             >
               Start Session
             </button>
@@ -207,63 +209,80 @@ const Attendance = () => {
       </div>
 
       {error && (
-        <div className="error-message">
+        <div className="error-message" style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f8d7da', color: '#721c24', borderRadius: '4px' }}>
           <span className='span'>{error}</span>
         </div>
       )}
 
-      <div className="tab-navigation">
+      <div className="tab-navigation" style={{ display: 'flex', marginBottom: '20px' }}>
         <button
           onClick={() => {
             setActiveTab('current');
             setViewingSessionId(null);
           }}
           className={activeTab === 'current' ? 'active' : ''}
-          style={{ color: 'black' }}
+          style={{
+            flex: 1,
+            padding: '10px',
+            backgroundColor: activeTab === 'current' ? '#3498db' : '#ecf0f1',
+            color: activeTab === 'current' ? '#fff' : '#333',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            marginRight: '10px'
+          }}
         >
           Current Session
         </button>
         <button
           onClick={() => setActiveTab('history')}
           className={activeTab === 'history' ? 'active' : ''}
-          style={{ color: 'black' }}
+          style={{
+            flex: 1,
+            padding: '10px',
+            backgroundColor: activeTab === 'history' ? '#3498db' : '#ecf0f1',
+            color: activeTab === 'history' ? '#fff' : '#333',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer'
+          }}
         >
           Session History
         </button>
       </div>
 
       {activeTab === 'current' && currentSession && (
-        <div className="current-session">
-          <h2 className='h2'>{currentSession.examName}</h2>
-          <div className="session-meta">
-            <p className='p'>Room: {currentSession.metadata.room}</p>
-            <p className='p'>Supervisor: {currentSession.metadata.supervisor}</p>
-            <p className='p'>Started: {formatDateTime(currentSession.startTime)}</p>
+        <div className="current-session" style={{ marginBottom: '20px', padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+          <h2 className='h2' style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>{currentSession.examName}</h2>
+          <div className="session-meta" style={{ marginBottom: '20px' }}>
+            <p className='p' style={{ fontSize: '16px', color: '#666' }}>Room: {currentSession.metadata.room}</p>
+            <p className='p' style={{ fontSize: '16px', color: '#666' }}>Supervisor: {currentSession.metadata.supervisor}</p>
+            <p className='p' style={{ fontSize: '16px', color: '#666' }}>Started: {formatDateTime(currentSession.startTime)}</p>
           </div>
 
-          <div className="attendance-table">
-            <table className="table">
-              <thead className='thead'>
+          <div className="attendance-table" style={{ overflowX: 'auto' }}>
+            <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead className='thead' style={{ backgroundColor: '#3498db', color: '#fff' }}>
                 <tr className='tr'>
-                  <th className='th'>Student ID</th>
-                  <th className='th'>Name</th>
-                  <th className='th'>Status</th>
-                  <th className='th'>Time Recorded</th>
+                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Student ID</th>
+                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Name</th>
+                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Status</th>
+                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Time Recorded</th>
                 </tr>
               </thead>
               <tbody className='tbody'>
                 {currentSession.students.length > 0 ? (
                   currentSession.students.map(student => (
-                    <tr className='tr' key={student.id}>
-                      <td className='td'>{student.registrationNumber}</td>
-                      <td className='td'>{student.name || 'N/A'}</td>
-                      <td className='td'><StatusBadge status={student.status} /></td>
-                      <td className='td'>{formatDateTime(student.timestamp)}</td>
+                    <tr className='tr' key={student.id} style={{ borderBottom: '1px solid #ddd' }}>
+                      <td className='td' style={{ padding: '10px' }}>{student.registrationNumber}</td>
+                      <td className='td' style={{ padding: '10px' }}>{student.name || 'N/A'}</td>
+                      <td className='td' style={{ padding: '10px' }}><StatusBadge status={student.status} /></td>
+                      <td className='td' style={{ padding: '10px' }}>{formatDateTime(student.timestamp)}</td>
                     </tr>
                   ))
                 ) : (
                   <tr className='tr'>
-                    <td className='tr' colSpan="4">No attendance records yet</td>
+                    <td className='td' colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#666' }}>No attendance records yet</td>
                   </tr>
                 )}
               </tbody>
@@ -273,67 +292,67 @@ const Attendance = () => {
       )}
 
       {activeTab === 'history' && (
-        <div className="session-history">
-          <table className="sessions-table">
-            <thead className='thead'>
+        <div className="session-history" style={{ padding: '20px', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+          <table className="sessions-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead className='thead' style={{ backgroundColor: '#3498db', color: '#fff' }}>
               <tr className='tr'>
-                <th className='th'>Exam</th>
-                <th className='th'>Course</th>
-                <th className='th'>Date</th>
-                <th className='th'>Duration</th>
-                <th className='th'>Students</th>
-                <th className='th'>Status</th>
-                <th className='th'>Actions</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Exam</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Course</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Date</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Duration</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Students</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Status</th>
+                <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Actions</th>
               </tr>
             </thead>
             <tbody className='tbody'>
               {sessions.length > 0 ? (
                 sessions.map((session) => (
                   <React.Fragment key={session.id}>
-                    <tr className='tr'>
-                      <td className='td'>{session.examName}</td>
-                      <td className='td'>{session.metadata.course || 'N/A'}</td>
-                      <td className='td'>{session.metadata.date || 'N/A'}</td>
-                      <td className='td'>
+                    <tr className='tr' style={{ borderBottom: '1px solid #ddd' }}>
+                      <td className='td' style={{ padding: '10px' }}>{session.examName}</td>
+                      <td className='td' style={{ padding: '10px' }}>{session.metadata.course || 'N/A'}</td>
+                      <td className='td' style={{ padding: '10px' }}>{session.metadata.date || 'N/A'}</td>
+                      <td className='td' style={{ padding: '10px' }}>
                         {session.startTime && session.endTime ?
                           `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` :
                           'N/A'}
                       </td>
-                      <td className='td'>{session.students.length}</td>
-                      <td className='td'>{session.endTime ? 'Completed' : 'Active'}</td>
-                      <td className='td'>
-                        <button className='button' onClick={() => setViewingSessionId(session.id)}>
+                      <td className='td' style={{ padding: '10px' }}>{session.students.length}</td>
+                      <td className='td' style={{ padding: '10px' }}>{session.endTime ? 'Completed' : 'Active'}</td>
+                      <td className='td' style={{ padding: '10px' }}>
+                        <button className='button' onClick={() => setViewingSessionId(session.id)} style={{ padding: '5px 10px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                           View
                         </button>
                       </td>
                     </tr>
                     {viewingSessionId === session.id && (
                       <tr className='tr'>
-                        <td className='td' colSpan="7">
-                          <div className="session-details">
-                            <h4 className='h4'>Attendance Details for {session.examName}</h4>
-                            <table className="student-details-table">
-                              <thead className='thead'>
+                        <td className='td' colSpan="7" style={{ padding: '10px' }}>
+                          <div className="session-details" style={{ padding: '20px', backgroundColor: '#ecf0f1', borderRadius: '8px' }}>
+                            <h4 className='h4' style={{ fontSize: '18px', fontWeight: 'bold', color: '#333', marginBottom: '10px' }}>Attendance Details for {session.examName}</h4>
+                            <table className="student-details-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+                              <thead className='thead' style={{ backgroundColor: '#3498db', color: '#fff' }}>
                                 <tr className='tr'>
-                                  <th className='th'>Student ID</th>
-                                  <th className='th'>Name</th>
-                                  <th className='th'>Status</th>
-                                  <th className='th'>Time Recorded</th>
+                                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Student ID</th>
+                                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Name</th>
+                                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Status</th>
+                                  <th className='th' style={{ padding: '10px', textAlign: 'left' }}>Time Recorded</th>
                                 </tr>
                               </thead>
                               <tbody className='tbody'>
                                 {session.students.length > 0 ? (
                                   session.students.map((student) => (
-                                    <tr className='tr' key={student.id}>
-                                      <td className='td'>{student.registrationNumber}</td>
-                                      <td className='td'>{student.name || 'N/A'}</td>
-                                      <td className='td'><StatusBadge status={student.status} /></td>
-                                      <td className='td'>{formatDateTime(student.timestamp)}</td>
+                                    <tr className='tr' key={student.id} style={{ borderBottom: '1px solid #ddd' }}>
+                                      <td className='td' style={{ padding: '10px' }}>{student.registrationNumber}</td>
+                                      <td className='td' style={{ padding: '10px' }}>{student.name || 'N/A'}</td>
+                                      <td className='td' style={{ padding: '10px' }}><StatusBadge status={student.status} /></td>
+                                      <td className='td' style={{ padding: '10px' }}>{formatDateTime(student.timestamp)}</td>
                                     </tr>
                                   ))
                                 ) : (
                                   <tr className='tr'>
-                                    <td className='td' colSpan="4">No attendance records</td>
+                                    <td className='td' colSpan="4" style={{ padding: '10px', textAlign: 'center', color: '#666' }}>No attendance records</td>
                                   </tr>
                                 )}
                               </tbody>
@@ -341,6 +360,7 @@ const Attendance = () => {
                             <button
                               onClick={() => setViewingSessionId(null)}
                               className="close-details"
+                              style={{ padding: '10px 20px', backgroundColor: '#e74c3c', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '10px' }}
                             >
                               Close Details
                             </button>
@@ -352,7 +372,7 @@ const Attendance = () => {
                 ))
               ) : (
                 <tr className='tr'>
-                  <td className='tr' colSpan="7">No sessions available</td>
+                  <td className='td' colSpan="7" style={{ padding: '10px', textAlign: 'center', color: '#666' }}>No sessions available</td>
                 </tr>
               )}
             </tbody>
