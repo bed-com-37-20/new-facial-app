@@ -5,8 +5,9 @@ import { Home } from "../../pages";
 import EnrollmentPage from "../../api/enrollment/enrollments";
 import Report from "../../api/reports/report";
 import NewExam from "../../api/examPage/newExam";
-import SelectStudents from "../../api/examPage/select-students";
+import SelectStudents from "../../api/examPage/ExamForm";
 import Attendance from "../../api/attendance";
+import ExamForm from "../../api/examPage/ExamForm";
 
 export default function RouteList() {
     return [
@@ -39,6 +40,11 @@ export default function RouteList() {
             path: "/api/attendance",
             layout: SideBarLayout,
             component: () => <Attendance />
+        }
+        , {
+            path: "/api/examPage/ExamForm",
+            layout: SideBarLayout,
+            component: () => <ExamForm />
         }
 
 

@@ -1,0 +1,280 @@
+/* Base Container */
+.exam-form-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Exam Details Form */
+.exam-details-form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+    color: #101345;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #101345;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #101345;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+/* Student Selection Section */
+.student-selection-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.selection-title {
+    color: #101345;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.org-unit-selector {
+    margin-bottom: 1.5rem;
+}
+
+.org-unit-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #101345;
+}
+
+.org-unit-select {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.divider {
+    margin: 1.5rem 0;
+    background-color: #eee;
+}
+
+.student-search-box {
+    margin-bottom: 1.5rem;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.loading-message {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+/* Student Table */
+.student-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-header {
+    background-color: #f5f5f5;
+}
+
+.table-header th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #101345;
+}
+
+.table-body td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.student-row:hover {
+    background-color: #f9f9f9;
+}
+
+.checkbox-header,
+.student-checkbox {
+    width: 40px;
+    text-align: center;
+}
+
+.select-all-checkbox,
+.student-select-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.no-students-row {
+    text-align: center;
+}
+
+.no-students-message {
+    padding: 2rem;
+    color: #666;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #101345;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1a1d6e;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #101345;
+    border: 1px solid #101345;
+}
+
+.btn-secondary:hover {
+    background-color: #f0f0f0;
+}
+
+.btn-back {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.btn-back:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-submit:hover {
+    background-color: #3e8e41;
+}
+
+.btn-submit:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.selection-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+/* Success Alert */
+.success-alert {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #4CAF50;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .org-unit-select {
+        max-width: 100%;
+    }
+
+    .selection-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
