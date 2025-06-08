@@ -46,21 +46,47 @@ const Attendance = () => {
   const saveSessionToServer = async (session) => {
     try {
       setIsLoading(true);
-      const response = await fetch(SAVE_SESSION_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(session),
-      });
 
-      if (!response.ok) {
-        throw new Error(`Failed to save session: ${response.statusText}`);
-      }
+      // Filter the data to only include what we want to send to the server
+      const filteredSession = {
+        id: session.id,
+        examId: session.examId,
+        examName: session.examName,
+        startTime: session.startTime,
+        endTime: session.endTime,
+        // Filter students to only include those in metadata.selectedStudents
+        students: session.students.filter(student =>
+          session.metadata.selectedStudents.includes(student.registrationNumber)
+        ),
+        // Only include the necessary metadata
+        metadata: {
+          room: session.metadata.room,
+          supervisor: session.metadata.supervisor,
+          course: session.metadata.course,
+          date: session.metadata.date,
+          startTime: session.metadata.startTime,
+          endTime: session.metadata.endTime,
+          orgUnit: session.metadata.orgUnit,
+          // Include the selectedStudents array as is
+          selectedStudents: session.metadata.selectedStudents
+        }
+      };
 
-      const data = await response.json();
-      console.log('Session saved successfully:', data);
-      return data;
+      // const response = await fetch(SAVE_SESSION_ENDPOINT, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(filteredSession),
+      // });
+
+      // if (!response.ok) {
+      //   throw new Error(`Failed to save session: ${response.statusText}`);
+      // }
+
+      // const data = await response.json();
+      console.log('Session saved successfully:', filteredSession);
+      return filteredSession;
     } catch (err) {
       console.error('Error saving session:', err);
       setError(`Failed to save session: ${err.message}`);

@@ -11,7 +11,7 @@ const markAllAbsent = async (url) => {
         console.log('Response:', data);
         return data;
     } catch (error) {
-        console.error('Error posting data:', error);
+        alert('Error posting data:', error);
         throw error;
     }
 };
