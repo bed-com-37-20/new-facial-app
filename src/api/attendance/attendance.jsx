@@ -11,8 +11,7 @@ const Attendance = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
   const [refreshInterval, setRefreshInterval] = useState(20000);
-  const [matchedTeiIds, setMatchedTeiIds] = useState([]);
-
+  
   const location = useLocation();
   const {
     courseName,
