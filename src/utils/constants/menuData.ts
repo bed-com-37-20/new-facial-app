@@ -62,7 +62,7 @@ function menuData(currentAcademicYear: string): MenuDataProps[] {
                     leftLabel: "Total",
                     appName: "",
                     formLink: "form-attendance",
-                    route: "api/attendance", //`attendance?sectionType=student&academicYear=${currentAcademicYear}`,
+                    route: "api/attendance/attendance", //`attendance?sectionType=student&academicYear=${currentAcademicYear}`,
                     disabled: false
                 },
                 {

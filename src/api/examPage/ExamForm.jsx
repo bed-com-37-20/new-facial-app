@@ -425,7 +425,7 @@ const ExamForm = () => {
         };
         setShowSuccessAlert(true);
         setTimeout(() => {
-            navigate('/api/attendance', { state: examData });
+            navigate('/api/attendance/attendance', { state: examData });
         }, 1500);
     };
 

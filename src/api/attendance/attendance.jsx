@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
-import { useDataQuery } from '@dhis2/app-runtime';
-import { markAllAbsent, camera } from './Attendance/hooks';
+import { markAllAbsent, camera } from '../Attendance/hooks';
 
 const Attendance = () => {
   const [sessions, setSessions] = useState([]);
@@ -13,7 +12,6 @@ const Attendance = () => {
   const [activeTab, setActiveTab] = useState('current');
   const [refreshInterval, setRefreshInterval] = useState(20000);
   const [matchedTeiIds, setMatchedTeiIds] = useState([]);
-  const [teiArray, setTeiArray] = useState([]);
 
   const location = useLocation();
   const {
@@ -35,21 +33,13 @@ const Attendance = () => {
   // Get the session being viewed
   const viewingSession = sessions.find(session => session.id === viewingSessionId);
 
-  // const PROGRAM_ID = 'TLvAWiCKRgq';
-  // const REG_NUM_ATTR_UID = 'ofiRHvsg4Mt';
-  // const ORG_UNIT_UID = orgUnit;
-
-  // // DHIS2 query for tracked entity instances
-  // const teiQuery = {
-  //   students: {
-  //     resource: 'trackedEntityInstances',
-  //     params: {
-  //       ou: ORG_UNIT_UID,
-  //     }
-  //   }
-  // };
-
-  // const { data: teiData, error: teiError, refetch: refetchTeis } = useDataQuery(teiQuery);
+  // Filter students based on registration numbers from location state
+  const filterStudents = (sessionStudents) => {
+    if (!students || !Array.isArray(students)) return [];
+    return sessionStudents.filter(student =>
+      students.includes(student.registrationNumber)
+    );
+  };
 
   // Initialize a new session
   const initNewSession = useCallback((sessionData) => {
@@ -79,10 +69,6 @@ const Attendance = () => {
 
     return newSession;
   }, [date, endTime, orgUnit, startTime, students]);
-
-  const findTei = (stNumber) => {
-    return teiArray.find((ti) => stNumber === ti.regNumber);
-  }
 
   // Fetch attendance data
   const fetchAttendanceData = useCallback(async () => {
@@ -164,7 +150,7 @@ const Attendance = () => {
   };
 
   useEffect(() => {
-    console.log('Current Session:', students);  
+    console.log('Current Session:', students);
   }, [students]);
   return (
     <div className="container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
@@ -271,8 +257,8 @@ const Attendance = () => {
                 </tr>
               </thead>
               <tbody className='tbody'>
-                {currentSession.students.length > 0 ? (
-                  currentSession.students.map(student => (
+                {filterStudents(currentSession.students).length > 0 ? (
+                  filterStudents(currentSession.students).map(student => (
                     <tr className='tr' key={student.id} style={{ borderBottom: '1px solid #ddd' }}>
                       <td className='td' style={{ padding: '10px' }}>{student.registrationNumber}</td>
                       <td className='td' style={{ padding: '10px' }}>{student.name || 'N/A'}</td>
@@ -318,7 +304,7 @@ const Attendance = () => {
                           `${Math.round((new Date(session.endTime) - new Date(session.startTime)) / 60000)} mins` :
                           'N/A'}
                       </td>
-                      <td className='td' style={{ padding: '10px' }}>{session.students.length}</td>
+                      <td className='td' style={{ padding: '10px' }}>{filterStudents(session.students).length}</td>
                       <td className='td' style={{ padding: '10px' }}>{session.endTime ? 'Completed' : 'Active'}</td>
                       <td className='td' style={{ padding: '10px' }}>
                         <button className='button' onClick={() => setViewingSessionId(session.id)} style={{ padding: '5px 10px', backgroundColor: '#3498db', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
@@ -341,8 +327,8 @@ const Attendance = () => {
                                 </tr>
                               </thead>
                               <tbody className='tbody'>
-                                {session.students.length > 0 ? (
-                                  session.students.map((student) => (
+                                {filterStudents(session.students).length > 0 ? (
+                                  filterStudents(session.students).map((student) => (
                                     <tr className='tr' key={student.id} style={{ borderBottom: '1px solid #ddd' }}>
                                       <td className='td' style={{ padding: '10px' }}>{student.registrationNumber}</td>
                                       <td className='td' style={{ padding: '10px' }}>{student.name || 'N/A'}</td>

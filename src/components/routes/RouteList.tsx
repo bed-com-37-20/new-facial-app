@@ -6,7 +6,7 @@ import EnrollmentPage from "../../api/enrollment/enrollments";
 import Report from "../../api/reports/report";
 import NewExam from "../../api/examPage/newExam";
 import SelectStudents from "../../api/examPage/ExamForm";
-import Attendance from "../../api/attendance";
+import Attendance from "../../api/attendance/attendance";
 import ExamForm from "../../api/examPage/ExamForm";
 
 export default function RouteList() {
@@ -37,9 +37,9 @@ export default function RouteList() {
             layout: SideBarLayout,
             component: () => <SelectStudents />
         }, {
-            path: "/api/attendance",
+            path: "/api/attendance/attendance",
             layout: SideBarLayout,
-            component: () => <NewExam />
+            component: () => <Attendance />
         }
         , {
             path: "/api/examPage/ExamForm",
