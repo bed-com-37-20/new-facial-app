@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { markAllAbsent, camera } from '../Attendance/hooks';
+import SaveFailedDialog from '../../components/alerts/dialog';
 
 const Attendance = () => {
   const [sessions, setSessions] = useState([]);
@@ -11,7 +12,10 @@ const Attendance = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('current');
   const [refreshInterval, setRefreshInterval] = useState(20000);
-  
+  const [cameraStarted, setCameraStarted] = useState(false);
+  const [networkError, setNetworkError] = useState(null);
+  const [failedSession, setFailedSession] = useState();
+  const [showDialog, setShowDialog] = useState(false);
   const location = useLocation();
   const {
     courseName,
@@ -48,40 +52,40 @@ const Attendance = () => {
 
       // Filter the data to only include what we want to send to the server
       const filteredSession = {
-        id: session.id,
-        examId: session.examId,
-        examName: session.examName,
-        startTime: session.startTime,
-        endTime: session.endTime,
-        // Filter students to only include those in metadata.selectedStudents
-        students: session.students.filter(student =>
-          session.metadata.selectedStudents.includes(student.registrationNumber)
-        ),
+        // id: session.id,
+        // examId: session.examId,
+        // examName: session.examName,
+        // startTime: session.startTime,
+        // endTime: session.endTime,
+        // // Filter students to only include those in metadata.selectedStudents
+        // students: session.students.filter(student =>
+        //   session.metadata.selectedStudents.includes(student.registrationNumber)
+        // ),
         // Only include the necessary metadata
         metadata: {
           room: session.metadata.room,
           supervisor: session.metadata.supervisor,
-          course: session.metadata.course,
+          examName: session.metadata.course,
           date: session.metadata.date,
           startTime: session.metadata.startTime,
           endTime: session.metadata.endTime,
-          orgUnit: session.metadata.orgUnit,
+          // orgUnit: session.metadata.orgUnit,
           // Include the selectedStudents array as is
-          selectedStudents: session.metadata.selectedStudents
+          studentsIds: session.metadata.selectedStudents
         }
       };
 
-      // const response = await fetch(SAVE_SESSION_ENDPOINT, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(filteredSession),
-      // });
+      const response = await fetch(SAVE_SESSION_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filteredSession),
+      });
 
-      // if (!response.ok) {
-      //   throw new Error(`Failed to save session: ${response.statusText}`);
-      // }
+      if (!response.ok) {
+        setShowDialog(true);
+      }
 
       // const data = await response.json();
       console.log('Session saved successfully:', filteredSession);
@@ -89,6 +93,7 @@ const Attendance = () => {
     } catch (err) {
       console.error('Error saving session:', err);
       setError(`Failed to save session: ${err.message}`);
+      setShowDialog(true);
       throw err;
     } finally {
       setIsLoading(false);
@@ -112,7 +117,7 @@ const Attendance = () => {
         metadata: {
           room: sessionData.room,
           supervisor: sessionData.supervisor,
-          course: sessionData.course,
+          courseName: sessionData.course,
           date: date,
           startTime: startTime,
           endTime: endTime,
@@ -153,7 +158,7 @@ const Attendance = () => {
         s.id === sessionId ? updatedSession : s
       ));
       setCurrentSessionIds(prev => prev.filter(id => id !== sessionId));
-
+      setFailedSession(updatedSession)
       // Save to server
       await saveSessionToServer(updatedSession);
       setError(null);
@@ -167,7 +172,8 @@ const Attendance = () => {
   const fetchAttendanceData = useCallback(async (sessionId) => {
     try {
 
-      
+      const cameraCheck = camera(CAMERA_START,setCameraStarted)
+
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
       if (!response.ok) {
         throw new Error('Failed to fetch attendance data');
@@ -255,7 +261,18 @@ const Attendance = () => {
     return `${minutes} mins`;
   };
 
+
+  const retrySave = () => {
+    setShowDialog(false);
+    saveSessionToServer(failedSession);
+  };
+
+  const cancelSave = () => {
+    setShowDialog(false);
+    console.log('Save canceled');
+  };
   return (
+    
     <div className="container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
       <div className="header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <div>
@@ -270,7 +287,7 @@ const Attendance = () => {
           <button
             onClick={async () => {
               try {
-                const data = await markAllAbsent(AB_END_POINT);
+                const data = await markAllAbsent(AB_END_POINT,setNetworkError);
                 const newSession = await initNewSession({
                   examId: courseName.replace(/\s+/g, '_') + '_' + Date.now(),
                   examName: courseName,
@@ -294,25 +311,44 @@ const Attendance = () => {
               marginLeft: '10px'
             }}
             disabled={isLoading}
-          >
-            {isLoading ? 'Starting...' : 'Start New Session'}
-          </button>
-        </div>
-      </div>
+            >
+            {networkError ? 'Connecting...' : 'Start New Session'}
+            </button>
+            <div className="camera-status-log" style={{
+            marginTop: '10px',
+            padding: '10px',
+            backgroundColor: '#f1f1f1',
+            borderRadius: '4px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            color: '#333',
+            fontSize: '14px'
+            }}>
+            <p style={{ margin: 0 }}>
+              Camera Status
+            </p>
+            <span style={{
+              color: cameraStarted ? '#2ecc71' : '#e74c3c',
+              fontWeight: 'bold'
+            }}>
+              {cameraStarted ? 'Connected' : 'Disconnected'}
+            </span>
+            </div>
+          </div>
+          </div>
 
-      {error && (
-        <div className="error-message" style={{
-          marginBottom: '20px',
-          padding: '10px',
-          backgroundColor: '#f8d7da',
-          color: '#721c24',
-          borderRadius: '4px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <span className='span'>{error}</span>
-          <button
+          {error && (
+          <div className="error-message" style={{
+            marginBottom: '20px',
+            padding: '10px',
+            backgroundColor: '#f8d7da',
+            color: '#721c24',
+            borderRadius: '4px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <span className='span'>{error}</span>
+            <button
             onClick={() => setError(null)}
             style={{
               background: 'none',
@@ -321,15 +357,15 @@ const Attendance = () => {
               cursor: 'pointer',
               fontSize: '16px'
             }}
-          >
+            >
             ×
-          </button>
-        </div>
-      )}
+            </button>
+          </div>
+          )}
 
-      <div className="tab-navigation" style={{ display: 'flex', marginBottom: '20px' }}>
-        <button
-          onClick={() => {
+          <div className="tab-navigation" style={{ display: 'flex', marginBottom: '20px' }}>
+          <button
+            onClick={() => {
             setActiveTab('current');
             setViewingSessionId(null);
           }}
@@ -562,6 +598,78 @@ const Attendance = () => {
               )}
             </tbody>
           </table>
+        </div>
+      )} 
+      {showDialog && (
+        <div className="container" style={{ fontFamily: 'Arial, sans-serif', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+          {/* Other content remains unchanged */}
+
+          {showDialog && (
+            <div
+              className="dialog-overlay"
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 1000,
+              }}
+            >
+              <div
+                className="dialog-box"
+                style={{
+                  backgroundColor: '#fff',
+                  padding: '20px',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                  width: '400px',
+                  maxWidth: '90%',
+                  textAlign: 'center',
+                }}
+              >
+                <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: '#333', marginBottom: '15px' }}>
+                  Save Failed
+                </h2>
+                <p style={{ fontSize: '16px', color: '#666', marginBottom: '20px' }}>
+                  There was an issue saving the session. Would you like to retry?
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <button
+                    onClick={retrySave}
+                    style={{
+                      padding: '10px 20px',
+                      backgroundColor: '#3498db',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      marginRight: '10px',
+                    }}
+                  >
+                    Retry
+                  </button>
+                  <button
+                    onClick={cancelSave}
+                    style={{
+                      padding: '10px 20px',
+                      backgroundColor: '#e74c3c',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

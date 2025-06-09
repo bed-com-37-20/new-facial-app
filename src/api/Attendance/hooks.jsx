@@ -1,6 +1,7 @@
-const markAllAbsent = async (url) => {
+const markAllAbsent = async (url,setNetworkError) => {
 
     try {
+        setNetworkError(true);
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -9,18 +10,21 @@ const markAllAbsent = async (url) => {
 
         const data = await response.json();
         console.log('Response:', data);
+        setNetworkError(false);
         return data;
     } catch (error) {
-        alert('Error posting data:', error);
+        alert('Error Creating Session, Check Your Network Connectivity:', error);
+        setNetworkError(false);
         throw error;
     }
 };
 
 
 
-const camera =  (url) => {
+const camera =  (url,setCameraStarted) => {
 
     try {
+        setCameraStarted(true)
         fetch(url, {
             method: 'POST',
             headers: {
@@ -29,15 +33,17 @@ const camera =  (url) => {
             
         }).then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                setCameraStarted(false)
+                // throw new Error(`HTTP error! status: ${response.status}`);
             }
+          
             return response.json();
         }).then(data => {
-            console.log('Response:', data);
+            setCameraStarted(false)
             return data;
         });
     } catch (error) {
-        console.error('Error posting data:', error);
+        alert('Error Connecting to Camera, Check Your Camera Connectivity:');
         throw error;
     }
 };
