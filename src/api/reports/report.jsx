@@ -3,26 +3,44 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './report.css';
+import CourseDisplay from './displayCourse'; // Adjust the import path as necessary
 const Report = () => {
     const location = useLocation();
     const { exam } = location.state || {};
     const [showStudents, setShowStudents] = useState(false);
-    const allStudents = [
-        { Name: "Plaston Zanda", RegNumber: "bed-com-10-20" },
-        { Name: "John Banda", RegNumber: "bed-com-11-20" },
-        { Name: "Jane Phiri", RegNumber: "bed-com-13-20" },
-        { Name: "Michael Sata", RegNumber: "bed-com-14-20" },
-        { Name: "Edgar Lungu", RegNumber: "bed-com-15-20" },
-    ];
+    const [students, setStudents] = useState([]);
+
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const data = await response.json();
+                // Handle both single exam and array of exams
+                setStudents(Array.isArray(data) ? data : [data]);
+            } catch (error) {
+                setExams([]);
+                console.error('Error fetching courses:', error);
+            }
+        };
+        fetchCourses();
+    }, []);
+
+
+
 
     if (!exam) {
         return (
-            <div className="no-data-container">
-                <div className="no-data-card">
-                    <h2 style={{ color: 'black' }}>No Exam Data Available</h2>
-                    <p>Please select an exam from the exam list to view its report.</p>
-                </div>
-            </div>
+            // <div className="no-data-container">
+            //     <div className="no-data-card">
+            //         <h2 style={{ color: 'black' }}>No Exam Data Available</h2>
+            //         <p>Please select an exam from the exam list to view its report.</p>
+            //     </div>
+            // </div>
+            <CourseDisplay courses={students} />
         );
     }
 
@@ -36,7 +54,10 @@ const Report = () => {
     };
 
 
- 
+ useEffect(() => {
+        // Reset showStudents when exam changes
+        console.log("Exam changed:", exam);
+    }, [exam]);
     
     return (
         <div className="report-container">
@@ -44,7 +65,7 @@ const Report = () => {
                 <h1 style={{ color: 'black' }}
                 >Exam Report Summary</h1>
                 <div className="exam-meta">
-                    <span className="exam-course" style={{ color: 'black' }} >{exam.courseName}</span>
+                    <span className="exam-course" style={{ color: 'black' }} >{exam.examName}</span>
                     <span className="exam-date" style={{ color: 'black' }} >{formatDate(exam.date)}</span>
                 </div>
             </div>
@@ -53,7 +74,7 @@ const Report = () => {
        
                 <div className="detail-card">
                     <h3>Supervisor</h3>
-                    <p>{exam.supervisorName}</p>
+                    <p>{exam.supervisor}</p>
                 </div>
                 <div className="detail-card">
                     <h3>Time</h3>
@@ -63,53 +84,48 @@ const Report = () => {
                     <h3>Room</h3>
                     <p>{exam.room}</p>
                 </div>
-                <div className="detail-card students-card" onClick={handleViewAllClick}>
-                    <h3>Students</h3>
-                    {/* <p>{allStudents.length} enrolled</p> */}
-                    <button className="view-students-btn">
-                        {showStudents ? "Hide List" : "List All"}
-                    </button>
-                </div>
+             
             </div>
 
-            {showStudents && (
-                <div className="modal-overlay">
+          
+                <div className="fulltable">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h2 style={{ color: 'black' }} >Students for {exam.courseName}</h2>
-                            {/* <button className="close-modal" onClick={handleViewAllClick}>
-                Close
-              </button> */}
-                        </div>
-                        <div className="students-table-container">
-                            <table className="students-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Registration Number</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {allStudents.map((student, index) => (
-                                        <tr key={index}>
-                                            <td>{index + 1}</td>
-                                            <td>{student.Name}</td>
-                                            <td>{student.RegNumber}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="modal-footer">
-                            <p>Total students: {allStudents.length}</p>
-                            <button className="close-btn" onClick={handleViewAllClick}>
-                                Close
-                            </button>
-                        </div>
+                        <h2 style={{ color: 'black' }} >Students for {exam.examName} </h2>
+                        <p>Total : {exam.students.length}</p>
+                            
+                                                    </div>
+                                                    <div className="students-table-container">
+                                                        <table className="students-table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>Name</th>
+                                                                    <th>Registration Number</th>
+                                                                    <th>Status</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {exam.students.map((student, index) => (
+                                                                    <tr key={index}>
+                                                                        <td>{index + 1}</td>
+                                                                        <td>{student.name}</td>
+                                                                        <td>{student.registrationNumber}</td>
+                                                                        <td 
+                                                                            className={student.status === 'Absent' ? 'status-absent' : 'status-present'}
+                                                                            style={{ color: student.status === 'Absent' ? 'green' : 'red' }}
+                                                                        >
+                                                                           <p>{student.status}</p> 
+                                                                        </td>
+                                                                    </tr>
+                                                                ))}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                  
                     </div>
                 </div>
-            )}
+           
 
         </div>
     );

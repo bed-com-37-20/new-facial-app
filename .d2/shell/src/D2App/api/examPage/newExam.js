@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { Divider } from '@material-ui/core';
 import './exam.css';
+import { Trash } from 'lucide-react';
 const ORG_UNITS_QUERY = {
   orgUnits: {
     resource: 'organisationUnits',
@@ -53,6 +54,7 @@ const NewExam = () => {
         }
         const data = await response.json();
         // Handle both single exam and array of exams
+        console.log('Fetched exams:', data);
         setExams(Array.isArray(data) ? data : [data]);
       } catch (error) {
         setExams([]);
@@ -74,6 +76,7 @@ const NewExam = () => {
     }
   });
   useEffect(() => {
+    // console.log(exams)
     if (selectedOrgUnit) {
       refetchStudents({
         orgUnitId: selectedOrgUnit
@@ -147,38 +150,71 @@ const NewExam = () => {
     d: "M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
   })), "New"))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", null, "Below is a summary of past exams. You can view details or create a new exam using the options provided."), /*#__PURE__*/React.createElement("div", {
     className: "card-container"
-  }, filteredExams.length > 0 ? filteredExams.map(exam => {
-    var _exam$students;
-    return /*#__PURE__*/React.createElement("div", {
-      key: exam.id,
-      className: "exam-card"
-    }, /*#__PURE__*/React.createElement("h3", null, exam.examName), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("strong", null, "Date:"), ' ', new Date(exam.date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })), /*#__PURE__*/React.createElement("p", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("strong", null, "Room:"), " ", exam.room), /*#__PURE__*/React.createElement("p", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("strong", null, "Supervisor:"), " ", exam.supervisor), /*#__PURE__*/React.createElement("p", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("strong", null, "Time:"), " ", exam.startTime, " - ", exam.endTime), /*#__PURE__*/React.createElement("p", {
-      className: "p1"
-    }, /*#__PURE__*/React.createElement("strong", null, "Attendance:"), " ", getAttendanceStatus(exam)), ((_exam$students = exam.students) === null || _exam$students === void 0 ? void 0 : _exam$students.length) > 0 && /*#__PURE__*/React.createElement("div", {
-      className: "student-preview"
-    }, /*#__PURE__*/React.createElement("strong", null, "Students:"), /*#__PURE__*/React.createElement("ul", null, exam.students.slice(0, 3).map(student => /*#__PURE__*/React.createElement("li", {
-      key: student.id
-    }, student.name, " (", student.registrationNumber, ") - ", student.status)), exam.students.length > 3 && /*#__PURE__*/React.createElement("li", null, "+", exam.students.length - 3, " more...")))), /*#__PURE__*/React.createElement("button", {
-      className: "secondary-btn",
-      onClick: () => navigate('/api/reports/report', {
-        state: {
-          exam
+  }, filteredExams.length > 0 ? filteredExams.map(exam => /*#__PURE__*/React.createElement("div", {
+    key: exam.id,
+    className: "exam-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    }
+  }, /*#__PURE__*/React.createElement("h3", null, exam.examName), /*#__PURE__*/React.createElement("button", {
+    style: {
+      color: 'red',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer',
+      margin: '0 10px'
+    },
+    onClick: () => {
+      // Add delete functionality here
+      const deleteExam = async examId => {
+        console.log('Deleting exam with ID:', examId);
+        try {
+          const response = await fetch(`https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourseById`, {
+            method: 'DELETE',
+            body: JSON.stringify({
+              "ids": [examId]
+            })
+          });
+          if (!response.ok) {
+            throw new Error('Failed to delete exam');
+          }
+          alert('Exam deleted successfully!');
+          setExams(prevExams => prevExams.filter(exam => exam.id !== examId));
+        } catch (error) {
+          console.error('Error deleting exam:', error);
+          alert('Failed to delete exam. Please try again.');
         }
-      })
-    }, "View Details"));
-  }) : /*#__PURE__*/React.createElement("div", {
+      };
+      deleteExam(exam.id);
+    }
+  }, /*#__PURE__*/React.createElement(Trash, {
+    size: 20
+  }))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
+    className: "p1"
+  }, /*#__PURE__*/React.createElement("strong", null, "Date:"), ' ', new Date(exam.date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })), /*#__PURE__*/React.createElement("p", {
+    className: "p1"
+  }, /*#__PURE__*/React.createElement("strong", null, "Room:"), " ", exam.room), /*#__PURE__*/React.createElement("p", {
+    className: "p1"
+  }, /*#__PURE__*/React.createElement("strong", null, "Supervisor:"), " ", exam.supervisor), /*#__PURE__*/React.createElement("p", {
+    className: "p1"
+  }, /*#__PURE__*/React.createElement("strong", null, "Time:"), " ", exam.startTime, " - ", exam.endTime), /*#__PURE__*/React.createElement("p", {
+    className: "p1"
+  }, /*#__PURE__*/React.createElement("strong", null, "Attendance:"), " ", getAttendanceStatus(exam))), /*#__PURE__*/React.createElement("button", {
+    className: "secondary-btn",
+    onClick: () => navigate('/api/reports/report', {
+      state: {
+        exam
+      }
+    })
+  }, "View Details"))) : /*#__PURE__*/React.createElement("div", {
     className: "empty-state"
   }, "No exams found.")), showSuccessAlert && /*#__PURE__*/React.createElement("div", {
     className: "success-alert"

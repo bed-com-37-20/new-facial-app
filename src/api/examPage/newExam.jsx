@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDataQuery } from '@dhis2/app-runtime';
 import { Divider } from '@material-ui/core';
 import './exam.css';
+import { Trash } from 'lucide-react';
 
 const ORG_UNITS_QUERY = {
     orgUnits: {
@@ -52,6 +53,7 @@ const NewExam = () => {
                 }
                 const data = await response.json();
                 // Handle both single exam and array of exams
+                console.log('Fetched exams:', data);
                 setExams(Array.isArray(data) ? data : [data]);
             } catch (error) {
                 setExams([]);
@@ -68,6 +70,7 @@ const NewExam = () => {
     });
 
     useEffect(() => {
+        // console.log(exams)
         if (selectedOrgUnit) {
             refetchStudents({ orgUnitId: selectedOrgUnit });
         }
@@ -162,7 +165,39 @@ const NewExam = () => {
                         {filteredExams.length > 0 ? (
                             filteredExams.map((exam) => (
                                 <div key={exam.id} className="exam-card">
+                                    <div style={{ display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                     <h3>{exam.examName}</h3>
+                                    <button
+                                       style={{color:'red', background: 'none', border: 'none', cursor: 'pointer',margin: '0 10px' }}
+                                        onClick={() => {
+                                            // Add delete functionality here
+                                            const deleteExam = async (examId) => {
+                                                console.log('Deleting exam with ID:', examId);
+                                                try {
+                                                    const response = await fetch(`https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourseById`, {
+
+                                                        method: 'DELETE',
+                                                        body: JSON.stringify({ "ids": [examId] }),
+                                                    });
+                                                    if (!response.ok) {
+                                                        throw new Error('Failed to delete exam');
+                                                    }
+                                                    alert('Exam deleted successfully!');
+                                                    setExams((prevExams) => prevExams.filter((exam) => exam.id !== examId));
+                                                } catch (error) {
+                                                    console.error('Error deleting exam:', error);
+                                                    alert('Failed to delete exam. Please try again.');
+                                                }
+                                            };
+
+                                            deleteExam(exam.id);
+                                            
+                                        }}
+                                    >
+                                        <Trash size={20} />
+                                    </button>
+                                    </div>
+                                 
                                     <Divider />
                                     <section>
                                         <p className="p1">
@@ -185,7 +220,7 @@ const NewExam = () => {
                                         <p className="p1">
                                             <strong>Attendance:</strong> {getAttendanceStatus(exam)}
                                         </p>
-                                        {exam.students?.length > 0 && (
+                                        {/* {exam.students?.length > 0 && (
                                             <div className="student-preview">
                                                 <strong>Students:</strong>
                                                 <ul>
@@ -199,7 +234,7 @@ const NewExam = () => {
                                                     )}
                                                 </ul>
                                             </div>
-                                        )}
+                                        )} */}
                                     </section>
                                     <button
                                         className="secondary-btn"
