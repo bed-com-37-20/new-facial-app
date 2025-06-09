@@ -319,3 +319,27 @@ export const useProgramsEvents = (programId, ou, dhis2BaseUrl, dhis2Auth, tracke
 
 // 2. Without trackedEntityInstance
 // const { events, loading, error } = useProgramsEvents('program123', 'orgUnit456', baseUrl, auth);
+
+export const getHistories = async (url, setHistories) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  setLoading(true);
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`Failed to fetch histories: ${text}`);
+    }
+    const data = await response.json();
+    setHistories(data);
+  } catch (err) {
+    setError(err);
+    console.error('Error fetching histories:', err);
+  } finally {
+    setLoading(false);
+    return {
+      loading,
+      error
+    };
+  }
+};

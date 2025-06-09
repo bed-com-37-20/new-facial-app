@@ -29,31 +29,7 @@ const STUDENTS_QUERY = {
 const NewExam = () => {
   var _orgUnitData$orgUnits, _studentData$students;
   const [filter, setFilter] = useState('');
-  const [exams] = useState([{
-    id: 1,
-    courseName: 'SCE 421',
-    date: '2023-10-01',
-    room: '101',
-    supervisorName: 'Joshua Judge',
-    startTime: '09:00',
-    endTime: '11:00'
-  }, {
-    id: 2,
-    courseName: 'COM 211',
-    date: '2023-09-15',
-    room: '202',
-    supervisorName: 'Isaac Mwakabila',
-    startTime: '10:00',
-    endTime: '12:00'
-  }, {
-    id: 3,
-    courseName: 'MAT 211',
-    date: '2023-08-20',
-    room: '303',
-    supervisorName: 'Alice Namagale',
-    startTime: '13:00',
-    endTime: '15:00'
-  }]);
+  const [exams, setExams] = useState([]);
   const [newExam, setNewExam] = useState({
     courseName: '',
     date: '',
@@ -68,6 +44,23 @@ const NewExam = () => {
   const [showStudentSelection, setShowStudentSelection] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const navigate = useNavigate();
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses');
+        }
+        const data = await response.json();
+        // Handle both single exam and array of exams
+        setExams(Array.isArray(data) ? data : [data]);
+      } catch (error) {
+        setExams([]);
+        console.error('Error fetching courses:', error);
+      }
+    };
+    fetchCourses();
+  }, []);
   const {
     data: orgUnitData
   } = useDataQuery(ORG_UNITS_QUERY);
@@ -89,7 +82,10 @@ const NewExam = () => {
   }, [selectedOrgUnit, refetchStudents]);
   const orgUnits = (orgUnitData === null || orgUnitData === void 0 ? void 0 : (_orgUnitData$orgUnits = orgUnitData.orgUnits) === null || _orgUnitData$orgUnits === void 0 ? void 0 : _orgUnitData$orgUnits.organisationUnits) || [];
   const students = (studentData === null || studentData === void 0 ? void 0 : (_studentData$students = studentData.students) === null || _studentData$students === void 0 ? void 0 : _studentData$students.trackedEntityInstances) || [];
-  const filteredExams = exams.filter(exam => exam.courseName.toLowerCase().includes(filter.toLowerCase()) || exam.date.includes(filter));
+  const filteredExams = exams.filter(exam => {
+    var _exam$examName, _exam$date;
+    return ((_exam$examName = exam.examName) === null || _exam$examName === void 0 ? void 0 : _exam$examName.toLowerCase().includes(filter.toLowerCase())) || ((_exam$date = exam.date) === null || _exam$date === void 0 ? void 0 : _exam$date.includes(filter));
+  });
   const filteredStudents = students.filter(student => {
     var _student$attributes$f, _student$attributes$f2, _student$attributes$f3, _student$attributes$f4;
     const firstName = ((_student$attributes$f = student.attributes.find(attr => attr.code === 'fname')) === null || _student$attributes$f === void 0 ? void 0 : _student$attributes$f.value) || '';
@@ -122,6 +118,11 @@ const NewExam = () => {
   const handleOrgUnitChange = e => {
     setSelectedOrgUnit(e.target.value);
   };
+  const getAttendanceStatus = exam => {
+    if (!exam.students) return 'No students registered';
+    const presentCount = exam.students.filter(s => s.status === 'present').length;
+    return `${presentCount}/${exam.students.length} students present`;
+  };
   return /*#__PURE__*/React.createElement("div", {
     className: "exam-container"
   }, !showStudentSelection ? /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
@@ -130,7 +131,7 @@ const NewExam = () => {
     className: "search-box"
   }, /*#__PURE__*/React.createElement("input", {
     type: "text",
-    placeholder: "Search by course name or date...",
+    placeholder: "Search by exam name or date...",
     value: filter,
     onChange: e => setFilter(e.target.value)
   }), /*#__PURE__*/React.createElement("button", {
@@ -146,29 +147,38 @@ const NewExam = () => {
     d: "M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
   })), "New"))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("p", null, "Below is a summary of past exams. You can view details or create a new exam using the options provided."), /*#__PURE__*/React.createElement("div", {
     className: "card-container"
-  }, filteredExams.length > 0 ? filteredExams.map(exam => /*#__PURE__*/React.createElement("div", {
-    key: exam.id,
-    className: "exam-card"
-  }, /*#__PURE__*/React.createElement("h3", null, exam.courseName), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
-    className: "p1"
-  }, /*#__PURE__*/React.createElement("strong", null, "Date:"), ' ', new Date(exam.date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })), /*#__PURE__*/React.createElement("p", {
-    className: "p1"
-  }, /*#__PURE__*/React.createElement("strong", null, "Room:"), " ", exam.room), /*#__PURE__*/React.createElement("p", {
-    className: "p1"
-  }, /*#__PURE__*/React.createElement("strong", null, "Supervisor:"), " ", exam.supervisorName), /*#__PURE__*/React.createElement("p", {
-    className: "p"
-  }, /*#__PURE__*/React.createElement("strong", null, "Time:"), " ", exam.startTime, " - ", exam.endTime)), /*#__PURE__*/React.createElement("button", {
-    className: "secondary-btn",
-    onClick: () => navigate('/api/reports/report', {
-      state: {
-        exam
-      }
-    })
-  }, "View"))) : /*#__PURE__*/React.createElement("div", {
+  }, filteredExams.length > 0 ? filteredExams.map(exam => {
+    var _exam$students;
+    return /*#__PURE__*/React.createElement("div", {
+      key: exam.id,
+      className: "exam-card"
+    }, /*#__PURE__*/React.createElement("h3", null, exam.examName), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("strong", null, "Date:"), ' ', new Date(exam.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })), /*#__PURE__*/React.createElement("p", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("strong", null, "Room:"), " ", exam.room), /*#__PURE__*/React.createElement("p", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("strong", null, "Supervisor:"), " ", exam.supervisor), /*#__PURE__*/React.createElement("p", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("strong", null, "Time:"), " ", exam.startTime, " - ", exam.endTime), /*#__PURE__*/React.createElement("p", {
+      className: "p1"
+    }, /*#__PURE__*/React.createElement("strong", null, "Attendance:"), " ", getAttendanceStatus(exam)), ((_exam$students = exam.students) === null || _exam$students === void 0 ? void 0 : _exam$students.length) > 0 && /*#__PURE__*/React.createElement("div", {
+      className: "student-preview"
+    }, /*#__PURE__*/React.createElement("strong", null, "Students:"), /*#__PURE__*/React.createElement("ul", null, exam.students.slice(0, 3).map(student => /*#__PURE__*/React.createElement("li", {
+      key: student.id
+    }, student.name, " (", student.registrationNumber, ") - ", student.status)), exam.students.length > 3 && /*#__PURE__*/React.createElement("li", null, "+", exam.students.length - 3, " more...")))), /*#__PURE__*/React.createElement("button", {
+      className: "secondary-btn",
+      onClick: () => navigate('/api/reports/report', {
+        state: {
+          exam
+        }
+      })
+    }, "View Details"));
+  }) : /*#__PURE__*/React.createElement("div", {
     className: "empty-state"
   }, "No exams found.")), showSuccessAlert && /*#__PURE__*/React.createElement("div", {
     className: "success-alert"

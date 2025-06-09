@@ -26,35 +26,7 @@ const STUDENTS_QUERY = {
 
 const NewExam = () => {
     const [filter, setFilter] = useState('');
-    const [exams] = useState([
-        {
-            id: 1,
-            courseName: 'SCE 421',
-            date: '2023-10-01',
-            room: '101',
-            supervisorName: 'Joshua Judge',
-            startTime: '09:00',
-            endTime: '11:00',
-        },
-        {
-            id: 2,
-            courseName: 'COM 211',
-            date: '2023-09-15',
-            room: '202',
-            supervisorName: 'Isaac Mwakabila',
-            startTime: '10:00',
-            endTime: '12:00',
-        },
-        {
-            id: 3,
-            courseName: 'MAT 211',
-            date: '2023-08-20',
-            room: '303',
-            supervisorName: 'Alice Namagale',
-            startTime: '13:00',
-            endTime: '15:00',
-        },
-    ]);
+    const [exams, setExams] = useState([]);
     const [newExam, setNewExam] = useState({
         courseName: '',
         date: '',
@@ -70,6 +42,24 @@ const NewExam = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch courses');
+                }
+                const data = await response.json();
+                // Handle both single exam and array of exams
+                setExams(Array.isArray(data) ? data : [data]);
+            } catch (error) {
+                setExams([]);
+                console.error('Error fetching courses:', error);
+            }
+        };
+        fetchCourses();
+    }, []);
 
     const { data: orgUnitData } = useDataQuery(ORG_UNITS_QUERY);
     const { data: studentData, refetch: refetchStudents } = useDataQuery(STUDENTS_QUERY, {
@@ -88,8 +78,8 @@ const NewExam = () => {
 
     const filteredExams = exams.filter(
         (exam) =>
-            exam.courseName.toLowerCase().includes(filter.toLowerCase()) ||
-            exam.date.includes(filter)
+            exam.examName?.toLowerCase().includes(filter.toLowerCase()) ||
+            exam.date?.includes(filter)
     );
 
     const filteredStudents = students.filter((student) => {
@@ -139,6 +129,12 @@ const NewExam = () => {
         setSelectedOrgUnit(e.target.value);
     };
 
+    const getAttendanceStatus = (exam) => {
+        if (!exam.students) return 'No students registered';
+        const presentCount = exam.students.filter(s => s.status === 'present').length;
+        return `${presentCount}/${exam.students.length} students present`;
+    };
+
     return (
         <div className="exam-container">
             {!showStudentSelection ? (
@@ -148,7 +144,7 @@ const NewExam = () => {
                         <div className="search-box">
                             <input
                                 type="text"
-                                placeholder="Search by course name or date..."
+                                placeholder="Search by exam name or date..."
                                 value={filter}
                                 onChange={(e) => setFilter(e.target.value)}
                             />
@@ -166,7 +162,7 @@ const NewExam = () => {
                         {filteredExams.length > 0 ? (
                             filteredExams.map((exam) => (
                                 <div key={exam.id} className="exam-card">
-                                    <h3>{exam.courseName}</h3>
+                                    <h3>{exam.examName}</h3>
                                     <Divider />
                                     <section>
                                         <p className="p1">
@@ -181,17 +177,35 @@ const NewExam = () => {
                                             <strong>Room:</strong> {exam.room}
                                         </p>
                                         <p className="p1">
-                                            <strong>Supervisor:</strong> {exam.supervisorName}
+                                            <strong>Supervisor:</strong> {exam.supervisor}
                                         </p>
-                                        <p className="p">
+                                        <p className="p1">
                                             <strong>Time:</strong> {exam.startTime} - {exam.endTime}
                                         </p>
+                                        <p className="p1">
+                                            <strong>Attendance:</strong> {getAttendanceStatus(exam)}
+                                        </p>
+                                        {exam.students?.length > 0 && (
+                                            <div className="student-preview">
+                                                <strong>Students:</strong>
+                                                <ul>
+                                                    {exam.students.slice(0, 3).map(student => (
+                                                        <li key={student.id}>
+                                                            {student.name} ({student.registrationNumber}) - {student.status}
+                                                        </li>
+                                                    ))}
+                                                    {exam.students.length > 3 && (
+                                                        <li>+{exam.students.length - 3} more...</li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        )}
                                     </section>
                                     <button
                                         className="secondary-btn"
                                         onClick={() => navigate('/api/reports/report', { state: { exam } })}
                                     >
-                                        View
+                                        View Details
                                     </button>
                                 </div>
                             ))
