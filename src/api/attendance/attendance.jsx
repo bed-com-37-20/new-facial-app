@@ -30,7 +30,7 @@ const Attendance = () => {
 
   const AB_END_POINT = 'https://facial-attendance-system-6vy8.onrender.com/attendance/mark-all-absent';
   const CAMERA_START = 'https://facial-attendance-system-6vy8.onrender.com/face/recognize';
-  const SAVE_SESSION_ENDPOINT = 'https://facial-attendance-system-6vy8.onrender.com/sessions/save';
+  const SAVE_SESSION_ENDPOINT = 'https://facial-attendance-system-6vy8.onrender.com/attendance/create-new-coures';
 
   // Get current sessions
   const currentSessions = sessions.filter(session => currentSessionIds.includes(session.id));
@@ -65,7 +65,7 @@ const Attendance = () => {
         metadata: {
           room: session.metadata.room,
           supervisor: session.metadata.supervisor,
-          examName: session.metadata.course,
+          examName: session.metadata.courseName,
           date: session.metadata.date,
           startTime: session.metadata.startTime,
           endTime: session.metadata.endTime,
@@ -80,7 +80,15 @@ const Attendance = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(filteredSession),
+        body: JSON.stringify({
+          "room": filteredSession.metadata.room,
+          "supervisor": filteredSession.metadata.supervisor,
+          "examName": filteredSession.metadata.examName,
+          "date": filteredSession.metadata.date,
+          "startTime": filteredSession.metadata.startTime,
+          "endTime": filteredSession.metadata.endTime,
+          "studentIds": filteredSession.metadata.studentsIds
+        }),
       });
 
       if (!response.ok) {
@@ -88,7 +96,7 @@ const Attendance = () => {
       }
 
       // const data = await response.json();
-      console.log('Session saved successfully:', filteredSession);
+      alert('Session saved successfully:');
       return filteredSession;
     } catch (err) {
       console.error('Error saving session:', err);
