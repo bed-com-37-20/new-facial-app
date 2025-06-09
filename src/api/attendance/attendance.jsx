@@ -166,6 +166,8 @@ const Attendance = () => {
   // Fetch attendance data for a specific session
   const fetchAttendanceData = useCallback(async (sessionId) => {
     try {
+
+      
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
       if (!response.ok) {
         throw new Error('Failed to fetch attendance data');
