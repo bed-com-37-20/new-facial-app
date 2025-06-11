@@ -35,7 +35,8 @@ const CourseDisplay = ({ courses }) => {
                 textAlign: 'center',
                 fontSize: '24px',
                 fontWeight: 'bold',
-                margin:"5px",
+                margin: "5px",
+                borderRadius: '8px',
                 boxShadow: '0 2px 10px rgba(8, 8, 8, 0.1)'
             }}>
                 Examinational Reports

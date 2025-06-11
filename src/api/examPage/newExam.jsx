@@ -52,8 +52,6 @@ const NewExam = () => {
                     throw new Error('Failed to fetch courses');
                 }
                 const data = await response.json();
-                // Handle both single exam and array of exams
-                console.log('Fetched exams:', data);
                 setExams(Array.isArray(data) ? data : [data]);
             } catch (error) {
                 setExams([]);
@@ -122,15 +120,6 @@ const NewExam = () => {
         );
     };
 
-    // const handleSelectAll = (studentIds, select) => {
-    //     setSelectedStudents((prev) =>
-    //         select ? [...new Set([...prev, ...studentIds])] : prev.filter((id) => !studentIds.includes(id))
-    //     );
-    // };
-
-    // const handleOrgUnitChange = (e) => {
-    //     setSelectedOrgUnit(e.target.value);
-    // };
 
     const getAttendanceStatus = (exam) => {
         if (!exam.students) return 'No students registered';
@@ -172,25 +161,40 @@ const NewExam = () => {
                                         onClick={() => {
                                             // Add delete functionality here
                                             const deleteExam = async (examId) => {
-                                                console.log('Deleting exam with ID:', examId);
-                                                try {
-                                                    const response = await fetch(`https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourseById`, {
 
-                                                        method: 'DELETE',
-                                                        body: JSON.stringify(examId ),
+
+                                                const myHeaders = new Headers();
+                                                myHeaders.append("Content-Type", "application/json");
+
+                                                const raw = JSON.stringify({
+                                                    "ids": [
+                                                        examId
+                                                    ]
+                                                });
+
+                                                const requestOptions = {
+                                                    method: "DELETE",
+                                                    headers: myHeaders,
+                                                    body: raw,
+                                                    redirect: "follow"
+                                                };
+
+                                                fetch("https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourse", requestOptions)
+                                                    .then((response) => response.text())
+                                                    .then((result) => {
+                                                        console.log(result);
+                                                        alert('Exam deleted successfully!');
+                                                        setExams((prevExams) => prevExams.filter((exam) => exam.id !== examId));
+                                                    })
+                                                    .catch((error) => {
+                                                        console.error('Error deleting exam:', error);
+                                                        alert('Failed to delete exam. Please try again.');
                                                     });
-                                                    if (!response.ok) {
-                                                        throw new Error('Failed to delete exam');
-                                                    }
-                                                    alert('Exam deleted successfully!');
-                                                    setExams((prevExams) => prevExams.filter((exam) => exam.id !== examId));
-                                                } catch (error) {
-                                                    console.error('Error deleting exam:', error);
-                                                    alert('Failed to delete exam. Please try again.');
-                                                }
-                                            };
 
-                                            deleteExam([exam.id]);
+                                                console.log('Deleting exam with ID:', raw);
+                                             };
+
+                                            deleteExam(exam.id);
                                             
                                         }}
                                     >
