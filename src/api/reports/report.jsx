@@ -10,6 +10,7 @@ const Report = () => {
     const [showStudents, setShowStudents] = useState(false);
     const [students, setStudents] = useState([]);
     const [loadingHistory, setLoadingHistory] = useState(false);
+    const [rowsPerPage, setRowsPerPage] = useState(10)
 
 
     useEffect(() => {

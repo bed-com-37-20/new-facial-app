@@ -36,13 +36,6 @@ const Attendance = () => {
   // Get the session being viewed
   const viewingSession = sessions.find(session => session.id === viewingSessionId);
 
-  // Filter students based on registration numbers from location state
-  // const filterStudents = (sessionStudents) => {
-  //   if (!students || !Array.isArray(students)) return [];
-  //   return sessionStudents.filter(student =>
-  //     students.includes(student.registrationNumber)
-  //   );
-  // };
 
   // Save session to server
   const saveSessionToServer = async (session) => {
@@ -51,15 +44,7 @@ const Attendance = () => {
 
       // Filter the data to only include what we want to send to the server
       const filteredSession = {
-        // id: session.id,
-        // examId: session.examId,
-        // examName: session.examName,
-        // startTime: session.startTime,
-        // endTime: session.endTime,
-        // // Filter students to only include those in metadata.selectedStudents
-        // students: session.students.filter(student =>
-        //   session.metadata.selectedStudents.includes(student.registrationNumber)
-        // ),
+  
         // Only include the necessary metadata
         metadata: {
           room: session.metadata.room,
@@ -68,8 +53,6 @@ const Attendance = () => {
           date: session.metadata.date,
           startTime: session.metadata.startTime,
           endTime: session.metadata.endTime,
-          // orgUnit: session.metadata.orgUnit,
-          // Include the selectedStudents array as is
           studentsIds: session.metadata.selectedStudents
         }
       };
@@ -98,10 +81,10 @@ const Attendance = () => {
       alert('Session saved successfully:');
       return filteredSession;
     } catch (err) {
-      console.error('Error saving session:', err);
+      alert('Error saving session:', err);
       setError(`Failed to save session: ${err.message}`);
       setShowDialog(true);
-      throw err;
+      
     } finally {
       setIsLoading(false);
     }
@@ -111,7 +94,7 @@ const Attendance = () => {
   const initNewSession = useCallback(async (sessionData) => {
     try {
       if (!courseName || !students) {
-        throw new Error('Missing required session data');
+        alert('Missing required session data');
       }
 
       const newSession = {
@@ -143,7 +126,7 @@ const Attendance = () => {
     } catch (err) {
       setError(`Failed to start session: ${err.message}`);
       console.error('Error initializing session:', err);
-      throw err;
+      alert('Failed to start session, check if you are connected to internet of exam data if not provided')
     }
   }, [courseName, date, endTime, orgUnit, startTime, students]);
 
@@ -152,7 +135,7 @@ const Attendance = () => {
     try {
       const sessionToEnd = sessions.find(s => s.id === sessionId);
       if (!sessionToEnd) {
-        throw new Error('Session not found');
+        alert('Session not found');
       }
 
       const updatedSession = {
@@ -171,55 +154,11 @@ const Attendance = () => {
       setError(null);
     } catch (err) {
       setError(`Failed to end session: ${err.message}`);
-      console.error('Error ending session:', err);
+      alert('Error ending session:', err);
     }
   };
 
-  // Fetch attendance data for a specific session
-  // const fetchAttendanceData = useCallback(async (sessionId) => {
-  //   try {
-
-  //     const cameraCheck = camera(CAMERA_START,setCameraStarted)
-
-  //     const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
-  //     if (!response.ok) {
-  //       throw new Error('Failed to fetch attendance data');
-  //     }
-
-  //     const data = await response.json();
-  //     console.log('Attendance data fetched successfully:', data);
-
-  //     if (data && data.length > 0) {
-  //       setSessions(prev => prev.map(session => {
-  //         if (session.id === sessionId) {
-  //           const newStudents = data.filter(newStudent =>
-  //             !session.students.some(existing =>
-  //               existing.registrationNumber === newStudent.registrationNumber
-  //             )
-  //           ).map(student => ({
-  //             ...student,
-  //             id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-  //             timestamp: new Date().toISOString(),
-  //             status: student.status
-  //           }));
-
-  //           return {
-  //             ...session,
-  //             students: [...session.students, ...newStudents]
-  //           };
-  //         }
-  //         return session;
-  //       }));
-  //     }
-  //   } catch (err) {
-  //     setError(`Failed to fetch attendance data: ${err.message}`);
-  //     console.error('Error fetching attendance data:', err);
-  //     // Cancel this session on error
-  //     setCurrentSessionIds(prev => prev.filter(id => id !== sessionId));
-  //   }
-  // }, []);
-
-  // Modify the fetchAttendanceData function to replace the student list instead of appending
+  // fetchAttendanceData function to replace the student list instead of appending
   const fetchAttendanceData = useCallback(async (sessionId) => {
     try {
       const cameraCheck = camera(CAMERA_START, setCameraStarted);
