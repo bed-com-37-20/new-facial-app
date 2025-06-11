@@ -168,37 +168,45 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
 
          
 
-            // Send to face detection endpoint
+            // Send to face detection endpoint  https://477b-105-234-180-1.ngrok-free.app
             const faceResponse = await fetch('https://facial-attendance-system-6vy8.onrender.com/face/detect', {
                 method: 'POST',
                 body: formDataToSend,
             });
-
-            if (!faceResponse.ok) {
-                throw new Error('Failed to register face data with recognition system');
-            }
-
             const faceData = await faceResponse.json();
-            console.log('Face data registered successfully:', faceData);
+            console.log('Face data registered successfully:', faceData.status);
+            if (faceData.status === "false") {   
+                throw new Error('Face detection failed. Please ensure the image is clear and try again.');
 
-            // // Proceed with enrollment
-            const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
-
-            if (enrollmentResult.success) {
-                console.log('Student registered and enrolled successfully!', enrollmentResult);
-                alert('Student registration and enrollment completed!');
-                
             } else {
-                throw new Error(enrollmentResult.error || 'Failed to enroll student');
+
+                console.log('Face data registered successfully:', faceData.status);
+
+                // // Proceed with enrollment
+                const enrollmentResult = await registerAndEnrollStudent(formData, 'TLvAWiCKRgq', orgUnitId, 'N6eVEDUrpYU');
+
+                if (enrollmentResult.success) {
+                    console.log('Student registered and enrolled successfully!', enrollmentResult);
+                    alert('Student registration and enrollment completed!');
+
+                } else {
+                    throw new Error(enrollmentResult.error || 'Failed to enroll student');
+                }
+                onSubmit?.(formData);
+                onCancel?.();
+                navigate('/api/enrollment/enrollments');
+             
             }
-            onSubmit?.(formData);
-            navigate('/api/enrollment/enrollments');
+
+         
         } catch (error) {
             setSubmitError(error.message);
             console.error('Enrollment error:', error);
             alert('Error: ' + error.message);
         } finally {
             setIsSubmitting(false);
+            
+            navigate('/api/enrollment/enrollments');
         }
     };
 
@@ -214,7 +222,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
     };
 
     return (
-        <div style={{ overflow: "auto", padding: '2rem', margin: "2rem" }} className='main1'>
+        <div style={{ overflow: "auto", marginLeft: '10%', margin: "2rem" }} className='main1'>
             <h2 className='formTitle'>
                 {editingEnrollment ? 'Edit Student Enrollment' : 'New Student Enrollment'}
             </h2>
@@ -225,7 +233,7 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
                 </NoticeBox>
             )}
 
-            <form onSubmit={handleSubmit} className='enrollmentForm'>
+            <form onSubmit={handleSubmit} className='enrollmentForm'  >
                 <div className="formContent">
                     <Divider className='divider' />
                     <h3 className='formSection'>Enrollment Details</h3>

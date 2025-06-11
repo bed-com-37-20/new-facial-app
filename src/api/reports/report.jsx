@@ -9,10 +9,12 @@ const Report = () => {
     const { exam } = location.state || {};
     const [showStudents, setShowStudents] = useState(false);
     const [students, setStudents] = useState([]);
+    const [loadingHistory, setLoadingHistory] = useState(false);
 
 
     useEffect(() => {
         const fetchCourses = async () => {
+            setLoadingHistory(true);
             try {
                 const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
                 if (!response.ok) {
@@ -21,9 +23,11 @@ const Report = () => {
                 const data = await response.json();
                 // Handle both single exam and array of exams
                 setStudents(Array.isArray(data) ? data : [data]);
+                setLoadingHistory(false);
             } catch (error) {
                 setExams([]);
                 console.error('Error fetching courses:', error);
+                setLoadingHistory(false);
             }
         };
         fetchCourses();
@@ -33,13 +37,37 @@ const Report = () => {
 
 
     if (!exam) {
+        if (loadingHistory) {
+            return (
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    height: '100px',
+                    gap: '10px',
+                    marginTop: '25%'
+
+                }}>
+                    <div style={{
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        border: '4px solid #f3f3f3',
+                        borderTop: '4px solid #3498db',
+                        animation: 'spin 1s linear infinite',
+                    }}></div>
+                    <p style={{
+                        fontSize: '18px',
+                        color: '#3498db',
+                        textAlign: 'center',
+                        margin: 0
+                    }}>Loading...</p>
+                </div>
+            );
+        }
+
         return (
-            // <div className="no-data-container">
-            //     <div className="no-data-card">
-            //         <h2 style={{ color: 'black' }}>No Exam Data Available</h2>
-            //         <p>Please select an exam from the exam list to view its report.</p>
-            //     </div>
-            // </div>
             <CourseDisplay courses={students} />
         );
     }
@@ -108,14 +136,13 @@ const Report = () => {
                                                             <tbody>
                                                                 {exam.students.map((student, index) => (
                                                                     <tr key={index}>
-                                                                        <td>{index + 1}</td>
-                                                                        <td>{student.name}</td>
-                                                                        <td>{student.registrationNumber}</td>
+                                                                        <td style={{ fontSize: "18px" }}>{index + 1}</td>
+                                                                        <td style={{ fontSize: "18px" }}>{student.name}</td>
+                                                                        <td style={{ fontSize: "18px" }}>{student.registrationNumber}</td>
                                                                         <td 
-                                                                            className={student.status === 'Absent' ? 'status-absent' : 'status-present'}
-                                                                            style={{ color: student.status === 'Absent' ? 'green' : 'red' }}
+                                                                            style={{ color: student.status === 'absent' ? 'red' : 'green'}}
                                                                         >
-                                                                           <p>{student.status}</p> 
+                                                                            <p style={ {fontSize:"18px"}}>{student.status}</p> 
                                                                         </td>
                                                                     </tr>
                                                                 ))}

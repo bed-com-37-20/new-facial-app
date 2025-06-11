@@ -57,8 +57,8 @@ const DeleteConfirmationModal: React.FC<{
   onConfirm: () => void;
   onCancel: () => void
 }> = ({ onConfirm, onCancel }) => (
-  <div className="modal-backdrop">
-    <div className="modal-content">
+  <div  className="modal-backdrop"> 
+    <div className="modal-content" style={{ zIndex: 1000, width: "50%", left: "5% " }}>
       <h3>Confirm Deletion</h3>
       <p>Are you sure you want to delete this student? This action cannot be undone.</p>
       <div className="modal-actions">
@@ -238,13 +238,13 @@ const EnrollmentTable: React.FC<{
               <td>{enrollment.gender}</td>
               <td>{enrollment.enrollDate}</td>
               <td className="action-buttons">
-                <button
+                {/* <button
                   onClick={() => onEdit(enrollment, index)}
                   aria-label="Edit"
                   className="edit-btn"
                 >
                   <Pencil size={16} />
-                </button>
+                </button> */}
                 <button
                   onClick={() => onDelete(enrollment)}
                   aria-label="Delete"
@@ -557,8 +557,8 @@ const EnrollmentPage: React.FC = () => {
       {showDeleteModal && <DeleteConfirmationModal onConfirm={confirmDelete} onCancel={cancelDelete} />}
 
       {showEnrollmentForm && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
+        <div className="modal-backdrop" >
+          <div className="modal-content" style={{ zIndex: 1000, width: "50%", left: "5% " }}>
             <button className="modal-close" onClick={handleCloseForm}>
               &times;
             </button>

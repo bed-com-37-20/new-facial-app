@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Attendance.css';
 import { useLocation } from 'react-router-dom';
 import { markAllAbsent, camera } from '../Attendance/hooks';
-import SaveFailedDialog from '../../components/alerts/dialog';
 
 const Attendance = () => {
   const [sessions, setSessions] = useState([]);
@@ -38,12 +37,12 @@ const Attendance = () => {
   const viewingSession = sessions.find(session => session.id === viewingSessionId);
 
   // Filter students based on registration numbers from location state
-  const filterStudents = (sessionStudents) => {
-    if (!students || !Array.isArray(students)) return [];
-    return sessionStudents.filter(student =>
-      students.includes(student.registrationNumber)
-    );
-  };
+  // const filterStudents = (sessionStudents) => {
+  //   if (!students || !Array.isArray(students)) return [];
+  //   return sessionStudents.filter(student =>
+  //     students.includes(student.registrationNumber)
+  //   );
+  // };
 
   // Save session to server
   const saveSessionToServer = async (session) => {
@@ -177,10 +176,53 @@ const Attendance = () => {
   };
 
   // Fetch attendance data for a specific session
+  // const fetchAttendanceData = useCallback(async (sessionId) => {
+  //   try {
+
+  //     const cameraCheck = camera(CAMERA_START,setCameraStarted)
+
+  //     const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch attendance data');
+  //     }
+
+  //     const data = await response.json();
+  //     console.log('Attendance data fetched successfully:', data);
+
+  //     if (data && data.length > 0) {
+  //       setSessions(prev => prev.map(session => {
+  //         if (session.id === sessionId) {
+  //           const newStudents = data.filter(newStudent =>
+  //             !session.students.some(existing =>
+  //               existing.registrationNumber === newStudent.registrationNumber
+  //             )
+  //           ).map(student => ({
+  //             ...student,
+  //             id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+  //             timestamp: new Date().toISOString(),
+  //             status: student.status
+  //           }));
+
+  //           return {
+  //             ...session,
+  //             students: [...session.students, ...newStudents]
+  //           };
+  //         }
+  //         return session;
+  //       }));
+  //     }
+  //   } catch (err) {
+  //     setError(`Failed to fetch attendance data: ${err.message}`);
+  //     console.error('Error fetching attendance data:', err);
+  //     // Cancel this session on error
+  //     setCurrentSessionIds(prev => prev.filter(id => id !== sessionId));
+  //   }
+  // }, []);
+
+  // Modify the fetchAttendanceData function to replace the student list instead of appending
   const fetchAttendanceData = useCallback(async (sessionId) => {
     try {
-
-      const cameraCheck = camera(CAMERA_START,setCameraStarted)
+      const cameraCheck = camera(CAMERA_START, setCameraStarted);
 
       const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance');
       if (!response.ok) {
@@ -193,20 +235,21 @@ const Attendance = () => {
       if (data && data.length > 0) {
         setSessions(prev => prev.map(session => {
           if (session.id === sessionId) {
-            const newStudents = data.filter(newStudent =>
-              !session.students.some(existing =>
-                existing.registrationNumber === newStudent.registrationNumber
+            // Create a new array of students with updated statuses
+            const updatedStudents = data
+              .filter(newStudent =>
+                session.metadata.selectedStudents.includes(newStudent.registrationNumber)
               )
-            ).map(student => ({
-              ...student,
-              id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-              timestamp: new Date().toISOString(),
-              status: student.status || 'present'
-            }));
+              .map(student => ({
+                ...student,
+                id: `student_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                timestamp: new Date().toISOString(),
+                status: student.status
+              }));
 
             return {
               ...session,
-              students: [...session.students, ...newStudents]
+              students: updatedStudents // Replace the entire student list
             };
           }
           return session;
@@ -215,10 +258,36 @@ const Attendance = () => {
     } catch (err) {
       setError(`Failed to fetch attendance data: ${err.message}`);
       console.error('Error fetching attendance data:', err);
-      // Cancel this session on error
       setCurrentSessionIds(prev => prev.filter(id => id !== sessionId));
     }
   }, []);
+
+  // Modify the filterStudents function to handle cases where students might not be in the session yet
+  const filterStudents = (sessionStudents) => {
+    if (!students || !Array.isArray(students)) return [];
+
+    // Create a default list of all expected students with 'absent' status
+    const defaultStudents = students.map(regNumber => ({
+      registrationNumber: regNumber,
+      name: 'N/A',
+      status: 'absent',
+      timestamp: new Date().toISOString(),
+      id: `default_${regNumber}`
+    }));
+
+    // If no session students, return all as absent
+    if (!sessionStudents || sessionStudents.length === 0) {
+      return defaultStudents;
+    }
+
+    // Merge session students with default list to ensure all students are shown
+    const mergedStudents = defaultStudents.map(defaultStudent => {
+      const found = sessionStudents.find(s => s.registrationNumber === defaultStudent.registrationNumber);
+      return found || defaultStudent;
+    });
+
+    return mergedStudents;
+  };
 
   // Poll attendance data for all active sessions
   useEffect(() => {

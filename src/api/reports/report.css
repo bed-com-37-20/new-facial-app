@@ -234,7 +234,7 @@ report.css
 
 .students-table td {
     padding: 1rem;
-    border-bottom: 1px solid var(--medium-gray);
+    border: 1px solid var(--medium-gray);
     color: var(--text-color);
 }
 
@@ -342,3 +342,40 @@ report.css
         padding: 0.75rem 0.5rem;
     }
 }
+.status-absent {
+    
+    color: #ff6347; /* Tomato red text */
+    font-weight: 500;
+    text-align: center;
+    font-size: 18px;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.status-present {
+
+    color: #3cb371; /* Medium sea green text */
+    font-weight: 500;
+    font-size: 18px;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+ @keyframes spin {
+     0% {
+         transform: rotate(0deg);
+     }
+
+     100% {
+         transform: rotate(360deg);
+     }
+ }
+ @keyframes spin {
+     0% {
+         transform: rotate(0deg);
+     }
+
+     100% {
+         transform: rotate(360deg);
+     }
+ }

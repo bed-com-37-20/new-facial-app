@@ -115,12 +115,17 @@ const NewExam = () => {
   const handleSelectStudent = studentId => {
     setSelectedStudents(prev => prev.includes(studentId) ? prev.filter(id => id !== studentId) : [...prev, studentId]);
   };
-  const handleSelectAll = (studentIds, select) => {
-    setSelectedStudents(prev => select ? [...new Set([...prev, ...studentIds])] : prev.filter(id => !studentIds.includes(id)));
-  };
-  const handleOrgUnitChange = e => {
-    setSelectedOrgUnit(e.target.value);
-  };
+
+  // const handleSelectAll = (studentIds, select) => {
+  //     setSelectedStudents((prev) =>
+  //         select ? [...new Set([...prev, ...studentIds])] : prev.filter((id) => !studentIds.includes(id))
+  //     );
+  // };
+
+  // const handleOrgUnitChange = (e) => {
+  //     setSelectedOrgUnit(e.target.value);
+  // };
+
   const getAttendanceStatus = exam => {
     if (!exam.students) return 'No students registered';
     const presentCount = exam.students.filter(s => s.status === 'present').length;
@@ -139,7 +144,11 @@ const NewExam = () => {
     onChange: e => setFilter(e.target.value)
   }), /*#__PURE__*/React.createElement("button", {
     className: "primary-btn",
-    onClick: handleCreateExam
+    onClick: handleCreateExam,
+    style: {
+      backgroundColor: 'blue',
+      color: 'white'
+    }
   }, /*#__PURE__*/React.createElement("svg", {
     xmlns: "http://www.w3.org/2000/svg",
     width: "16",
@@ -160,7 +169,11 @@ const NewExam = () => {
       alignItems: 'center',
       justifyContent: 'space-between'
     }
-  }, /*#__PURE__*/React.createElement("h3", null, exam.examName), /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("h3", {
+    style: {
+      color: 'black'
+    }
+  }, exam.examName), /*#__PURE__*/React.createElement("button", {
     style: {
       color: 'red',
       background: 'none',
@@ -175,9 +188,7 @@ const NewExam = () => {
         try {
           const response = await fetch(`https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourseById`, {
             method: 'DELETE',
-            body: JSON.stringify({
-              "ids": [examId]
-            })
+            body: JSON.stringify(examId)
           });
           if (!response.ok) {
             throw new Error('Failed to delete exam');
@@ -189,7 +200,7 @@ const NewExam = () => {
           alert('Failed to delete exam. Please try again.');
         }
       };
-      deleteExam(exam.id);
+      deleteExam([exam.id]);
     }
   }, /*#__PURE__*/React.createElement(Trash, {
     size: 20

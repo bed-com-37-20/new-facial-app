@@ -122,15 +122,15 @@ const NewExam = () => {
         );
     };
 
-    const handleSelectAll = (studentIds, select) => {
-        setSelectedStudents((prev) =>
-            select ? [...new Set([...prev, ...studentIds])] : prev.filter((id) => !studentIds.includes(id))
-        );
-    };
+    // const handleSelectAll = (studentIds, select) => {
+    //     setSelectedStudents((prev) =>
+    //         select ? [...new Set([...prev, ...studentIds])] : prev.filter((id) => !studentIds.includes(id))
+    //     );
+    // };
 
-    const handleOrgUnitChange = (e) => {
-        setSelectedOrgUnit(e.target.value);
-    };
+    // const handleOrgUnitChange = (e) => {
+    //     setSelectedOrgUnit(e.target.value);
+    // };
 
     const getAttendanceStatus = (exam) => {
         if (!exam.students) return 'No students registered';
@@ -151,7 +151,7 @@ const NewExam = () => {
                                 value={filter}
                                 onChange={(e) => setFilter(e.target.value)}
                             />
-                            <button className="primary-btn" onClick={handleCreateExam}>
+                            <button className="primary-btn" onClick={handleCreateExam} style={{backgroundColor: 'blue', color: 'white',}}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                                     <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                 </svg>
@@ -166,7 +166,7 @@ const NewExam = () => {
                             filteredExams.map((exam) => (
                                 <div key={exam.id} className="exam-card">
                                     <div style={{ display: 'flex', flexDirection:'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <h3>{exam.examName}</h3>
+                                        <h3 style={{ color: 'black'}}>{exam.examName}</h3>
                                     <button
                                        style={{color:'red', background: 'none', border: 'none', cursor: 'pointer',margin: '0 10px' }}
                                         onClick={() => {
@@ -177,7 +177,7 @@ const NewExam = () => {
                                                     const response = await fetch(`https://facial-attendance-system-6vy8.onrender.com/attendance/deleteCourseById`, {
 
                                                         method: 'DELETE',
-                                                        body: JSON.stringify({ "ids": [examId] }),
+                                                        body: JSON.stringify(examId ),
                                                     });
                                                     if (!response.ok) {
                                                         throw new Error('Failed to delete exam');
@@ -190,7 +190,7 @@ const NewExam = () => {
                                                 }
                                             };
 
-                                            deleteExam(exam.id);
+                                            deleteExam([exam.id]);
                                             
                                         }}
                                     >
@@ -220,21 +220,6 @@ const NewExam = () => {
                                         <p className="p1">
                                             <strong>Attendance:</strong> {getAttendanceStatus(exam)}
                                         </p>
-                                        {/* {exam.students?.length > 0 && (
-                                            <div className="student-preview">
-                                                <strong>Students:</strong>
-                                                <ul>
-                                                    {exam.students.slice(0, 3).map(student => (
-                                                        <li key={student.id}>
-                                                            {student.name} ({student.registrationNumber}) - {student.status}
-                                                        </li>
-                                                    ))}
-                                                    {exam.students.length > 3 && (
-                                                        <li>+{exam.students.length - 3} more...</li>
-                                                    )}
-                                                </ul>
-                                            </div>
-                                        )} */}
                                     </section>
                                     <button
                                         className="secondary-btn"
