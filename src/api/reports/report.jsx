@@ -1,41 +1,57 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './report.css';
-import CourseDisplay from './displayCourse'; // Adjust the import path as necessary
+import CourseDisplay from './displayCourse';
+
 const Report = () => {
     const location = useLocation();
     const { exam } = location.state || {};
     const [showStudents, setShowStudents] = useState(false);
     const [students, setStudents] = useState([]);
     const [loadingHistory, setLoadingHistory] = useState(false);
-    const [rowsPerPage, setRowsPerPage] = useState(10)
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
-
+    // Fetch courses from local storage instead of API
     useEffect(() => {
-        const fetchCourses = async () => {
+        const fetchCoursesFromLocalStorage = () => {
             setLoadingHistory(true);
             try {
-                const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch courses');
-                }
-                const data = await response.json();
-                // Handle both single exam and array of exams
-                setStudents(Array.isArray(data) ? data : [data]);
+                const storedSessions = JSON.parse(localStorage.getItem('attendanceSessions') || '[]');
+
+                // Transform the stored sessions to match the expected format
+                const formattedCourses = storedSessions.map(session => ({
+                    id: session.id,
+                    examName: session.metadata.courseName,
+                    date: session.metadata.date,
+                    startTime: session.metadata.startTime,
+                    endTime: session.metadata.endTime,
+                    room: session.metadata.room,
+                    supervisor: session.metadata.supervisor,
+                    students: session.students.length > 0 ?
+                        session.students.map(student => ({
+                            name: student.name || 'N/A',
+                            registrationNumber: student.registrationNumber,
+                            status: student.status
+                        })) :
+                        session.metadata.selectedStudents.map(regNumber => ({
+                            name: 'N/A',
+                            registrationNumber: regNumber,
+                            status: 'absent'
+                        }))
+                }));
+
+                setStudents(formattedCourses);
                 setLoadingHistory(false);
             } catch (error) {
-                setExams([]);
-                console.error('Error fetching courses:', error);
+                console.error('Error loading courses from local storage:', error);
+                setStudents([]);
                 setLoadingHistory(false);
             }
         };
-        fetchCourses();
+
+        fetchCoursesFromLocalStorage();
     }, []);
-
-
-
 
     if (!exam) {
         if (loadingHistory) {
@@ -48,7 +64,6 @@ const Report = () => {
                     height: '100px',
                     gap: '10px',
                     marginTop: '25%'
-
                 }}>
                     <div style={{
                         width: '40px',
@@ -68,9 +83,7 @@ const Report = () => {
             );
         }
 
-        return (
-            <CourseDisplay courses={students} />
-        );
+        return <CourseDisplay courses={students} />;
     }
 
     const handleViewAllClick = () => {
@@ -82,25 +95,21 @@ const Report = () => {
         return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
-
- useEffect(() => {
-        // Reset showStudents when exam changes
+    useEffect(() => {
         console.log("Exam changed:", exam);
     }, [exam]);
-    
+
     return (
         <div className="report-container">
             <div className="report-header">
-                <h1 style={{ color: 'black' }}
-                >Exam Report Summary</h1>
+                <h1 style={{ color: 'black' }}>Exam Report Summary</h1>
                 <div className="exam-meta">
-                    <span className="exam-course" style={{ color: 'black' }} >{exam.examName}</span>
-                    <span className="exam-date" style={{ color: 'black' }} >{formatDate(exam.date)}</span>
+                    <span className="exam-course" style={{ color: 'black' }}>{exam.examName}</span>
+                    <span className="exam-date" style={{ color: 'black' }}>{formatDate(exam.date)}</span>
                 </div>
             </div>
 
             <div className="exam-details-grid">
-       
                 <div className="detail-card">
                     <h3>Supervisor</h3>
                     <p>{exam.supervisor}</p>
@@ -113,48 +122,46 @@ const Report = () => {
                     <h3>Room</h3>
                     <p>{exam.room}</p>
                 </div>
-             
             </div>
 
-          
-                <div className="fulltable">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                        <h2 style={{ color: 'black' }} >Students for {exam.examName} </h2>
+            <div className="fulltable">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h2 style={{ color: 'black' }}>Students for {exam.examName}</h2>
                         <p>Total : {exam.students.length}</p>
-                            
-                                                    </div>
-                                                    <div className="students-table-container">
-                                                        <table className="students-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Name</th>
-                                                                    <th>Registration Number</th>
-                                                                    <th>Status</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {exam.students.map((student, index) => (
-                                                                    <tr key={index}>
-                                                                        <td style={{ fontSize: "18px" }}>{index + 1}</td>
-                                                                        <td style={{ fontSize: "18px" }}>{student.name}</td>
-                                                                        <td style={{ fontSize: "18px" }}>{student.registrationNumber}</td>
-                                                                        <td 
-                                                                            style={{ color: student.status === 'absent' ? 'red' : 'green'}}
-                                                                        >
-                                                                            <p style={ {fontSize:"18px"}}>{student.status}</p> 
-                                                                        </td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                  
+                    </div>
+                    <div className="students-table-container">
+                        <table className="students-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Registration Number</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {exam.students.map((student, index) => (
+                                    <tr key={index}>
+                                        <td style={{ fontSize: "18px" }}>{index + 1}</td>
+                                        <td style={{ fontSize: "18px" }}>{student.name}</td>
+                                        <td style={{ fontSize: "18px" }}>{student.registrationNumber}</td>
+                                        <td style={{ color: student.status === 'absent' ? 'red' : 'green' }}>
+                                            <p style={{ fontSize: "18px" }}>{student.status}</p>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-           
+            </div>
 
+            {showSuccessAlert && (
+                <div className="success-alert">
+                    Exam created successfully for students!
+                </div>
+            )}
         </div>
     );
 };

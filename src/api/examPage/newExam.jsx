@@ -45,20 +45,41 @@ const NewExam = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCourses = async () => {
+        const fetchCoursesFromLocalStorage = () => {
             try {
-                const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch courses');
-                }
-                const data = await response.json();
-                setExams(Array.isArray(data) ? data : [data]);
+                // Get stored sessions from local storage
+                const storedSessions = JSON.parse(localStorage.getItem('attendanceSessions') || []);
+
+                // Transform the stored sessions to match the expected exams format
+                const formattedExams = storedSessions.map(session => ({
+                    id: session.id,
+                    examName: session.metadata.courseName,
+                    date: session.metadata.date,
+                    startTime: session.metadata.startTime,
+                    endTime: session.metadata.endTime,
+                    room: session.metadata.room,
+                    supervisor: session.metadata.supervisor,
+                    students: session.students.length > 0
+                        ? session.students.map(student => ({
+                            name: student.name || 'N/A',
+                            registrationNumber: student.registrationNumber,
+                            status: student.status
+                        }))
+                        : session.metadata.selectedStudents.map(regNumber => ({
+                            name: 'N/A',
+                            registrationNumber: regNumber,
+                            status: 'absent'
+                        }))
+                }));
+
+                setExams(formattedExams);
             } catch (error) {
+                console.error('Error loading courses from local storage:', error);
                 setExams([]);
-                console.error('Error fetching courses:', error);
             }
         };
-        fetchCourses();
+
+        fetchCoursesFromLocalStorage();
     }, []);
 
     const { data: orgUnitData } = useDataQuery(ORG_UNITS_QUERY);
@@ -198,7 +219,7 @@ const NewExam = () => {
                                             
                                         }}
                                     >
-                                        <Trash size={20} />
+                                        {/* <Trash size={20} /> */}
                                     </button>
                                     </div>
                                  

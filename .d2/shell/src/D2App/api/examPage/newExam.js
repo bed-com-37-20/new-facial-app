@@ -46,20 +46,37 @@ const NewExam = () => {
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchCoursesFromLocalStorage = () => {
       try {
-        const response = await fetch('https://facial-attendance-system-6vy8.onrender.com/attendance/getAllCourses');
-        if (!response.ok) {
-          throw new Error('Failed to fetch courses');
-        }
-        const data = await response.json();
-        setExams(Array.isArray(data) ? data : [data]);
+        // Get stored sessions from local storage
+        const storedSessions = JSON.parse(localStorage.getItem('attendanceSessions') || []);
+
+        // Transform the stored sessions to match the expected exams format
+        const formattedExams = storedSessions.map(session => ({
+          id: session.id,
+          examName: session.metadata.courseName,
+          date: session.metadata.date,
+          startTime: session.metadata.startTime,
+          endTime: session.metadata.endTime,
+          room: session.metadata.room,
+          supervisor: session.metadata.supervisor,
+          students: session.students.length > 0 ? session.students.map(student => ({
+            name: student.name || 'N/A',
+            registrationNumber: student.registrationNumber,
+            status: student.status
+          })) : session.metadata.selectedStudents.map(regNumber => ({
+            name: 'N/A',
+            registrationNumber: regNumber,
+            status: 'absent'
+          }))
+        }));
+        setExams(formattedExams);
       } catch (error) {
+        console.error('Error loading courses from local storage:', error);
         setExams([]);
-        console.error('Error fetching courses:', error);
       }
     };
-    fetchCourses();
+    fetchCoursesFromLocalStorage();
   }, []);
   const {
     data: orgUnitData
@@ -194,9 +211,7 @@ const NewExam = () => {
       };
       deleteExam(exam.id);
     }
-  }, /*#__PURE__*/React.createElement(Trash, {
-    size: 20
-  }))), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
+  })), /*#__PURE__*/React.createElement(Divider, null), /*#__PURE__*/React.createElement("section", null, /*#__PURE__*/React.createElement("p", {
     className: "p1"
   }, /*#__PURE__*/React.createElement("strong", null, "Date:"), ' ', new Date(exam.date).toLocaleDateString('en-US', {
     year: 'numeric',

@@ -134,12 +134,7 @@ const CourseDisplay = ({ courses }) => {
                                                         fontWeight: '600',
                                                         color: '#2c3e50'
                                                     }}>Status</th>
-                                                    <th style={{
-                                                        padding: '15px',
-                                                        textAlign: 'left',
-                                                        fontWeight: '600',
-                                                        color: '#2c3e50'
-                                                    }}>Last Marked</th>
+                                                
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -171,10 +166,6 @@ const CourseDisplay = ({ courses }) => {
                                                                 {student.status}
                                                             </span>
                                                         </td>
-                                                        <td style={{
-                                                            padding: '15px',
-                                                            color: '#7f8c8d'
-                                                        }}>{student.lastMarkedAt ? new Date(student.lastMarkedAt).toLocaleString() : 'Never'}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>

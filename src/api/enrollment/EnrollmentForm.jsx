@@ -534,8 +534,8 @@ const EnrollmentForm = ({ school, orgUnitId, onSubmit, editingEnrollment, onCanc
                         Cancel
                     </button>
                     <button
-                        style={{ marginLeft: "50%", backgroundColor: "blue" }}
-                        primary
+                        style={{ marginLeft: "50%",color:"black" }}
+                        
                         type="submit"
                         disabled={isSubmitting}
                         icon={isSubmitting ? <CircularLoader small /> : null}
